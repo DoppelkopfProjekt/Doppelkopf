@@ -2,6 +2,10 @@ unit mTSpielerManager;
 
 interface
 
+uses Classes, SysUtils, mTSpieler, Contnrs;
+
+type
+
  TSpielerManager = class
   private
     FSpieler: TObjectList;
@@ -9,11 +13,12 @@ interface
     function addPlayer(pSpieler: TSpieler): Boolean;
     function playerForIP(pIP: string): TSpieler;
     function playerForName(pName: string): TSpieler;
-    function PlayerForIndex(pIndex: Integer): TSpieler;
+    function playerForIndex(pIndex: Integer): TSpieler;
     procedure deletePlayerWithIP(pIP: string);
     function countConnectedPlayer: Integer;
     constructor Create;
   end;
+
 
 implementation
 

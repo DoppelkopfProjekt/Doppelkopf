@@ -86,12 +86,12 @@ const SPIELBEGINN = 'Spielbeginn';
 constructor TDoppelkopfServer.Create(pPortNr: Integer);
 begin
   inherited Create(pPortNr);
-  FSpielerManager := TSpielerManager.Create;
+  //FSpielerManager := TSpielerManager.Create;
 end;
 
 destructor TDoppelkopfServer.Destroy;
 begin
-  FSpielerManager.Free;
+//FSpielerManager.Free;
   inherited Destroy;
 end;
 
@@ -100,7 +100,7 @@ var spieler: TSpieler;
 begin
   Spieler := TSpieler.create;
   Spieler.IP := pClientIP;
-  FSpielerManager.addPlayer(Spieler);
+  //FSpielerManager.addPlayer(Spieler);
 end;
 
 procedure TDoppelkopfServer.closeConnection(pClientIP: string; pClientPort: integer);
@@ -117,17 +117,17 @@ begin
   msg := TNetworkMessage.Create(pMessage);
   if (msg.key = CONNECT) then
   begin
-    player := FSpielerManager.playerForIP(pClientIP);
+    //player := FSpielerManager.playerForIP(pClientIP);
     player.Name := msg.parameter[0];
     self.send(pClientIP, pClientPort, msg.key + '#YES#');
 
     s := SPIELBEGINN;
-    for i := 0 to FSpielerManager.countConnectedPlayer-1 do
+    //for i := 0 to FSpielerManager.countConnectedPlayer-1 do
     begin
-      s := s + '#' + FSpielerManager.PlayerForIndex(i).name;
+   //   s := s + '#' + FSpielerManager.PlayerForIndex(i).name;
     end;
     s := s + '#';
-    if FSpielerManager.countConnectedPlayer = 4 then
+    //if FSpielerManager.countConnectedPlayer = 4 then
     begin
       Self.sendToAll(s);
     end;
