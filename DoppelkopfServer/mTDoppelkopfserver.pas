@@ -2,13 +2,12 @@ unit mTDoppelkopfserver;
 
 interface
 
-uses Sysutils, classes, mServer, mTNetworkMessage, mTSpieler;
+uses Sysutils, classes, mServer, mTNetworkMessage, mTSpieler, mTDoppelkopfSpiel;
 
 type
 
 TDoppelkopfServer = class(TServer)
 private
-  FSpielerManager: TSpielerManager;
   procedure processSpielbeginn(pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
   procedure processKarten(pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
   procedure processVorbehalteAbfragen (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);

@@ -10,7 +10,11 @@ uses
   mConnection in 'netzklassen\mConnection.pas',
   mList in 'netzklassen\mList.pas',
   mServer in 'netzklassen\mServer.pas',
-  mTSpieler in 'mTSpieler.pas';
+  mTSpieler in 'mTSpieler.pas',
+  mTDoppelkopfSpiel in 'mTDoppelkopfSpiel.pas',
+  mTStich in 'mTStich.pas',
+  mTBlatt in 'mTBlatt.pas',
+  mTSpielerManager in 'mTSpielerManager.pas';
 
 {$R *.RES}
 

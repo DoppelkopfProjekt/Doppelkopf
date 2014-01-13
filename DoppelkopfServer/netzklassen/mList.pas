@@ -23,6 +23,7 @@ type
     procedure setNext(pNext: TNode);
     function getContent: TObject;
     function getNext: TNode;
+ public
     destructor destroy; override;
   end;
 
