@@ -1,0 +1,19 @@
+Vor Spielbeginn
+1. Create -> yes
+2. connectnachricht (name) -> yes
+3. nachricht vom server (spieler, spielbeginn, anfangsspieler) -> yes
+4. nachrichit vom server (karten) -> yes
+5. nachricht vom server (Vorbehgalt?) -> yes/no
+6. nachricht vom server (Solo, spieler, art) -> yes
+
+Spielanfang (Kartenspiel) 10x
+"""6,5. spieler an server (ansage) -> yes/no
+6,51. nachricht vom server an spieler -> (Ansage von X) -> yes 
+7. nachricht vom server an spieler X (welche karte?) -> (Karte) -> yes/no
+8. nachricht vom server an spieler (aktueller Stich) -> yes""" 4x
+9. nachricht vom server an spieler (gewinner stich) -> yes
+10. visueller Tisch löschen
+
+Auswertung
+11. nachricht vom server an spieler (gewinnername, punkte)
+12. nachricht vom server an spieler (aktueller punktestand)
