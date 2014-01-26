@@ -28,7 +28,7 @@ implementation
 constructor TDoppelkopfSpiel.Create;
 begin
   FSpielerManager := TSpielerManager.Create;
-  FStich := TStich.create;
+  //FStich := TStich.create;
 end;
 
 function TDoppelkopfSpiel.addPlayer(pSpieler: TSpieler): Boolean;

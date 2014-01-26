@@ -32,7 +32,7 @@ implementation
 
 procedure TKarte.setSpielModus(pSpielModus: dkSpielModus);
 begin
-  FSpielModus := dkSpielModus;
+  FSpielModus := pSpielModus;
   if self.SpielModus = Normal then
   begin
     FIstTrumpf := (FKartentyp = Bube) or (FKartentyp = Dame) or (FFarbe = Karo) or ((FKartentyp = Zehn) and (FFarbe = Herz));
