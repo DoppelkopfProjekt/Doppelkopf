@@ -6,20 +6,24 @@ uses classes, sysutils, mTKarte, mTStich, dialogs, types;
 
 type
 
+dkPartei = (Re, Kontra);
+
 TBlatt = class
 private
   FKarten: TList;
-
+  FPartei: dkPartei;
   function istTrumpfInBlatt: Boolean;
   function getAnzahlTrumpfInBlatt: Integer;
   function istFehlfarbeInBlatt(pFarbe: dkFarbe): Boolean;
   function getAnzahlFehlfarbeInBlatt(pFarbe: dkFarbe): Integer;
+  function bestimmePartei: dkPartei;
 public
   constructor Create;
   function getKarteMitCode(pCode: string): TKarte;
   function istZugLegal(pKarte: TKarte; pStich: TStich): Boolean;
   procedure KarteHinzufuegen(pKarte: TKarte);
   procedure LegeKarte(pKarte: TKarte);
+  property Partei: dkPartei read FPartei;
 end;
 
 implementation
@@ -27,6 +31,17 @@ implementation
 constructor TBlatt.Create;
 begin
   FKarten.Create;
+end;
+
+function TBlatt.bestimmePartei;
+var i: Integer;
+begin
+  result := Kontra;
+  //Partei muss bestimmt werden, wenn alle Karten da sind
+  for i := 0 to 9 do
+  begin
+    if TKarte(FKarten[i]).Code = 'KRD' then result := Re;
+  end;
 end;
 
 function TBlatt.getKarteMitCode(pCode: string): TKarte;

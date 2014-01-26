@@ -7,14 +7,18 @@ uses Classes, SysUtils, mTBlatt, mTKarte, dialogs, mTStich;
 type
   TSpieler = class
   private
+    FSpieltSolo: Boolean;
     FName: string;
     FIP: string;
     FBlatt: TBlatt;
     FGewonneneStiche: TList;
+    FExtraPunkte: Integer;
+    function getPartei: dkPartei;
   public
     constructor Create(pIP: string);
     property Name: string read FName write FName;
     property IP: string read FIP;
+    property ExtraPunkte: Integer read FExtraPunkte;
 
     procedure gibKarte(pKarte: TKarte);
     function karteLegen(pKartenCode: string; pStich: TStich): Boolean;
@@ -22,6 +26,9 @@ type
     procedure gibGewonnenenStich(pStich: TStich);
 
     function gewonnenePunkte: Integer;
+    procedure gibExtraPunkt;
+
+    property Partei: dkPartei read getPartei;
   end;
 
 implementation
@@ -31,6 +38,19 @@ begin
   FIP := pIP;
   FBlatt := TBlatt.Create;
   FGewonneneStiche := TList.Create;
+  FExtraPunkte := 0;
+  FSpieltSolo := false;
+end;
+
+function TSpieler.getPartei: dkPartei;
+begin
+  if not FSpieltSolo then result := FBlatt.Partei
+    else result := true;
+end;
+
+procedure TSpieler.gibExtraPunkt;
+begin
+  inc(FExtraPunkte);
 end;
 
 procedure TSpieler.gibKarte(pKarte: TKarte);
