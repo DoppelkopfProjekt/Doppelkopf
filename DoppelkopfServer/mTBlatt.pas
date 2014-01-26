@@ -16,6 +16,7 @@ private
   function getAnzahlFehlfarbeInBlatt(pFarbe: dkFarbe): Integer;
 public
   constructor Create;
+  function getKarteMitCode(pCode: string): TKarte;
   function istZugLegal(pKarte: TKarte; pStich: TStich): Boolean;
   procedure KarteHinzufuegen(pKarte: TKarte);
   procedure LegeKarte(pKarte: TKarte);
@@ -26,6 +27,20 @@ implementation
 constructor TBlatt.Create;
 begin
   FKarten.Create;
+end;
+
+function TBlatt.getKarteMitCode(pCode: string): TKarte;
+var i: Integer;
+begin
+  result := nil;
+  for i := 0 to FKarten.Count -1 do
+  begin
+    if TKarte(FKarten[i]).Code = pCode then
+    begin
+      result := FKarten[i];
+      break;
+    end;
+  end;
 end;
 
 procedure TBlatt.LegeKarte(pKarte: TKarte);
