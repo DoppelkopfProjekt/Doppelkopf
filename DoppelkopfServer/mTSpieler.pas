@@ -29,6 +29,8 @@ type
     procedure gibExtraPunkt;
 
     property Partei: dkPartei read getPartei;
+
+    procedure setSpielModus(pModus: dkSpielModus);
   end;
 
 implementation
@@ -40,6 +42,11 @@ begin
   FGewonneneStiche := TList.Create;
   FExtraPunkte := 0;
   FSpieltSolo := false;
+end;
+
+procedure TSpieler.setSpielModus(pModus: dkSpielModus);
+begin
+  self.FBlatt.setSpielModus(pModus);
 end;
 
 function TSpieler.getPartei: dkPartei;

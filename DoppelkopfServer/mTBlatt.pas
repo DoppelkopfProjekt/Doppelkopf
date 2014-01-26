@@ -24,6 +24,7 @@ public
   procedure KarteHinzufuegen(pKarte: TKarte);
   procedure LegeKarte(pKarte: TKarte);
   property Partei: dkPartei read FPartei;
+  procedure setSpielModus(pModus: dkSpielModus);
 end;
 
 implementation
@@ -31,6 +32,17 @@ implementation
 constructor TBlatt.Create;
 begin
   FKarten.Create;
+end;
+
+procedure TBlatt.setSpielModus(pModus: dkSpielModus);
+var i: Integer;
+begin
+  if not self.FKarten.Count = 10 then ShowMessage('Kein Solo wenn Spiel läuft');
+
+  for i := 0 to 9 do
+  begin
+    TKarte(FKarten[i]).SpielModus = pModus;
+  end;
 end;
 
 function TBlatt.bestimmePartei;
