@@ -28,6 +28,9 @@ public
 
   procedure starteSpiel;
   function legeKarte(pKartenCode: string; pIP:string): Boolean;
+  //procedure MacheAnsage(pIP: string);
+  //Saemtliche Soli implementieren
+
   function getKartenPunkteRePartei;
   function getKartenPunkteKontraPartei;
   function getSiegerPartei: dkPartei;
