@@ -17,6 +17,7 @@ private
   FIstTrumpf: boolean;
   FCode: string;
   FSpielModus: dkSpielModus;
+  FPunkte: Integer;
 public
   constructor create(pCode: string);
   procedure setSpielModus(pSpielModus: dkSpielModus);
@@ -25,6 +26,7 @@ public
   property IstTrumpf: Boolean read FIstTrumpf write FIstTrumpf;
   property Code: string read FCode;
   property SpielModus: dkSpielModus read FSpielModus write setSpielModus;
+  property Punkte: Integer read FPunkte;
   function kannKarteMichStechen(pKarte: TKarte): dkErgebnis;
 end;
 
@@ -62,11 +64,31 @@ begin
   if farbString = 'HE' then FFarbe := Herz;
   if farbString = 'PI' then FFarbe := Pik;
   if farbString = 'KA' then FFarbe := Karo;
-  if typString = '10' then FKartentyp := Zehn;
-  if typString = 'K' then FKartentyp := Koenig;
-  if typString = 'D' then FKartentyp := Dame;
-  if typString = 'B' then FKartentyp := Bube;
-  if typString = 'A' then FKartentyp := Ass;
+  if typString = '10' then
+  begin
+    FKartentyp := Zehn;
+    FPunkte := 10;
+  end;
+  if typString = 'K' then
+  begin
+    FKartentyp := Koenig;
+    FPunkte := 4;
+  end;
+  if typString = 'D' then
+  begin
+    FKartentyp := Dame;
+    FPunkte := 3;
+  end;
+  if typString = 'B' then
+  begin
+    FKartentyp := Bube;
+    FPunkte := 2;
+  end;
+  if typString = 'A' then
+  begin
+    FKartentyp := Ass;
+    FPunkte := 11;
+  end;
 
   self.SpielModus := Normal;
 end;

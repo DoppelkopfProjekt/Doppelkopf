@@ -60,9 +60,14 @@ begin
   FGewonneneStiche.Add(pStich);
 end;
 
-function TSpieler.gewonnenePunkte;
+function TSpieler.gewonnenePunkte: Integer;
+var i: Integer;
 begin
-  ShowMessage('Noch nicht implementiert');
+  result := 0;
+  for i := 0 to FGewonneneStiche.Count-1 do
+  begin
+    inc(result, TStich(FGewonneneStiche[i]).getPunkte);
+  end;
 end;
 
 end.

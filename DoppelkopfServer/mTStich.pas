@@ -9,19 +9,21 @@ type
 TStich = class
 
 private
-FSpielerListe: TList;
-FKarten: TList;
-FAktuellerSieger: TObject;
-FAktuellBesteKarte: TKarte;
-FAktuellerSpieler: TObject;
-FNummer: Integer;
+  FSpielerListe: TList;
+  FKarten: TList;
+  FAktuellerSieger: TObject;
+  FAktuellBesteKarte: TKarte;
+  FAktuellerSpieler: TObject;
+  FNummer: Integer;
 public
-function istErsteKarteTrumpf: Boolean;
-function getFarbeVonErsterKarte: dkFarbe;
-property AktuellerSieger: TObject read FAktuellerSieger;
-procedure AddSpieler(pSpieler: TObject);
-procedure LegeKarte(pKarte: TKarte; pLegenderSpieler: TObject);
-constructor Create(pNummer: Integer);
+  function istErsteKarteTrumpf: Boolean;
+  function getFarbeVonErsterKarte: dkFarbe;
+  property AktuellerSieger: TObject read FAktuellerSieger;
+  procedure AddSpieler(pSpieler: TObject);
+  procedure LegeKarte(pKarte: TKarte; pLegenderSpieler: TObject);
+  constructor Create(pNummer: Integer);
+
+  function getPunkte: Integer;
 end;
 
 implementation
@@ -33,6 +35,16 @@ begin
   FKarten := TList.Create;
   FSpielerListe := TList.Create;
   FNummer := pNummer;
+end;
+
+function TStich.getPunkte;
+var i: Integer;
+begin
+  result := 0;
+  for i := 0 to FKarten.Count-1 do
+  begin
+    inc(result, TKarte(FKarten[i]).Punkte);
+  end;
 end;
 
 function TStich.istErsteKarteTrumpf: Boolean;
