@@ -2,7 +2,7 @@ unit mTDoppelkopfSpiel;
 
 interface
 
-uses mTSpielerManager, mTSpieler, mTStich, dialogs, mTDoppelkopfDeck, mTBlatt;
+uses mTSpielerManager, mTSpieler, mTStich, dialogs, mTDoppelkopfDeck, mTBlatt, mTSoloAnfrage;
 
 type
 
@@ -31,8 +31,8 @@ public
   //procedure MacheAnsage(pIP: string);
   //Saemtliche Soli implementieren
 
-  function getKartenPunkteRePartei;
-  function getKartenPunkteKontraPartei;
+  function getKartenPunkteRePartei: Integer;
+  function getKartenPunkteKontraPartei: Integer;
   function getSiegerPartei: dkPartei;
   function getPunkteVonSieger: Integer;
 

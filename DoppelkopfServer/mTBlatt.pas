@@ -41,7 +41,7 @@ begin
 
   for i := 0 to 9 do
   begin
-    TKarte(FKarten[i]).SpielModus = pModus;
+    TKarte(FKarten[i]).SpielModus := pModus;
   end;
 end;
 

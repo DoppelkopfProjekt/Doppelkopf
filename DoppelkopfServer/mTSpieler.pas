@@ -7,6 +7,8 @@ uses Classes, SysUtils, mTBlatt, mTKarte, dialogs, mTStich;
 type
   TSpieler = class
   private
+    FIsIndexSet: Boolean;
+    FIndex: Integer;
     FSpieltSolo: Boolean;
     FName: string;
     FIP: string;
@@ -15,10 +17,12 @@ type
     FExtraPunkte: Integer;
     function getPartei: dkPartei;
   public
+    procedure setIndex(pIndex: Integer);
     constructor Create(pIP: string);
     property Name: string read FName write FName;
     property IP: string read FIP;
     property ExtraPunkte: Integer read FExtraPunkte;
+    property SpielerIndex: Integer read FIndex;
 
     procedure gibKarte(pKarte: TKarte);
     function karteLegen(pKartenCode: string; pStich: TStich): Boolean;
@@ -37,11 +41,25 @@ implementation
 
 constructor TSpieler.Create(pIP: string);
 begin
+  FIndex := -1;
+  FIsIndexSet := false;
   FIP := pIP;
   FBlatt := TBlatt.Create;
   FGewonneneStiche := TList.Create;
   FExtraPunkte := 0;
   FSpieltSolo := false;
+end;
+
+procedure TSpieler.setIndex(pIndex: Integer);
+begin
+  if not self.FIsIndexSet then
+  begin
+    self.FIndex := pIndex;
+    self.FIsIndexSet := true;
+  end else
+  begin
+    ShowMessage('Ein SpielerIndex kann kein zweites Mal gesetzt werden!');
+  end;
 end;
 
 procedure TSpieler.setSpielModus(pModus: dkSpielModus);

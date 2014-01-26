@@ -7,7 +7,7 @@ type
 dkKartentyp = (Koenig, Zehn, Ass, Bube, Dame);
 dkFarbe = (Karo, Herz, Pik, Kreuz, Keine);
 dkErgebnis = (schwaecher, staerker, gleich);
-dkSpielModus = (Normal, Bubensolo, Damensolo, Fleischloser);
+dkSpielModus = (Damensolo, Bubensolo, Fleischloser, Normal);
 
 
 TKarte = class

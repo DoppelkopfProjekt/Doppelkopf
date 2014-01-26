@@ -92,6 +92,8 @@
         <DCCReference Include="mTSpielerManager.pas"/>
         <DCCReference Include="mTKarte.pas"/>
         <DCCReference Include="mTDoppelkopfDeck.pas"/>
+        <DCCReference Include="mTSoloAnfrage.pas"/>
+        <DCCReference Include="StringKonstanten.pas"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

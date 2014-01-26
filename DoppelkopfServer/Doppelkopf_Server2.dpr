@@ -16,7 +16,9 @@ uses
   mTBlatt in 'mTBlatt.pas',
   mTSpielerManager in 'mTSpielerManager.pas',
   mTKarte in 'mTKarte.pas',
-  mTDoppelkopfDeck in 'mTDoppelkopfDeck.pas';
+  mTDoppelkopfDeck in 'mTDoppelkopfDeck.pas',
+  mTSoloAnfrage in 'mTSoloAnfrage.pas',
+  StringKonstanten in 'StringKonstanten.pas';
 
 {$R *.RES}
 
