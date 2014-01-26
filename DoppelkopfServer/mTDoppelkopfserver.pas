@@ -98,8 +98,7 @@ end;
 procedure TDoppelkopfServer.processNewConnection(pClientIP: string; pClientPort: integer);
 var spieler: TSpieler;
 begin
-  Spieler := TSpieler.create;
-  Spieler.IP := pClientIP;
+  Spieler := TSpieler.create(pClientIP);
   //FSpielerManager.addPlayer(Spieler);
 end;
 
