@@ -9,13 +9,15 @@ TStich = class
 
 private
 FSpielerListe: TList;
-FAktuellerStich: TList;
+FKarten: TList;
 FAktuellerSieger: TSpieler;
 FAktuellBesteKarte: TKarte;
 FAktuellerSpieler: TSpieler;
 FNummer: Integer;
 public
+function getIstErsteKarteTrumpf: Boolean;
 property AktuellerSieger: TSpieler read FAktuellerSieger;
+property IstErsteKarteKarteTrumpf: Boolean read getIstErsteKarteTrumpf;
 procedure AddSpieler(pSpieler: TSpieler);
 procedure LegeKarte(pKarte: TKarte; pLegenderSpieler: TSpieler);
 constructor Create(pNummer: Integer);
@@ -27,9 +29,14 @@ constructor TStich.Create(pNummer: Integer);
 begin
   FAktuellerSieger := nil;
   FAktuellBesteKarte := nil;
-  FAktuellerStich := TList.Create;
+  FKarten := TList.Create;
   FSpielerListe := TList.Create;
   FNummer := pNummer;
+end;
+
+function TStich.getIstErsteKarteTrumpf: Boolean;
+begin
+  if FKarten.Count = 0 then result := false else result := TKarte(FKarten[0]).IstTrumpf;
 end;
 
 procedure TStich.AddSpieler(pSpieler: TSpieler);
@@ -45,11 +52,11 @@ procedure TStich.LegeKarte(pKarte: TKarte; pLegenderSpieler: TSpieler);
 var Ergebnis: dkErgebnis;
 begin
   if FSpielerListe.Count = 4 then ShowMessage('Keine 4 Spieler zum Stich hinzugefügt!');
-  if FAktuellerStich.Count >= 4 then ShowMessage('5 Karten auf einem Stich!?!');
+  if FKarten.count >= 4 then ShowMessage('5 Karten auf einem Stich!?!');
 
-  FAktuellerStich.add(pKarte);
-  if not (FSpielerListe[FAktuellerStich.Count-1] = pLegenderSpieler) then ShowMessage('Der falsche Spieler legt die Karte!?!');
-  if FAktuellerStich.count = 1 then
+  FKarten.add(pKarte);
+  if not (FSpielerListe[FKarten.count-1] = pLegenderSpieler) then ShowMessage('Der falsche Spieler legt die Karte!?!');
+  if FKarten.count = 1 then
   begin
     FAktuellerSieger := FSpielerListe[0];
     FAktuellBesteKarte := pKarte;
