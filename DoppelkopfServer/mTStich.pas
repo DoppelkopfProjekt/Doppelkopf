@@ -18,6 +18,7 @@ private
 public
   function istErsteKarteTrumpf: Boolean;
   function getFarbeVonErsterKarte: dkFarbe;
+  function kartenCount: Integer;
   property AktuellerSieger: TObject read FAktuellerSieger;
   procedure AddSpieler(pSpieler: TObject);
   procedure LegeKarte(pKarte: TKarte; pLegenderSpieler: TObject);
@@ -35,6 +36,11 @@ begin
   FKarten := TList.Create;
   FSpielerListe := TList.Create;
   FNummer := pNummer;
+end;
+
+function TStich.kartenCount: Integer;
+begin
+  result := self.FKarten.Count;
 end;
 
 function TStich.getPunkte;
