@@ -12,6 +12,7 @@ type
     Button1: TButton;
     Memo1: TMemo;
     procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private-Deklarationen }
   public
@@ -38,6 +39,11 @@ begin
     memo1.lines.add(msg.parameter[i]);
   end;
 
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  randomize;
 end;
 
 end.
