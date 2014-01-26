@@ -27,7 +27,7 @@ type
                    constructor create(pInhalt:string);
                    procedure setzeInhalt(pInhalt:string);
                    function gibInhalt:string;
-                   destructor destroy;override;
+                   destructor Destroy;override;
                  end;
 
   TConnection = class
@@ -47,7 +47,7 @@ type
                  constructor create(pServerIP:string; pServerPort:integer);
                  procedure send(pMessage:string);virtual;
                  function receive:string;
-                 destructor destroy; override;
+                 destructor Destroy; override;
                 end;
 implementation
 

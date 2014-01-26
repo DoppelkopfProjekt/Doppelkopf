@@ -41,7 +41,7 @@ type
               procedure processMessage(pClientIP: string; pClientPort: integer; pMessage:string); overload; dynamic;
               procedure processClosedConnection(pClientIP:string; pClientPort: integer);overload; dynamic;
 
-              destructor destroy;override;
+              destructor Destroy;override;
             end;
 
 

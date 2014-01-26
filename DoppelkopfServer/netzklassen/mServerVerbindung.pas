@@ -23,7 +23,7 @@ uses
                       procedure setzeInhalt(pInhalt:TObject);
                       function Inhalt:TObject;
                       function hatInhalt:boolean;
-                      destructor destroy;override;
+                      destructor Destroy;override;
                     end;
 implementation
 

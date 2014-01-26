@@ -24,7 +24,7 @@ type
     function getContent: TObject;
     function getNext: TNode;
  public
-    destructor destroy; override;
+    destructor Destroy; override;
   end;
 
   TList = class
@@ -45,7 +45,7 @@ type
      procedure insert(pObject: TObject); virtual;
      procedure concat(pList: TList); virtual;
      procedure remove; virtual;
-     destructor destroy; override;
+     destructor Destroy; override;
    end;
 
 implementation

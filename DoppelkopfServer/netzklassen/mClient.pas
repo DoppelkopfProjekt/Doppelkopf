@@ -23,7 +23,7 @@ type
                        procedure ClientSocketRead(Sender: TObject;Socket: TCustomWinSocket); override;
                        public
                        procedure processMessage(pMessage:string);virtual;
-                       destructor destroy;override;
+                       destructor Destroy;override;
                      end;
 implementation
 
