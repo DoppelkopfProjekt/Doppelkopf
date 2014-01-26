@@ -16,9 +16,9 @@ FAktuellBesteKarte: TKarte;
 FAktuellerSpieler: TObject;
 FNummer: Integer;
 public
-function getIstErsteKarteTrumpf: Boolean;
+function istErsteKarteTrumpf: Boolean;
+function getFarbeVonErsterKarte: dkFarbe;
 property AktuellerSieger: TObject read FAktuellerSieger;
-property IstErsteKarteKarteTrumpf: Boolean read getIstErsteKarteTrumpf;
 procedure AddSpieler(pSpieler: TObject);
 procedure LegeKarte(pKarte: TKarte; pLegenderSpieler: TObject);
 constructor Create(pNummer: Integer);
@@ -35,9 +35,14 @@ begin
   FNummer := pNummer;
 end;
 
-function TStich.getIstErsteKarteTrumpf: Boolean;
+function TStich.istErsteKarteTrumpf: Boolean;
 begin
   if FKarten.Count = 0 then result := false else result := TKarte(FKarten[0]).IstTrumpf;
+end;
+
+function TStich.getFarbeVonErsterKarte: dkFarbe;
+begin
+  if FKarten.Count = 0 then result := Keine else result := TKarte(FKarten[0]).farbe;
 end;
 
 procedure TStich.AddSpieler(pSpieler: TObject);

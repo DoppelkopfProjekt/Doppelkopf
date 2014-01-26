@@ -5,7 +5,7 @@ interface
 type
 
 dkKartentyp = (Koenig, Zehn, Ass, Bube, Dame);
-dkFarbe = (Karo, Herz, Pik, Kreuz);
+dkFarbe = (Karo, Herz, Pik, Kreuz, Keine);
 dkErgebnis = (schwaecher, staerker, gleich);
 dkSpielModus = (Normal, Bubensolo, Damensolo, Fleischloser);
 
