@@ -45,7 +45,7 @@ end;
 function TSpieler.getPartei: dkPartei;
 begin
   if not FSpieltSolo then result := FBlatt.Partei
-    else result := true;
+    else result := re;
 end;
 
 procedure TSpieler.gibExtraPunkt;
