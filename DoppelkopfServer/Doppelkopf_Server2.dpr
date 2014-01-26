@@ -15,7 +15,8 @@ uses
   mTStich in 'mTStich.pas',
   mTBlatt in 'mTBlatt.pas',
   mTSpielerManager in 'mTSpielerManager.pas',
-  mTKarte in 'mTKarte.pas';
+  mTKarte in 'mTKarte.pas',
+  mTDoppelkopfDeck in 'mTDoppelkopfDeck.pas';
 
 {$R *.RES}
 
