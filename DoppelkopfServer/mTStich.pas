@@ -2,24 +2,25 @@ unit mTStich;
 
 interface
 
-uses Sysutils, classes, mTSpieler, mTKarte, Dialogs;
+uses Sysutils, classes, mTKarte, Dialogs;
 
 type
+
 TStich = class
 
 private
 FSpielerListe: TList;
 FKarten: TList;
-FAktuellerSieger: TSpieler;
+FAktuellerSieger: TObject;
 FAktuellBesteKarte: TKarte;
-FAktuellerSpieler: TSpieler;
+FAktuellerSpieler: TObject;
 FNummer: Integer;
 public
 function getIstErsteKarteTrumpf: Boolean;
-property AktuellerSieger: TSpieler read FAktuellerSieger;
+property AktuellerSieger: TObject read FAktuellerSieger;
 property IstErsteKarteKarteTrumpf: Boolean read getIstErsteKarteTrumpf;
-procedure AddSpieler(pSpieler: TSpieler);
-procedure LegeKarte(pKarte: TKarte; pLegenderSpieler: TSpieler);
+procedure AddSpieler(pSpieler: TObject);
+procedure LegeKarte(pKarte: TKarte; pLegenderSpieler: TObject);
 constructor Create(pNummer: Integer);
 end;
 
@@ -39,7 +40,7 @@ begin
   if FKarten.Count = 0 then result := false else result := TKarte(FKarten[0]).IstTrumpf;
 end;
 
-procedure TStich.AddSpieler(pSpieler: TSpieler);
+procedure TStich.AddSpieler(pSpieler: TObject);
 begin
 if FSpielerListe.count >= 4 then ShowMessage('Zu viele Spieler')
   else
@@ -48,7 +49,7 @@ if FSpielerListe.count >= 4 then ShowMessage('Zu viele Spieler')
   end;
 end;
 
-procedure TStich.LegeKarte(pKarte: TKarte; pLegenderSpieler: TSpieler);
+procedure TStich.LegeKarte(pKarte: TKarte; pLegenderSpieler: TObject);
 var Ergebnis: dkErgebnis;
 begin
   if FSpielerListe.Count = 4 then ShowMessage('Keine 4 Spieler zum Stich hinzugefügt!');
