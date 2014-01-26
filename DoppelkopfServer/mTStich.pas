@@ -63,7 +63,7 @@ begin
     end;
     if Ergebnis = gleich then
     begin
-      if (pKarte.Code = 'HE10') and not (FNummer = 10) then
+      if (pKarte.Code = 'HE10') and not (FNummer = 10) and (pKarte.SpielModus = Normal) then
       begin
         FAktuellerSieger := pLegenderSpieler;
         FAktuellBesteKarte := pKarte;
