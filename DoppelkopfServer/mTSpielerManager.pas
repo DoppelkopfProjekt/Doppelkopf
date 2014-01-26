@@ -29,7 +29,7 @@ end;
 
 function TSpielerManager.PlayerForIndex(pIndex: Integer): TSpieler;
 begin
-  result := (FSpieler[pIndex] as TSpieler);
+  result := (FSpieler[pIndex+1] as TSpieler);
 end;
 
 function TSpielerManager.countConnectedPlayer: Integer;
