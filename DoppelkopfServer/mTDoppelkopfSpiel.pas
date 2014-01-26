@@ -2,7 +2,7 @@ unit mTDoppelkopfSpiel;
 
 interface
 
-uses mTSpielerManager, mTSpieler, mTStich, dialogs, mTDoppelkopfDeck;
+uses mTSpielerManager, mTSpieler, mTStich, dialogs, mTDoppelkopfDeck, mTBlatt;
 
 type
 
@@ -28,6 +28,13 @@ public
 
   procedure starteSpiel;
   function legeKarte(pKartenCode: string; pIP:string): Boolean;
+  function getKartenPunkteRePartei;
+  function getKartenPunkteKontraPartei;
+  function getSiegerPartei: dkPartei;
+  function getPunkteVonSieger: Integer;
+
+  property AktuellerStich: TStich read FAktuellerStich;
+  property RundenNummer: Integer read FRundenNummer;
 end;
 
 
@@ -38,9 +45,62 @@ begin
   FSpielerManager := TSpielerManager.Create;
 end;
 
+function TDoppelkopfSpiel.getKartenPunkteRePartei: Integer;
+var i: Integer;
+begin
+  result := 0;
+  for i := 1 to 4 do
+  begin
+    if self.FSpielerManager.playerForIndex(i).Partei = Re then
+    begin
+      inc(result, self.FSpielerManager.playerForIndex(i).gewonnenePunkte);
+    end;
+  end;
+end;
+
+function TDoppelkopfSpiel.getKartenPunkteKontraPartei: integer;
+begin
+  result := 240 - self.getKartenPunkteRePartei;
+end;
+
+function TDoppelkopfSpiel.getSiegerPartei;
+begin
+  if self.FRundenNummer < 10 then ShowMessage('Spiel noch nicht beendet und schon Sieger wissen wollen?!?')
+  else
+  begin
+    result := Re;
+    if self.getKartenPunkteRePartei > 120 then result := Kontra;
+  end;
+end;
+
+function TDoppelkopfSpiel.getPunkteVonSieger: Integer;
+var sieger: dkPartei;
+    temp: Integer;
+begin
+  result := 1;  //Punkt fuer gewonnen
+  sieger := self.getSiegerPartei;
+  if sieger = Kontra then
+  begin
+    inc(result);//Extrapunkt wenn Kontra gewinnt
+    temp := self.getKartenPunkteKontraPartei - 120;
+  end else
+  begin
+    temp := self.getKartenPunkteRePartei - 120;
+  end;
+  inc(result, (temp-1) div 30);
+
+  //Extra-Punkte hinzufuegen
+  //Multiplikatoren hinzufuegen
+end;
+
 function TDoppelkopfSpiel.aktuellerSpieler;
 begin
   result := self.FSpielerManager.playerForIndex(self.FAktuellerSpielerIndex mod 4);
+end;
+
+function TDoppelkopfSpiel.aktuelleSpielerIP;
+begin
+  result := self.aktuellerSpieler.IP;
 end;
 
 function TDoppelkopfSpiel.legeKarte(pKartenCode: string; pIP: string): Boolean;
@@ -56,16 +116,11 @@ begin
   begin
   //Gewinner kriegt seinen Stich
     TSpieler(self.FAktuellerStich.AktuellerSieger).gibGewonnenenStich(self.FAktuellerStich);
-    //Sonderpunkte müssen noch ausgewertet werden
+    //Sonderpunkte muessen noch ausgewertet werden
 
     inc(self.FRundenNummer);
     self.FAktuellerStich := TStich.Create(self.FRundenNummer);
   end;
-end;
-
-function TDoppelkopfSpiel.aktuelleSpielerIP;
-begin
-  result := self.aktuellerSpieler.IP;
 end;
 
 procedure TDoppelkopfSpiel.starteSpiel;
