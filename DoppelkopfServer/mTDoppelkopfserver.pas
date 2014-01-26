@@ -41,7 +41,7 @@ const SPIELBEGINN = 'Spielbeginn';
       FLEISCHLOSER = 'Fleischloser';
       HOCHZEIT = 'Hochzeit';
       SOLO = 'Solo';
-      WECHELKARTELEGEN = 'WelcheKarte';
+      WELCHEKARTELEGEN = 'WelcheKarte';
       AKTUELLERSTICH = 'AktuellerStich';
       GEWINNERSTICH = 'GewinnerStich';
       GEWINNERSPIEL = 'GewinnerSpiel';
@@ -98,13 +98,13 @@ end;
 procedure TDoppelkopfServer.processNewConnection(pClientIP: string; pClientPort: integer);
 var spieler: TSpieler;
 begin
-  Spieler := TSpieler.create(pClientIP);
+  //Spieler := TSpieler.create(pClientIP);
   //FSpielerManager.addPlayer(Spieler);
 end;
 
 procedure TDoppelkopfServer.closeConnection(pClientIP: string; pClientPort: integer);
 begin
-  inherited closeConnection(pClientIP, pClientPort);
+//  inherited closeConnection(pClientIP, pClientPort);
 end;
 
 procedure TDoppelkopfServer.processMessage(pClientIP: string; pClientPort: integer; pMessage: string);
