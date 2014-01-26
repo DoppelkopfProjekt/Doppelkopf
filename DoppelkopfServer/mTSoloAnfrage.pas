@@ -24,7 +24,7 @@ constructor TSoloAnfrage.Create(pArt: dkSpielModus; pSender: TSpieler);
 begin
   self.FArt := pArt;
   self.FSender := pSender;
-  self.Prioritaet := self.FArt * 100 + self.FSender;
+  self.FPrioritaet := Integer(self.FArt) * 100 + self.FSender.SpielerIndex;
 end;
 
 end.

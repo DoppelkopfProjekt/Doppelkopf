@@ -2,7 +2,7 @@ unit mTDoppelkopfSpiel;
 
 interface
 
-uses mTSpielerManager, mTSpieler, mTStich, dialogs, mTDoppelkopfDeck, mTBlatt, mTSoloAnfrage;
+uses mTSpielerManager, mTSpieler, mTStich, dialogs, mTDoppelkopfDeck, mTBlatt, mTSoloAnfrage, Classes, mTKarte, StringKonstanten;
 
 type
 
@@ -12,6 +12,7 @@ private
   FAktuellerStich: TStich;
   FRundenNummer: Integer;
   FAktuellerSpielerIndex: Integer;
+  FSoloAnfragen: TList;
 
  (* function playerForIP(pIP: string): TSpieler;
   function playerForName(pName: string): TSpieler;
@@ -28,6 +29,8 @@ public
 
   procedure starteSpiel;
   function legeKarte(pKartenCode: string; pIP:string): Boolean;
+  procedure MacheSoloAnsage(pSpielerIP: string; pAnsageCode: string);
+ // function EntscheideWelchesSolo: string;
   //procedure MacheAnsage(pIP: string);
   //Saemtliche Soli implementieren
 
@@ -46,6 +49,21 @@ implementation
 constructor TDoppelkopfSpiel.Create;
 begin
   FSpielerManager := TSpielerManager.Create;
+  FSoloAnfragen := TList.Create;
+end;
+
+procedure TDoppelkopfSpiel.MacheSoloAnsage(pSpielerIP: string; pAnsageCode: string);
+var Spieler: TSpieler;
+    AnsageArt: dkSpielModus;
+begin
+  AnsageArt := dkNormal;
+  spieler := self.FSpielerManager.playerForIP(pSpielerIP);
+  if pAnsageCode = FLEISCHLOSER then AnsageArt := dkFleischloser;
+  if pAnsageCode = DAMENSOLO then AnsageArt := dkDamensolo;
+  if pAnsageCode = BUBENSOLO then AnsageArt := dkBubensolo;
+  if AnsageArt = dkNormal then ShowMessage('Zum Normal-Spielen braucht man keine Ansage?!?');
+
+  self.FSoloAnfragen.Add(TSoloAnfrage.Create(AnsageArt, spieler));
 end;
 
 function TDoppelkopfSpiel.getKartenPunkteRePartei: Integer;

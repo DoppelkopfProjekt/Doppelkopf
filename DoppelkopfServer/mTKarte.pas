@@ -4,10 +4,10 @@ interface
 
 type
 
-dkKartentyp = (Koenig, Zehn, Ass, Bube, Dame);
-dkFarbe = (Karo, Herz, Pik, Kreuz, Keine);
-dkErgebnis = (schwaecher, staerker, gleich);
-dkSpielModus = (Damensolo, Bubensolo, Fleischloser, Normal);
+dkKartentyp = (dkKoenig, dkZehn, dkAss, dkBube, dkDame);
+dkFarbe = (dkKaro, dkHerz, dkPik, dkKreuz, dkKeine);
+dkErgebnis = (dkschwaecher, dkstaerker, dkgleich);
+dkSpielModus = (dkDamensolo, dkBubensolo, dkFleischloser, dkNormal);
 
 
 TKarte = class
@@ -35,19 +35,19 @@ implementation
 procedure TKarte.setSpielModus(pSpielModus: dkSpielModus);
 begin
   FSpielModus := pSpielModus;
-  if self.SpielModus = Normal then
+  if self.SpielModus = dkNormal then
   begin
-    FIstTrumpf := (FKartentyp = Bube) or (FKartentyp = Dame) or (FFarbe = Karo) or ((FKartentyp = Zehn) and (FFarbe = Herz));
+    FIstTrumpf := (FKartentyp = dkBube) or (FKartentyp = dkDame) or (FFarbe = dkKaro) or ((FKartentyp = dkZehn) and (FFarbe = dkHerz));
   end;
-  if self.SpielModus = Bubensolo then
+  if self.SpielModus = dkBubensolo then
   begin
-    FIstTrumpf := FKartentyp = Bube;
+    FIstTrumpf := FKartentyp = dkBube;
   end;
-  if self.SpielModus = Damensolo then
+  if self.SpielModus = dkDamensolo then
   begin
-    FIstTrumpf := FKartentyp = Dame;
+    FIstTrumpf := FKartentyp = dkDame;
   end;
-  if self.SpielModus = Fleischloser then
+  if self.SpielModus = dkFleischloser then
   begin
     FIstTrumpf := false;
   end;
@@ -60,62 +60,62 @@ begin
   farbString := copy(pCode, 1, 2);
   typString := copy(pCode, 3, 1);
 
-  if farbString = 'KR' then FFarbe := Kreuz;
-  if farbString = 'HE' then FFarbe := Herz;
-  if farbString = 'PI' then FFarbe := Pik;
-  if farbString = 'KA' then FFarbe := Karo;
+  if farbString = 'KR' then FFarbe := dkKreuz;
+  if farbString = 'HE' then FFarbe := dkHerz;
+  if farbString = 'PI' then FFarbe := dkPik;
+  if farbString = 'KA' then FFarbe := dkKaro;
   if typString = '10' then
   begin
-    FKartentyp := Zehn;
+    FKartentyp := dkZehn;
     FPunkte := 10;
   end;
   if typString = 'K' then
   begin
-    FKartentyp := Koenig;
+    FKartentyp := dkKoenig;
     FPunkte := 4;
   end;
   if typString = 'D' then
   begin
-    FKartentyp := Dame;
+    FKartentyp := dkDame;
     FPunkte := 3;
   end;
   if typString = 'B' then
   begin
-    FKartentyp := Bube;
+    FKartentyp := dkBube;
     FPunkte := 2;
   end;
   if typString = 'A' then
   begin
-    FKartentyp := Ass;
+    FKartentyp := dkAss;
     FPunkte := 11;
   end;
 
-  self.SpielModus := Normal;
+  self.SpielModus := dkNormal;
 end;
 
 function TKarte.kannKarteMichStechen(pKarte: TKarte): dkErgebnis;
 begin
-  result := gleich;
-  if not self.IstTrumpf and pKarte.IstTrumpf then result := staerker
+  result := dkgleich;
+  if not self.IstTrumpf and pKarte.IstTrumpf then result := dkstaerker
   else
   begin
-    if self.IstTrumpf and not pKarte.IstTrumpf then result := schwaecher
+    if self.IstTrumpf and not pKarte.IstTrumpf then result := dkschwaecher
       else
       begin
         if self.IstTrumpf and pKarte.IstTrumpf then
         begin
-          if self.Kartentyp < pKarte.Kartentyp then result := staerker;
-          if self.Kartentyp > pKarte.Kartentyp then result := schwaecher;
+          if self.Kartentyp < pKarte.Kartentyp then result := dkstaerker;
+          if self.Kartentyp > pKarte.Kartentyp then result := dkschwaecher;
           if self.Kartentyp = pKarte.Kartentyp then
           begin
-            if self.Farbe < pKarte.Farbe then result := staerker;
-            if self.Farbe > pKarte.Farbe then result := schwaecher;
-            if self.Farbe = pKarte.Farbe then result := gleich;
+            if self.Farbe < pKarte.Farbe then result := dkstaerker;
+            if self.Farbe > pKarte.Farbe then result := dkschwaecher;
+            if self.Farbe = pKarte.Farbe then result := dkgleich;
           end;
         end;
-        if (self.Kartentyp = Zehn) and (self.Farbe = Herz) and not (pKarte.Kartentyp = Zehn) and not (pKarte.Farbe = Herz) then result := schwaecher;
-        if (self.Kartentyp = Zehn) and (self.Farbe = Herz) and (pKarte.Kartentyp = Zehn) and (pKarte.Farbe = Herz) then result := gleich;
-        if not (self.Kartentyp = Zehn) and not (self.Farbe = Herz) and (pKarte.Kartentyp = Zehn) and (pKarte.Farbe = Herz) then result := staerker;
+        if (self.Kartentyp = dkZehn) and (self.Farbe = dkHerz) and not (pKarte.Kartentyp = dkZehn) and not (pKarte.Farbe = dkHerz) then result := dkschwaecher;
+        if (self.Kartentyp = dkZehn) and (self.Farbe = dkHerz) and (pKarte.Kartentyp = dkZehn) and (pKarte.Farbe = dkHerz) then result := dkgleich;
+        if not (self.Kartentyp = dkZehn) and not (self.Farbe = dkHerz) and (pKarte.Kartentyp = dkZehn) and (pKarte.Farbe = dkHerz) then result := dkstaerker;
       end;
   end;
 end;

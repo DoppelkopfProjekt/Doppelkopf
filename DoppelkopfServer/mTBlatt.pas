@@ -121,7 +121,7 @@ function TBlatt.istZugLegal(pKarte: TKarte; pStich: TStich): Boolean;
 begin
   result := true;
   if pStich.istErsteKarteTrumpf and not pKarte.IstTrumpf and self.istTrumpfInBlatt then result := false;
-  if not pStich.istErsteKarteTrumpf and not (pStich.getFarbeVonErsterKarte = Keine) then
+  if not pStich.istErsteKarteTrumpf and not (pStich.getFarbeVonErsterKarte = dkKeine) then
   begin
     if (not (pStich.getFarbeVonErsterKarte = pKarte.Farbe))
       and self.istFehlfarbeInBlatt(pStich.getFarbeVonErsterKarte) then result := false;

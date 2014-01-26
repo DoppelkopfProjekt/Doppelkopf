@@ -60,7 +60,7 @@ end;
 
 function TStich.getFarbeVonErsterKarte: dkFarbe;
 begin
-  if FKarten.Count = 0 then result := Keine else result := TKarte(FKarten[0]).farbe;
+  if FKarten.Count = 0 then result := dkKeine else result := TKarte(FKarten[0]).farbe;
 end;
 
 procedure TStich.AddSpieler(pSpieler: TObject);
@@ -87,14 +87,14 @@ begin
   end else
   begin
     Ergebnis := FAktuellBesteKarte.kannKarteMichStechen(pKarte);
-    if Ergebnis = staerker then
+    if Ergebnis = dkstaerker then
     begin
       FAktuellerSieger := pLegenderSpieler;
       FAktuellBesteKarte := pKarte;
     end;
-    if Ergebnis = gleich then
+    if Ergebnis = dkgleich then
     begin
-      if (pKarte.Code = 'HE10') and not (FNummer = 10) and (pKarte.SpielModus = Normal) then
+      if (pKarte.Code = 'HE10') and not (FNummer = 10) and (pKarte.SpielModus = dkNormal) then
       begin
         FAktuellerSieger := pLegenderSpieler;
         FAktuellBesteKarte := pKarte;

@@ -55,7 +55,7 @@ begin
   begin
     result := true;
     FSpieler.Add(pSpieler);
-    pSpieler.setIndex := FSpieler.IndexOf(pSpieler);
+    pSpieler.setIndex(FSpieler.IndexOf(pSpieler));
   end;
 end;
 
