@@ -14,7 +14,8 @@ uses
   mTDoppelkopfSpiel in 'mTDoppelkopfSpiel.pas',
   mTStich in 'mTStich.pas',
   mTBlatt in 'mTBlatt.pas',
-  mTSpielerManager in 'mTSpielerManager.pas';
+  mTSpielerManager in 'mTSpielerManager.pas',
+  mTKarte in 'mTKarte.pas';
 
 {$R *.RES}
 
