@@ -2,7 +2,7 @@ unit mTStich;
 
 interface
 
-uses Sysutils, classes, mTKarte, Dialogs;
+uses Sysutils, classes, mTKarte, Dialogs, mTSonderkarteEreignis;
 
 type
 
@@ -11,17 +11,22 @@ TStich = class
 private
   FSpielerListe: TList;
   FKarten: TList;
-  FAktuellerSieger: TObject;
+  FAktuellerSieger: Pointer;
   FAktuellBesteKarte: TKarte;
-  FAktuellerSpieler: TObject;
+  FAktuellerSpieler: Pointer;
   FNummer: Integer;
+  FReSonderPunkte: Integer;//Kann negativ werden
+  FSonderkarten: TList;
+
+  procedure erkenneSonderKarten(pNeueKarte: TKarte; pSpieler: Pointer);
+  procedure verarbeiteSonderPunkte;
 public
   function istErsteKarteTrumpf: Boolean;
   function getFarbeVonErsterKarte: dkFarbe;
   function kartenCount: Integer;
-  property AktuellerSieger: TObject read FAktuellerSieger;
-  procedure AddSpieler(pSpieler: TObject);
-  procedure LegeKarte(pKarte: TKarte; pLegenderSpieler: TObject);
+  property AktuellerSieger: Pointer read FAktuellerSieger;
+  procedure AddSpieler(pSpieler: Pointer);
+  procedure LegeKarte(pKarte: TKarte; pLegenderSpieler: Pointer);
   constructor Create(pNummer: Integer);
 
   function getPunkte: Integer;
@@ -29,13 +34,69 @@ end;
 
 implementation
 
+uses mTSpieler;
+
 constructor TStich.Create(pNummer: Integer);
 begin
+  FSonderkarten := TList.Create;
   FAktuellerSieger := nil;
   FAktuellBesteKarte := nil;
   FKarten := TList.Create;
   FSpielerListe := TList.Create;
   FNummer := pNummer;
+end;
+
+procedure TStich.erkenneSonderKarten(pNeueKarte: TKarte; pSpieler: Pointer);
+begin
+  //Fuchs
+  if pNeueKarte.Code = 'KAA' then self.FSonderkarten.Add(TSonderkarteEreignis.Create(pNeueKarte, pSpieler));
+  //Karlchen
+  if (self.FNummer = 10) and (pNeueKarte.Code = 'KRB') then self.FSonderkarten.Add(TSonderkarteEreignis.Create(pNeueKarte, pSpieler));
+end;
+
+procedure TStich.verarbeiteSonderPunkte;
+var i, counter: Integer;
+    SonderkarteEreignis: TSonderKarteEreignis;
+    karte: TKarte;
+    spieler: TSpieler;
+begin
+  for i := 0 to self.FSonderkarten.Count-1 do
+  begin
+    SonderkarteEreignis := FSonderkarten[i];
+    karte := sonderkarteEreignis.Karte;
+    spieler := sonderkarteEreignis.spieler;
+    //Fuchs verarbeiten
+    if karte.Code = 'KAA' then
+    begin
+      if not (karte = self.FAktuellBesteKarte) and not (spieler.partei = TSpieler(self.FaktuellerSieger).partei) then
+      begin
+        TSpieler(self.FAktuellerSieger).gibExtraPunkt;
+      end;
+    end;
+    //Karlchen verarbeiten
+    if karte.Code = 'KRB' then
+    begin
+      if (karte = self.FAktuellerSieger) then
+      begin
+        TSpieler(self.FAktuellerSieger).gibExtraPunkt;
+      end;
+      if not (karte = self.FAktuellBesteKarte) and (spieler.partei = TSpieler(self.FaktuellerSieger).partei) then
+      begin
+        TSpieler(self.FAktuellerSieger).gibExtraPunkt;
+      end;
+    end;
+  end;
+  //Doppelköpfe erkennen
+  counter := 0;
+  for i := 0 to 3 do
+  begin
+    karte := self.FKarten[i];
+    inc(counter, karte.Punkte);
+  end;
+  if counter >= 40 then
+  begin
+    TSpieler(self.FAktuellerSieger).gibExtraPunkt;
+  end;
 end;
 
 function TStich.kartenCount: Integer;
@@ -63,7 +124,7 @@ begin
   if FKarten.Count = 0 then result := dkKeine else result := TKarte(FKarten[0]).farbe;
 end;
 
-procedure TStich.AddSpieler(pSpieler: TObject);
+procedure TStich.AddSpieler(pSpieler: Pointer);
 begin
 if FSpielerListe.count >= 4 then ShowMessage('Zu viele Spieler')
   else
@@ -72,13 +133,14 @@ if FSpielerListe.count >= 4 then ShowMessage('Zu viele Spieler')
   end;
 end;
 
-procedure TStich.LegeKarte(pKarte: TKarte; pLegenderSpieler: TObject);
+procedure TStich.LegeKarte(pKarte: TKarte; pLegenderSpieler: Pointer);
 var Ergebnis: dkErgebnis;
 begin
   if FSpielerListe.Count = 4 then ShowMessage('Keine 4 Spieler zum Stich hinzugefügt!');
   if FKarten.count >= 4 then ShowMessage('5 Karten auf einem Stich!?!');
 
   FKarten.add(pKarte);
+  self.erkenneSonderKarten(pKarte, pLegenderSpieler);
   if not (FSpielerListe[FKarten.count-1] = pLegenderSpieler) then ShowMessage('Der falsche Spieler legt die Karte!?!');
   if FKarten.count = 1 then
   begin

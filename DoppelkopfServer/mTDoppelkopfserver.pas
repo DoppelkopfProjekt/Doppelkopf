@@ -2,7 +2,7 @@ unit mTDoppelkopfserver;
 
 interface
 
-uses Sysutils, classes, mServer, mTNetworkMessage, mTSpieler, mTDoppelkopfSpiel;
+uses Sysutils, classes, mServer, mTNetworkMessage, mTSpieler, mTDoppelkopfSpiel, StringKonstanten;
 
 type
 

@@ -18,7 +18,8 @@ uses
   mTKarte in 'mTKarte.pas',
   mTDoppelkopfDeck in 'mTDoppelkopfDeck.pas',
   mTSoloAnfrage in 'mTSoloAnfrage.pas',
-  StringKonstanten in 'StringKonstanten.pas';
+  StringKonstanten in 'StringKonstanten.pas',
+  mTSonderkarteEreignis in 'mTSonderkarteEreignis.pas';
 
 {$R *.RES}
 
