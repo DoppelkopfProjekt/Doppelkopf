@@ -35,6 +35,7 @@ type
     property Partei: dkPartei read getPartei;
 
     procedure setSpielModus(pModus: dkSpielModus);
+    procedure macheZumSolisten;
   end;
 
 implementation
@@ -48,6 +49,11 @@ begin
   FGewonneneStiche := TObjectList.Create;
   FExtraPunkte := 0;
   FSpieltSolo := false;
+end;
+
+procedure TSpieler.macheZumSolisten;
+begin
+  self.FSpieltSolo := true;
 end;
 
 procedure TSpieler.setIndex(pIndex: Integer);

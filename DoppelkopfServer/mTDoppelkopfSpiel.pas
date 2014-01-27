@@ -6,6 +6,8 @@ uses mTSpielerManager, mTSpieler, mTStich, dialogs, mTDoppelkopfDeck, mTBlatt, m
 
 type
 
+dkAnsage = (dkSchwarz, dkKeine3, dkKeine6, dkKeine9, dkRe, dkKontra);
+
 TDoppelkopfSpiel = class
 private
   FSpielerManager: TSpielerManager;
@@ -14,25 +16,29 @@ private
   FAktuellerSpielerIndex: Integer;
   FSoloAnfragen: TList;
 
- (* function playerForIP(pIP: string): TSpieler;
-  function playerForName(pName: string): TSpieler;
-  function playerForIndex(pIndex: Integer): TSpieler;
-  procedure deletePlayerWithIP(pIP: string);
-  function countConnectedPlayer: Integer; *)
+  FSpielModus: dkSpielModus;
+  FSolistIP: string;
+  FZahlGelegteKarten: Integer;
+
+  procedure setSpielModus(pModus: dkSpielModus);
+  function countConnectedPlayer: Integer;
+
+  function aktuellerSpieler: TSpieler;
 public
   constructor Create;
 
   function addPlayer(pIP, pName: string): Boolean;
 
-  function aktuellerSpieler: TSpieler;
+  function aktuellerSpielerName: string;
   function aktuelleSpielerIP: string;
+  function NameForSpielerIP(pIP: string): string;
+  function SpielerIPForName(pName: string): string;
 
   procedure starteSpiel;
   function legeKarte(pKartenCode: string; pIP:string): Boolean;
   procedure MacheSoloAnsage(pSpielerIP: string; pAnsageCode: string);
- // function EntscheideWelchesSolo: string;
-  //procedure MacheAnsage(pIP: string);
-  //Saemtliche Soli implementieren
+  procedure EntscheideWelchesSolo;
+  //procedure MacheAnsage(pIP: string, pArt: dkAnsage);
 
   function getKartenPunkteRePartei: Integer;
   function getKartenPunkteKontraPartei: Integer;
@@ -41,6 +47,9 @@ public
 
   property AktuellerStich: TStich read FAktuellerStich;
   property RundenNummer: Integer read FRundenNummer;
+  property SpielModus: dkSpielModus read FSpielModus;
+  property SolistIP: string read FSolistIP; //Gibt '' zurueck wenn kein Solo gespielt wird
+  property ZahlGelegteKarten: Integer read FZahlGelegteKarten;
 end;
 
 
@@ -50,12 +59,55 @@ constructor TDoppelkopfSpiel.Create;
 begin
   FSpielerManager := TSpielerManager.Create;
   FSoloAnfragen := TList.Create;
+  FSolistIP := '';
+  FSpielModus := dkNormal;
+  self.FZahlGelegteKarten := 0;
+end;
+
+procedure TDoppelkopfSpiel.setSpielModus(pModus: dkSpielModus);
+var i: Integer;
+begin
+  for i := 1 to 4 do
+  begin
+    self.FSpielerManager.playerForIndex(i).setSpielModus(pModus);
+  end;
+end;
+
+procedure TDoppelkopfSpiel.EntscheideWelchesSolo;
+var i: Integer;
+    anfrage, wichtigsteAnfrage: TSoloAnfrage;
+begin
+  if self.FZahlGelegteKarten > 0 then
+  begin
+    ShowMessage('Zu spät um Solo zu bestimmen');
+    exit;
+  end;
+  if self.FSoloAnfragen.Count > 1 then
+  begin
+    wichtigsteAnfrage := self.FSoloAnfragen[0];
+    for i := 1 to self.FSoloAnfragen.Count-1 do
+    begin
+      anfrage := self.FSoloAnfragen[i];
+      if anfrage.Prioritaet > wichtigsteAnfrage.Prioritaet then
+      begin
+        wichtigsteAnfrage := anfrage;
+      end;
+    end;
+    self.setSpielModus(wichtigsteAnfrage.Art);
+    self.FSolistIP := wichtigsteAnfrage.Sender.IP;
+    wichtigsteAnfrage.Sender.macheZumSolisten;
+  end;
 end;
 
 procedure TDoppelkopfSpiel.MacheSoloAnsage(pSpielerIP: string; pAnsageCode: string);
 var Spieler: TSpieler;
     AnsageArt: dkSpielModus;
 begin
+  if self.FZahlGelegteKarten > 0 then
+  begin
+    ShowMessage('Zu spät um Solo anzusagen');
+    exit;
+  end;
   AnsageArt := dkNormal;
   spieler := self.FSpielerManager.playerForIP(pSpielerIP);
   if pAnsageCode = FLEISCHLOSER then AnsageArt := dkFleischloser;
@@ -86,7 +138,7 @@ end;
 
 function TDoppelkopfSpiel.getSiegerPartei;
 begin
-  if self.FRundenNummer < 10 then
+  if (self.FRundenNummer < 10) and (self.ZahlGelegteKarten < 40) then
   begin
     ShowMessage('Spiel noch nicht beendet und schon Sieger wissen wollen?!?');
     result := re;
@@ -130,14 +182,29 @@ begin
   //Multiplikatoren hinzufuegen
 end;
 
-function TDoppelkopfSpiel.aktuellerSpieler;
+function TDoppelkopfSpiel.aktuellerSpieler: TSpieler;
 begin
   result := self.FSpielerManager.playerForIndex(self.FAktuellerSpielerIndex mod 4);
+end;
+
+function TDoppelkopfSpiel.aktuellerSpielerName;
+begin
+  result := self.aktuellerSpieler.Name;
 end;
 
 function TDoppelkopfSpiel.aktuelleSpielerIP;
 begin
   result := self.aktuellerSpieler.IP;
+end;
+
+function TDoppelkopfSpiel.NameForSpielerIP(pIP: string): string;
+begin
+  result := self.FSpielerManager.playerForIP(pIP).Name;
+end;
+
+function TDoppelkopfSpiel.SpielerIPForName(pName: string): string;
+begin
+  result := self.FSpielerManager.playerForName(pName).Name;
 end;
 
 function TDoppelkopfSpiel.legeKarte(pKartenCode: string; pIP: string): Boolean;
@@ -147,7 +214,11 @@ begin
   spieler := self.FSpielerManager.playerForIP(pIP);
   result := spieler.karteLegen(pKartenCode, self.FAktuellerStich);
   //Wenn erfolgreich, ist der nächste Spieler dran
-  if result then inc(self.FAktuellerSpielerIndex);
+  if result then
+  begin
+    inc(self.FAktuellerSpielerIndex);
+    inc(self.FZahlGelegteKarten);
+  end;
   //Wenn Stich voll...
   if self.FAktuellerStich.kartenCount >= 4 then
   begin
@@ -164,7 +235,11 @@ var deck: TDoppelkopfDeck;
     i, k: Integer;
     spieler: TSpieler;
 begin
-  if not self.FSpielerManager.countConnectedPlayer = 4 then ShowMessage('Nicht korrekte Zahl Spieler');
+  if not self.FSpielerManager.countConnectedPlayer = 4 then
+  begin
+    ShowMessage('Nicht korrekte Zahl Spieler');
+    exit;
+  end;
 
   //Karten austeilen...
   deck := TDoppelkopfDeck.Create;
@@ -193,29 +268,9 @@ begin
   result := self.FSpielerManager.addPlayer(spieler);
 end;
 
-(*function TDoppelkopfSpiel.playerForIP(pIP: string): TSpieler;
-begin
-  result := self.FSpielerManager.playerForIP(pIP);
-end;
-
-function TDoppelkopfSpiel.playerForName(pName: string): TSpieler;
-begin
-  result := self.FSpielerManager.playerForName(pName);
-end;
-
-function TDoppelkopfSpiel.playerForIndex(pIndex: Integer): TSpieler;
-begin
-  result := self.FSpielerManager.playerForIndex(pIndex);
-end;
-
-procedure TDoppelkopfSpiel.deletePlayerWithIP(pIP: string);
-begin
-  self.FSpielerManager.deletePlayerWithIP(pIP);
-end;
-
 function TDoppelkopfSpiel.countConnectedPlayer;
 begin
   result := self.FSpielerManager.countConnectedPlayer;
-end;  *)
+end;
 
 end.
