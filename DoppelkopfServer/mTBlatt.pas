@@ -2,7 +2,7 @@ unit mTBlatt;
 
 interface
 
-uses classes, sysutils, mTKarte, mTStich, dialogs, types;
+uses classes, sysutils, mTKarte, mTStich, dialogs, types, contnrs;
 
 type
 
@@ -10,7 +10,7 @@ dkPartei = (Re, Kontra);
 
 TBlatt = class
 private
-  FKarten: TList;
+  FKarten: TObjectList;
   FPartei: dkPartei;
   function istTrumpfInBlatt: Boolean;
   function getAnzahlTrumpfInBlatt: Integer;
@@ -64,7 +64,7 @@ begin
   begin
     if TKarte(FKarten[i]).Code = pCode then
     begin
-      result := FKarten[i];
+      result := TKarte(FKarten[i]);
       break;
     end;
   end;
@@ -132,6 +132,7 @@ procedure TBlatt.KarteHinzufuegen(pKarte: TKarte);
 begin
   FKarten.Add(pKarte);
   if FKarten.Count > 10 then ShowMessage('Zu viele Karten ausgeteilt!');
+  if self.FKarten.Count = 10 then self.bestimmePartei;
 end;
 
 end.

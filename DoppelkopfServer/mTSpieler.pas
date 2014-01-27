@@ -2,7 +2,7 @@ unit mTSpieler;
 
 interface
 
-uses Classes, SysUtils, mTBlatt, mTKarte, dialogs, mTStich;
+uses Classes, SysUtils, mTBlatt, mTKarte, dialogs, mTStich, Contnrs;
 
 type
   TSpieler = class
@@ -13,7 +13,7 @@ type
     FName: string;
     FIP: string;
     FBlatt: TBlatt;
-    FGewonneneStiche: TList;
+    FGewonneneStiche: TObjectList;
     FExtraPunkte: Integer;
     function getPartei: dkPartei;
   public
@@ -45,7 +45,7 @@ begin
   FIsIndexSet := false;
   FIP := pIP;
   FBlatt := TBlatt.Create;
-  FGewonneneStiche := TList.Create;
+  FGewonneneStiche := TObjectList.Create;
   FExtraPunkte := 0;
   FSpieltSolo := false;
 end;

@@ -46,7 +46,7 @@ begin
 end;
 
 procedure TDoppelkopfServer.processNewConnection(pClientIP: string; pClientPort: integer);
-var spieler: TSpieler;
+//var spieler: TSpieler;
 begin
   //Spieler := TSpieler.create(pClientIP);
   //FSpielerManager.addPlayer(Spieler);
@@ -59,15 +59,15 @@ end;
 
 procedure TDoppelkopfServer.processMessage(pClientIP: string; pClientPort: integer; pMessage: string);
 var msg: TNetworkMessage;
-    player: TSpieler;
+   // player: TSpieler;
     s: string;
-    i: Integer;
+  //  i: Integer;
 begin
   msg := TNetworkMessage.Create(pMessage);
   if (msg.key = CONNECT) then
   begin
     //player := FSpielerManager.playerForIP(pClientIP);
-    player.Name := msg.parameter[0];
+   // player.Name := msg.parameter[0];
     self.send(pClientIP, pClientPort, msg.key + '#YES#');
 
     s := SPIELBEGINN;

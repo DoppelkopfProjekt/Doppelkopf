@@ -86,7 +86,11 @@ end;
 
 function TDoppelkopfSpiel.getSiegerPartei;
 begin
-  if self.FRundenNummer < 10 then ShowMessage('Spiel noch nicht beendet und schon Sieger wissen wollen?!?')
+  if self.FRundenNummer < 10 then
+  begin
+    ShowMessage('Spiel noch nicht beendet und schon Sieger wissen wollen?!?');
+    result := re;
+  end
   else
   begin
     result := Re;

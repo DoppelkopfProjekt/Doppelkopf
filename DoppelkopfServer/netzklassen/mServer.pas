@@ -93,7 +93,7 @@ IMPLEMENTATION
     lNachricht,lEineNachricht:string;
     lPos:integer;
   begin
-    lNachricht:=Socket.receiveText;
+    lNachricht:=string(Socket.receiveText);
     repeat
        lPos:=pos(ZEILENENDE,lNachricht);
        lEineNachricht:=copy(lNachricht,1,lPos-1);
@@ -135,7 +135,7 @@ IMPLEMENTATION
   begin
     lVerbindung:=self.serverVerbindungVonIP(pCLientIP, pClientPort);
     if (lVerbindung<>nil) then
-        lVerbindung.sendText(pMessage+ZEILENENDE);
+        lVerbindung.sendText(ansiString(pMessage+ZEILENENDE));
   end;
   
   procedure TServer.sendToAll(pMessage:string);
@@ -145,7 +145,7 @@ IMPLEMENTATION
   begin
        for lVerbindungenZaehler:=0 to hatServerSocket.Socket.ActiveConnections-1 do begin
         lVerbindung:=hatServerSocket.socket.connections[lVerbindungenZaehler];
-        lVerbindung.sendText(pMessage+ZEILENENDE);
+        lVerbindung.sendText(ansiString(pMessage+ZEILENENDE));
        end;
   end;
 

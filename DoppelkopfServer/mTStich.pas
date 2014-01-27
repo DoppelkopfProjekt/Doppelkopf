@@ -2,31 +2,31 @@ unit mTStich;
 
 interface
 
-uses Sysutils, classes, mTKarte, Dialogs, mTSonderkarteEreignis;
+uses Sysutils, classes, mTKarte, Dialogs, mTSonderkarteEreignis, Contnrs;
 
 type
 
 TStich = class
 
 private
-  FSpielerListe: TList;
-  FKarten: TList;
-  FAktuellerSieger: Pointer;
+  FSpielerListe: TObjectList;
+  FKarten: TObjectList;
+  FAktuellerSieger: TObject;
   FAktuellBesteKarte: TKarte;
-  FAktuellerSpieler: Pointer;
+  //FAktuellerSpieler: TObject;
   FNummer: Integer;
-  FReSonderPunkte: Integer;//Kann negativ werden
-  FSonderkarten: TList;
+ // FReSonderPunkte: Integer;//Kann negativ werden
+  FSonderkarten: TObjectList;
 
-  procedure erkenneSonderKarten(pNeueKarte: TKarte; pSpieler: Pointer);
+  procedure erkenneSonderKarten(pNeueKarte: TKarte; pSpieler: TObject);
   procedure verarbeiteSonderPunkte;
 public
   function istErsteKarteTrumpf: Boolean;
   function getFarbeVonErsterKarte: dkFarbe;
   function kartenCount: Integer;
-  property AktuellerSieger: Pointer read FAktuellerSieger;
-  procedure AddSpieler(pSpieler: Pointer);
-  procedure LegeKarte(pKarte: TKarte; pLegenderSpieler: Pointer);
+  property AktuellerSieger: TObject read FAktuellerSieger;
+  procedure AddSpieler(pSpieler: TObject);
+  procedure LegeKarte(pKarte: TKarte; pLegenderSpieler: TObject);
   constructor Create(pNummer: Integer);
 
   function getPunkte: Integer;
@@ -38,15 +38,15 @@ uses mTSpieler;
 
 constructor TStich.Create(pNummer: Integer);
 begin
-  FSonderkarten := TList.Create;
+  FSonderkarten := TObjectList.Create;
   FAktuellerSieger := nil;
   FAktuellBesteKarte := nil;
-  FKarten := TList.Create;
-  FSpielerListe := TList.Create;
+  FKarten := TObjectList.Create;
+  FSpielerListe := TObjectList.Create;
   FNummer := pNummer;
 end;
 
-procedure TStich.erkenneSonderKarten(pNeueKarte: TKarte; pSpieler: Pointer);
+procedure TStich.erkenneSonderKarten(pNeueKarte: TKarte; pSpieler: Tobject);
 begin
   //Fuchs
   if pNeueKarte.Code = 'KAA' then self.FSonderkarten.Add(TSonderkarteEreignis.Create(pNeueKarte, pSpieler));
@@ -62,7 +62,7 @@ var i, counter: Integer;
 begin
   for i := 0 to self.FSonderkarten.Count-1 do
   begin
-    SonderkarteEreignis := FSonderkarten[i];
+    SonderkarteEreignis := TSonderkarteEreignis(FSonderkarten[i]);
     karte := sonderkarteEreignis.Karte;
     spieler := sonderkarteEreignis.spieler;
     //Fuchs verarbeiten
@@ -90,7 +90,7 @@ begin
   counter := 0;
   for i := 0 to 3 do
   begin
-    karte := self.FKarten[i];
+    karte := TKarte(self.FKarten[i]);
     inc(counter, karte.Punkte);
   end;
   if counter >= 40 then
@@ -124,7 +124,7 @@ begin
   if FKarten.Count = 0 then result := dkKeine else result := TKarte(FKarten[0]).farbe;
 end;
 
-procedure TStich.AddSpieler(pSpieler: Pointer);
+procedure TStich.AddSpieler(pSpieler: TObject);
 begin
 if FSpielerListe.count >= 4 then ShowMessage('Zu viele Spieler')
   else
@@ -133,7 +133,7 @@ if FSpielerListe.count >= 4 then ShowMessage('Zu viele Spieler')
   end;
 end;
 
-procedure TStich.LegeKarte(pKarte: TKarte; pLegenderSpieler: Pointer);
+procedure TStich.LegeKarte(pKarte: TKarte; pLegenderSpieler: TObject);
 var Ergebnis: dkErgebnis;
 begin
   if FSpielerListe.Count = 4 then ShowMessage('Keine 4 Spieler zum Stich hinzugefügt!');
@@ -164,6 +164,7 @@ begin
      //Ansonsten gewinnt die zuerst gelegte Karte
     end;
   end;
+  if self.FKarten.Count = 4 then self.verarbeiteSonderPunkte;
 end;
 
 end.

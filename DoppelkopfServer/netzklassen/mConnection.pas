@@ -87,7 +87,7 @@ implementation
 
   procedure TConnection.send(pMessage:string);
   begin
-    clientSocket.socket.sendText(pMessage+ZEILENENDE);
+    clientSocket.socket.sendText(ansistring(pMessage+ZEILENENDE));
     nachricht:='';
   end;
 
@@ -124,7 +124,7 @@ implementation
     lNachricht, lEineNachricht:string;
     lPos:integer;
   begin
-    lNachricht:=Socket.receiveText;
+    lNachricht:=string(Socket.receiveText);
     repeat
       lPos := pos(ZEILENENDE,lNachricht);
       if lPos>0 then begin
