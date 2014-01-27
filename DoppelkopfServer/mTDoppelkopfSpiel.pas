@@ -100,7 +100,8 @@ end;
 
 function TDoppelkopfSpiel.getPunkteVonSieger: Integer;
 var sieger: dkPartei;
-    temp: Integer;
+    temp, i: Integer;
+    spieler: TSpieler;
 begin
   result := 1;  //Punkt fuer gewonnen
   sieger := self.getSiegerPartei;
@@ -114,7 +115,18 @@ begin
   end;
   inc(result, (temp-1) div 30);
 
-  //Extra-Punkte hinzufuegen
+  //Extrapunkte
+  for i := 1 to 4 do
+  begin
+    spieler := self.FSpielerManager.playerForIndex(i);
+    if spieler.Partei = sieger then
+    begin
+      inc(result, spieler.ExtraPunkte);
+    end else
+    begin
+      dec(result, spieler.ExtraPunkte);
+    end;
+  end;
   //Multiplikatoren hinzufuegen
 end;
 
@@ -141,7 +153,6 @@ begin
   begin
   //Gewinner kriegt seinen Stich
     TSpieler(self.FAktuellerStich.AktuellerSieger).gibGewonnenenStich(self.FAktuellerStich);
-    //Sonderpunkte muessen noch ausgewertet werden
 
     inc(self.FRundenNummer);
     self.FAktuellerStich := TStich.Create(self.FRundenNummer);
