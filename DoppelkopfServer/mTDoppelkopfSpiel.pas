@@ -160,10 +160,10 @@ begin
   if sieger = Kontra then
   begin
     inc(result);//Extrapunkt wenn Kontra gewinnt
-    temp := self.getKartenPunkteKontraPartei - 120;
+    temp := self.getKartenPunkteRePartei;
   end else
   begin
-    temp := self.getKartenPunkteRePartei - 120;
+    temp := self.getKartenPunkteKontraPartei;
   end;
   inc(result, (temp-1) div 30);
 
@@ -187,12 +187,12 @@ begin
   result := self.FSpielerManager.playerForIndex(self.FAktuellerSpielerIndex mod 4);
 end;
 
-function TDoppelkopfSpiel.aktuellerSpielerName;
+function TDoppelkopfSpiel.aktuellerSpielerName:string;
 begin
   result := self.aktuellerSpieler.Name;
 end;
 
-function TDoppelkopfSpiel.aktuelleSpielerIP;
+function TDoppelkopfSpiel.aktuelleSpielerIP:string;
 begin
   result := self.aktuellerSpieler.IP;
 end;
