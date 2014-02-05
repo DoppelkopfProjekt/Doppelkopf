@@ -86,7 +86,7 @@ begin
       end;
     end;
   end;
-  //Doppelköpfe erkennen
+  //Doppelkï¿½pfe erkennen
   counter := 0;
   for i := 0 to 3 do
   begin
@@ -104,7 +104,7 @@ begin
   result := self.FKarten.Count;
 end;
 
-function TStich.getPunkte;
+function TStich.getPunkte: integer;
 var i: Integer;
 begin
   result := 0;
@@ -136,7 +136,7 @@ end;
 procedure TStich.LegeKarte(pKarte: TKarte; pLegenderSpieler: TObject);
 var Ergebnis: dkErgebnis;
 begin
-  if FSpielerListe.Count = 4 then ShowMessage('Keine 4 Spieler zum Stich hinzugefügt!');
+  if FSpielerListe.Count = 4 then ShowMessage('Keine 4 Spieler zum Stich hinzugefï¿½gt!');
   if FKarten.count >= 4 then ShowMessage('5 Karten auf einem Stich!?!');
 
   FKarten.add(pKarte);
