@@ -79,7 +79,7 @@ var i: Integer;
 begin
   if self.FZahlGelegteKarten > 0 then
   begin
-    ShowMessage('Zu spät um Solo zu bestimmen');
+    ShowMessage('Zu spï¿½t um Solo zu bestimmen');
     exit;
   end;
   if self.FSoloAnfragen.Count > 1 then
@@ -105,7 +105,7 @@ var Spieler: TSpieler;
 begin
   if self.FZahlGelegteKarten > 0 then
   begin
-    ShowMessage('Zu spät um Solo anzusagen');
+    ShowMessage('Zu spï¿½t um Solo anzusagen');
     exit;
   end;
   AnsageArt := dkNormal;
@@ -136,17 +136,17 @@ begin
   result := 240 - self.getKartenPunkteRePartei;
 end;
 
-function TDoppelkopfSpiel.getSiegerPartei;
+function TDoppelkopfSpiel.getSiegerPartei: dkPartei;
 begin
   if (self.FRundenNummer < 10) and (self.ZahlGelegteKarten < 40) then
   begin
     ShowMessage('Spiel noch nicht beendet und schon Sieger wissen wollen?!?');
-    result := re;
+    result := -1;
   end
   else
   begin
-    result := Re;
-    if self.getKartenPunkteRePartei > 120 then result := Kontra;
+    result := Re;getSiegerPartei;
+    if self.getKartenPunkteKontraPartei >= 120 then result := Kontra;
   end;
 end;
 
@@ -156,7 +156,7 @@ var sieger: dkPartei;
     spieler: TSpieler;
 begin
   result := 1;  //Punkt fuer gewonnen
-  sieger := self.getSiegerPartei;
+  sieger := self.
   if sieger = Kontra then
   begin
     inc(result);//Extrapunkt wenn Kontra gewinnt
@@ -213,7 +213,7 @@ var //istLegal: Boolean;
 begin
   spieler := self.FSpielerManager.playerForIP(pIP);
   result := spieler.karteLegen(pKartenCode, self.FAktuellerStich);
-  //Wenn erfolgreich, ist der nächste Spieler dran
+  //Wenn erfolgreich, ist der nï¿½chste Spieler dran
   if result then
   begin
     inc(self.FAktuellerSpielerIndex);
