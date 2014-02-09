@@ -110,9 +110,9 @@ begin
   end;
   AnsageArt := dkNormal;
   spieler := self.FSpielerManager.playerForIP(pSpielerIP);
-  if pAnsageCode = FLEISCHLOSER then AnsageArt := dkFleischloser;
-  if pAnsageCode = DAMENSOLO then AnsageArt := dkDamensolo;
-  if pAnsageCode = BUBENSOLO then AnsageArt := dkBubensolo;
+  if pAnsageCode = VORBEHALT_FLEISCHLOSER then AnsageArt := dkFleischloser;
+  if pAnsageCode = VORBEHALT_DAMENSOLO then AnsageArt := dkDamensolo;
+  if pAnsageCode = VORBEHALT_BUBENSOLO then AnsageArt := dkBubensolo;
   if AnsageArt = dkNormal then ShowMessage('Zum Normal-Spielen braucht man keine Ansage?!?');
 
   self.FSoloAnfragen.Add(TSoloAnfrage.Create(AnsageArt, spieler));
