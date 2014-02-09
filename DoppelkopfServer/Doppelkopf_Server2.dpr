@@ -15,7 +15,8 @@ uses
   mTSoloAnfrage in 'mTSoloAnfrage.pas',
   StringKonstanten in 'StringKonstanten.pas',
   mTSonderkarteEreignis in 'mTSonderkarteEreignis.pas',
-  mTServer in 'mTServer.pas';
+  mTServer in 'mTServer.pas',
+  mTExpectedTransmissionConfirmation in 'mTExpectedTransmissionConfirmation.pas';
 
 {$R *.RES}
 
