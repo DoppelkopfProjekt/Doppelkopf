@@ -2,7 +2,7 @@ unit mTDoppelkopfserver;
 
 interface
 
-uses Sysutils, Types, classes, mTServer, mTNetworkMessage, mTSpieler, mTDoppelkopfSpiel, StringKonstanten, Contnrs, mTExpectedTransmissionConfirmation, ExtCtrls;
+uses Sysutils, Types, classes, mTServer, mTNetworkMessage, mTSpieler, mTDoppelkopfSpiel, StringKonstanten, Contnrs, mTExpectedTransmissionConfirmation, ExtCtrls, dialogs;
 
 const TimeOut = 0.3;
 
@@ -56,6 +56,11 @@ begin
   self.FConfirmationSpielbeginnCounter := 0;
 end;
 
+procedure TDoppelkopfServer.ClientHasConnected(pClientIP: string);
+begin
+  ShowMessage('lol');
+end;
+
 procedure TDoppelkopfServer.processTransmissionConfirmations(sender: TObject);
 var i: Integer;
     temp: TExpectedTransmissionConfirmation;
@@ -74,13 +79,6 @@ destructor TDoppelkopfServer.Destroy;
 begin
 //FSpielerManager.Free;
   inherited Destroy;
-end;
-
-procedure TDoppelkopfServer.ClientHasConnected(pClientIP: string);
-//var spieler: TSpieler;
-begin
-  //Spieler := TSpieler.create(pClientIP);
-  //FSpielerManager.addPlayer(Spieler);
 end;
 
 procedure TDoppelkopfServer.ClientHasDisconnected(pClientIP: string);

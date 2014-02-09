@@ -29,15 +29,24 @@ object Form1: TForm1
     Height = 25
     Caption = 'Button1'
     TabOrder = 1
-    OnClick = Button1Click
+    OnClick = Button2Click
   end
   object Memo1: TMemo
-    Left = 64
-    Top = 88
+    Left = 56
+    Top = 63
     Width = 185
     Height = 89
     Lines.Strings = (
       'Memo1')
     TabOrder = 2
+  end
+  object Button2: TButton
+    Left = 56
+    Top = 176
+    Width = 75
+    Height = 25
+    Caption = 'Server starten'
+    TabOrder = 3
+    OnClick = Button2Click
   end
 end

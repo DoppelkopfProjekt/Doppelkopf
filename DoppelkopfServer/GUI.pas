@@ -4,17 +4,19 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, mTNetworkMessage;
+  StdCtrls, mTNetworkMessage, mTDoppelkopfServer;
 
 type
   TForm1 = class(TForm)
     Edit1: TEdit;
     Button1: TButton;
     Memo1: TMemo;
+    Button2: TButton;
+    procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
-    { Private-Deklarationen }
+     FServer: TDoppelkopfServer;
   public
     { Public-Deklarationen }
   end;
@@ -39,6 +41,12 @@ begin
     memo1.lines.add(msg.parameter[i]);
   end;
 
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  FServer := TDoppelkopfServer.Create(45678);
+  FServer.Activate;
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);

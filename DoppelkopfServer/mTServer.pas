@@ -2,7 +2,7 @@ unit mTServer;
 
 interface
 
-uses ScktComp;
+uses ScktComp, dialogs;
 
 type
 
@@ -40,6 +40,7 @@ end;
 
 procedure TServer.OnClientConnect(Sender: TObject; Socket: TCustomWinSocket);
 begin
+  ShowMessage('ClientConnect');
   self.ClientHasConnected(socket.RemoteAddress);
 end;
 
