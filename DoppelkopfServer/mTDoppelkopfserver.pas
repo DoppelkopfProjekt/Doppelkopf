@@ -8,27 +8,30 @@ type
 
 TDoppelkopfServer = class(TServer)
 private
-  procedure processSpielbeginn(pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
-  procedure processKarten(pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
-  procedure processVorbehalteAbfragen (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
-  procedure processDamensolo (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
-  procedure processBubensolo (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
-  procedure processFleischloser (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
-  procedure processHochzeit (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
-  procedure processSolo (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
-  procedure processWelcheKarte (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
-  procedure processAktuellerStich (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
-  procedure processGeweinnerStich (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
-  procedure processGewinnerSpiel (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
-  procedure processAnsage (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
-  procedure processAnsageGemacht (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
-  procedure processUngueltigeKarte (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
+  procedure processConnect(pClientIP: string; pMessage: TNetworkMessage);
+  procedure processSpielbeginn(pClientIP: string; pMessage: TNetworkMessage);
+  procedure processKarten(pClientIP: string; pMessage: TNetworkMessage);
+  procedure processVorbehalteAbfragen (pClientIP: string; pMessage: TNetworkMessage);
+  procedure processDamensolo (pClientIP: string; pMessage: TNetworkMessage);
+  procedure processBubensolo (pClientIP: string; pMessage: TNetworkMessage);
+  procedure processFleischloser (pClientIP: string; pMessage: TNetworkMessage);
+  procedure processHochzeit (pClientIP: string; pMessage: TNetworkMessage);
+  procedure processSolo (pClientIP: string; pMessage: TNetworkMessage);
+  procedure processSoloBestaetigen (pClientIP: string; pMessage: TNetworkMessage);
+  procedure processWelcheKarte (pClientIP: string; pMessage: TNetworkMessage);
+  procedure processWelcheKarteBestaetigen (pClientIP: string; pMessage: TNetworkMessage);
+  procedure processAktuellerStich (pClientIP: string; pMessage: TNetworkMessage);
+  procedure processGewinnerStich (pClientIP: string; pMessage: TNetworkMessage);
+  procedure processGewinnerSpiel (pClientIP: string; pMessage: TNetworkMessage);
+  procedure processAnsage (pClientIP: string; pMessage: TNetworkMessage);
+  procedure processAnsageGemacht (pClientIP: string;pMessage: TNetworkMessage);
+  //procedure processUngueltigeKarte (pClientIP: string; pMessage: TNetworkMessage);
 public
   constructor Create(pPortNr: Integer);
   destructor Destroy; override;
- (* procedure ProcessMessage(pMessage: string; pSenderIP: string); override;
+  procedure ProcessMessage(pMessage: string; pSenderIP: string); override;
   procedure ClientHasConnected(pClientIP: string); override;
-  procedure ClientHasDisconnected(pClientIP: string); override;*)
+  procedure ClientHasDisconnected(pClientIP: string); override;
 end;
 
 implementation
@@ -45,116 +48,175 @@ begin
   inherited Destroy;
 end;
 
-(*procedure TDoppelkopfServer.processNewConnection(pClientIP: string; pClientPort: integer);
+procedure TDoppelkopfServer.ClientHasConnected(pClientIP: string);
 //var spieler: TSpieler;
 begin
   //Spieler := TSpieler.create(pClientIP);
   //FSpielerManager.addPlayer(Spieler);
 end;
 
-procedure TDoppelkopfServer.closeConnection(pClientIP: string; pClientPort: integer);
+procedure TDoppelkopfServer.ClientHasDisconnected(pClientIP: string);
 begin
-//  inherited closeConnection(pClientIP, pClientPort);
+
 end;
 
-procedure TDoppelkopfServer.processMessage(pClientIP: string; pClientPort: integer; pMessage: string);
+procedure TDoppelkopfServer.ProcessMessage(pMessage: string; pSenderIP: string);
 var msg: TNetworkMessage;
-   // player: TSpieler;
     s: string;
-  //  i: Integer;
 begin
   msg := TNetworkMessage.Create(pMessage);
   if (msg.key = CONNECT) then
   begin
-    //player := FSpielerManager.playerForIP(pClientIP);
-   // player.Name := msg.parameter[0];
-   // self.sendMessage(pClientIP, pClientPort, msg.key + '#YES#');
-
-    s := SPIELBEGINN;
-    //for i := 0 to FSpielerManager.countConnectedPlayer-1 do
-    begin
-   //   s := s + '#' + FSpielerManager.PlayerForIndex(i).name;
-    end;
-    s := s + '#';
-    //if FSpielerManager.countConnectedPlayer = 4 then
-    begin
-     // Self.sendToAll(s);
-    end;
+    self.processConnect(pSenderIP, msg);
   end;
-end;   *)
+  if (msg.key = ANSAGE) then
+  begin
+    self.processAnsage(pSenderIP, msg);
+  end;
+  if (msg.key = SPIELBEGINN) then
+  begin
+    self.processSpielbeginn(pSenderIP, msg);
+  end;
+  if (msg.key = KARTEN) then
+  begin
+    self.processKarten(pSenderIP, msg);
+  end;
+  if (msg.key = VORBEHALTE_ABFRAGEN) then
+  begin
+    self.processVorbehalteAbfragen(pSenderIP, msg);
+  end;
+  if (msg.key = VORBEHALT_DAMENSOLO) then
+  begin
+    self.processDamensolo(pSenderIP, msg);
+  end;
+  if (msg.key = VORBEHALT_BUBENSOLO) then
+  begin
+    self.processBubensolo(pSenderIP, msg);
+  end;
+  if (msg.key = VORBEHALT_FLEISCHLOSER) then
+  begin
+    self.processFleischloser(pSenderIP, msg);
+  end;
+  if (msg.key = VORBEHALT_HOCHZEIT) then
+  begin
+    self.processHochzeit(pSenderIP, msg);
+  end;
+  if (msg.key = SOLO) then
+  begin
+    self.processSolo(pSenderIP, msg);
+  end;
+  if (msg.key = SOLO_BESTAETIGEN) then
+  begin
+    self.processSoloBestaetigen(pSenderIP, msg);
+  end;
+  if (msg.key = WELCHE_KARTE) then
+  begin
+    self.processWelcheKarte(pSenderIP, msg);
+  end;
+  if (msg.key = WELCHE_KARTE_BESTAETIGEN) then
+  begin
+    self.processWelcheKarteBestaetigen(pSenderIP, msg);
+  end;
+  if (msg.key = AKTUELLER_STICH) then
+  begin
+    self.processAktuellerStich(pSenderIP, msg);
+  end;
+  if (msg.key = GEWINNER_STICH) then
+  begin
+    self.processGewinnerStich(pSenderIP, msg);
+  end;
+  if (msg.key = GEWINNER_SPIEL) then
+  begin
+    self.processGewinnerSpiel(pSenderIP, msg);
+  end;
+  if (msg.key = ANSAGE_GEMACHT) then
+  begin
+    self.processAnsageGemacht(pSenderIP, msg);
+  end;
+end;
 
 
-procedure TDoppelkopfServer.processSpielbeginn(pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processSpielbeginn(pClientIP: string;pMessage: TNetworkMessage);
 begin
 
 end;
 
-procedure TDoppelkopfServer.processKarten(pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processKarten(pClientIP: string;pMessage: TNetworkMessage);
 begin
 
 end;
 
-procedure TDoppelkopfServer.processVorbehalteAbfragen (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processVorbehalteAbfragen (pClientIP: string;pMessage: TNetworkMessage);
 begin
 
 end;
 
-procedure TDoppelkopfServer.processDamensolo (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processDamensolo (pClientIP: string;pMessage: TNetworkMessage);
 begin
 
 end;
 
-procedure TDoppelkopfServer.processBubensolo (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processBubensolo (pClientIP: string;pMessage: TNetworkMessage);
 begin
 
 end;
 
-procedure TDoppelkopfServer.processFleischloser (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processFleischloser (pClientIP: string;pMessage: TNetworkMessage);
 begin
 
 end;
 
-procedure TDoppelkopfServer.processHochzeit (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processHochzeit (pClientIP: string;pMessage: TNetworkMessage);
 begin
 
 end;
 
-procedure TDoppelkopfServer.processSolo (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processSolo (pClientIP: string;pMessage: TNetworkMessage);
 begin
 
 end;
 
-procedure TDoppelkopfServer.processWelcheKarte (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processWelcheKarte (pClientIP: string;pMessage: TNetworkMessage);
 begin
 
 end;
 
-procedure TDoppelkopfServer.processAktuellerStich (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processAktuellerStich (pClientIP: string;pMessage: TNetworkMessage);
 begin
 
 end;
 
-procedure TDoppelkopfServer.processGeweinnerStich (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processGewinnerStich (pClientIP: string;pMessage: TNetworkMessage);
 begin
 
 end;
 
-procedure TDoppelkopfServer.processGewinnerSpiel (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processGewinnerSpiel (pClientIP: string;pMessage: TNetworkMessage);
 begin
 
 end;
 
-procedure TDoppelkopfServer.processAnsage (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processAnsage (pClientIP: string;pMessage: TNetworkMessage);
 begin
 
 end;
 
-procedure TDoppelkopfServer.processAnsageGemacht (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processAnsageGemacht (pClientIP: string;pMessage: TNetworkMessage);
 begin
 
 end;
 
-procedure TDoppelkopfServer.processUngueltigeKarte (pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processConnect(pClientIP: string; pMessage: TNetworkMessage);
+begin
+
+end;
+
+procedure TDoppelkopfServer.processSoloBestaetigen(pClientIP: string; pMessage: TNetworkMessage);
+begin
+
+end;
+
+procedure TDoppelkopfServer.processWelcheKarteBestaetigen(pClientIP: string; pMessage: TNetworkMessage);
 begin
 
 end;
