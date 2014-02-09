@@ -14,6 +14,7 @@ private
   FTransmissionConfirmations: TObjectList;
   FTimer: TTimer;
   FConfirmationSpielbeginnCounter: Integer;
+  FKartenConfirmationCounter: Integer;
   procedure processConnect(pClientIP: string; pMessage: TNetworkMessage);
   procedure processSpielbeginn(pClientIP: string; pMessage: TNetworkMessage);
   procedure processKarten(pClientIP: string; pMessage: TNetworkMessage);
@@ -32,7 +33,7 @@ private
   procedure processAnsage (pClientIP: string; pMessage: TNetworkMessage);
   procedure processAnsageGemacht (pClientIP: string;pMessage: TNetworkMessage);
 
-  procedure processConfirmation(pConfirmationMessage: string);
+  procedure processConfirmation(pConfirmationMessage: string; pSenderIP: string);
   procedure processTransmissionConfirmations(sender: TObject);
 public
   constructor Create(pPortNr: Integer);
@@ -86,14 +87,14 @@ begin
 
 end;
 
-procedure TDoppelkopfServer.processConfirmation(pConfirmationMessage: string);
+procedure TDoppelkopfServer.processConfirmation(pConfirmationMessage: string; pSenderIP: string);
 var i: Integer;
     temp: TExpectedTransmissionConfirmation;
 begin
   for i := 0 to self.FTransmissionConfirmations.Count-1 do
   begin
     temp := TExpectedTransmissionConfirmation(self.FTransmissionConfirmations[i]);
-    if temp.ExpectedConfirmationMessage = pConfirmationMessage then
+    if (temp.ExpectedConfirmationMessage = pConfirmationMessage) and (temp.ReceiverIP = pSenderIP) then
     begin
       self.FTransmissionConfirmations.Remove(temp);
       self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(temp.OriginalMessage, temp.ExpectedConfirmationMessage, temp.ReceiverIP));
@@ -105,6 +106,7 @@ end;
 procedure TDoppelkopfServer.ProcessMessage(pMessage: string; pSenderIP: string);
 var msg: TNetworkMessage;
 begin
+  self.processConfirmation(pMessage, pSenderIP);
   msg := TNetworkMessage.Create(pMessage);
   if (msg.key = CONNECT) then
   begin
@@ -180,6 +182,7 @@ end;
 procedure TDoppelkopfServer.processSpielbeginn(pClientIP: string;pMessage: TNetworkMessage);
 var msg: string;
     i, k: Integer;
+    kartenList: TStringList;
 begin
   inc(self.FConfirmationSpielbeginnCounter);
   if self.FConfirmationSpielbeginnCounter = 4 then
@@ -188,9 +191,10 @@ begin
     for i := 1 to 4 do
     begin
       msg := KARTEN + '#';
+      kartenList := self.FSpiel.getKartenForSpielerWithIndex(i);
       for k := 0 to 9 do
       begin
-       // msg := msg +
+        msg := msg + kartenList[k] + '#';
       end;
       self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, KARTEN + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
     end;
@@ -199,7 +203,11 @@ end;
 
 procedure TDoppelkopfServer.processKarten(pClientIP: string;pMessage: TNetworkMessage);
 begin
+  inc(self.FKartenConfirmationCounter);
+  if (self.FKartenConfirmationCounter = 4) then
+  begin
 
+  end;
 end;
 
 procedure TDoppelkopfServer.processVorbehalteAbfragen (pClientIP: string;pMessage: TNetworkMessage);

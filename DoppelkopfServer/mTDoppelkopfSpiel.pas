@@ -45,6 +45,8 @@ public
   function getKartenPunkteKontraPartei: Integer;
   function getSiegerPartei: dkPartei;
   function getPunkteVonSieger: Integer;
+  function getKartenForSpielerWithIndex(pIndex: Integer): TStringList;
+  function getKartenForSpielerIP(pIP: string): TStringList;
 
   property AktuellerStich: TStich read FAktuellerStich;
   property RundenNummer: Integer read FRundenNummer;
@@ -64,6 +66,16 @@ begin
   FSolistIP := '';
   FSpielModus := dkNormal;
   self.FZahlGelegteKarten := 0;
+end;
+
+function TDoppelkopfSpiel.getKartenForSpielerWithIndex(pIndex: Integer): TStringList;
+begin
+  result := self.FSpielerManager.playerForIndex(pIndex).getKarten;
+end;
+
+function TDoppelkopfSpiel.getKartenForSpielerIP(pIP: string): TStringList;
+begin
+  result := self.FSpielerManager.playerForIP(pIP).getKarten;
 end;
 
 function TDoppelkopfSpiel.PlayerNameForIndex(pIndex: Integer): string;

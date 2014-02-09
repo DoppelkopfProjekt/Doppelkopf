@@ -36,6 +36,8 @@ type
 
     procedure setSpielModus(pModus: dkSpielModus);
     procedure macheZumSolisten;
+
+    function getKarten: TStringList;
   end;
 
 implementation
@@ -49,6 +51,11 @@ begin
   FGewonneneStiche := TObjectList.Create;
   FExtraPunkte := 0;
   FSpieltSolo := false;
+end;
+
+function TSpieler.getKarten;
+begin
+  result := FBlatt.getKarten;
 end;
 
 procedure TSpieler.macheZumSolisten;

@@ -25,6 +25,7 @@ public
   procedure LegeKarte(pKarte: TKarte);
   property Partei: dkPartei read FPartei;
   procedure setSpielModus(pModus: dkSpielModus);
+  function getKarten: TStringList;
 end;
 
 implementation
@@ -32,6 +33,16 @@ implementation
 constructor TBlatt.Create;
 begin
   FKarten.Create;
+end;
+
+function TBlatt.getKarten: TStringList;
+var i: Integer;
+begin
+  result := TStringList.Create;
+  for i := 0 to 9 do
+  begin
+    result.add(TKarte(FKarten[i]).Code);
+  end;
 end;
 
 procedure TBlatt.setSpielModus(pModus: dkSpielModus);
