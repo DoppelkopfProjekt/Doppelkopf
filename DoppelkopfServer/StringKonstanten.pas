@@ -1,4 +1,4 @@
-unit StringKonstanten;
+﻿unit StringKonstanten;
 
 interface
 
@@ -13,7 +13,8 @@ const SPIELBEGINN = 'Spielbeginn';
       SOLO = 'Solo';
       SOLO_BESTAETIGEN = 'SoloBestaetigen';
       WELCHE_KARTE = 'WelcheKarte';
-      WELCHE_KARTE_BESTAETIGEN = 'WelcheKarteBestaetigen';
+     // WELCHE_KARTE_BESTAETIGEN = 'WelcheKarteBestaetigen';
+      KARTE_Legen = 'KarteLegen';
       AKTUELLER_STICH = 'AktuellerStich';
       GEWINNER_STICH = 'GewinnerStich';
       GEWINNER_SPIEL = 'GewinnerSpiel';
@@ -22,6 +23,9 @@ const SPIELBEGINN = 'Spielbeginn';
      // UNGUELTIGEKARTE = 'Ung�ltigeKarte';
      NO = 'NO';
      YES = 'YES';
+
+     KONTRA = 'Kontra';
+     RE = 'Re';
 
       //Auf Client antworten
       CONNECT = 'Connect';
