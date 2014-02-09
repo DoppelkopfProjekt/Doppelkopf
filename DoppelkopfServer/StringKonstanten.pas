@@ -19,6 +19,8 @@ const SPIELBEGINN = 'Spielbeginn';
       //ANSAGE = 'Ansage';
       ANSAGE_GEMACHT = 'AnsageGemacht';
      // UNGUELTIGEKARTE = 'UngültigeKarte';
+     NO = 'NO';
+     YES = 'YES';
 
       //Auf Client antworten
       CONNECT = 'Connect';
