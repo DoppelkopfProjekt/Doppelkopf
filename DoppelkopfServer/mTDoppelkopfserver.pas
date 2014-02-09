@@ -2,12 +2,18 @@ unit mTDoppelkopfserver;
 
 interface
 
-uses Sysutils, classes, mTServer, mTNetworkMessage, mTSpieler, mTDoppelkopfSpiel, StringKonstanten;
+uses Sysutils, classes, mTServer, mTNetworkMessage, mTSpieler, mTDoppelkopfSpiel, StringKonstanten, Contnrs, mTExpectedTransmissionConfirmation, ExtCtrls;
+
+const TimeOut = 0.3;
 
 type
 
 TDoppelkopfServer = class(TServer)
 private
+  FSpiel: TDoppelkopfSpiel;
+  FTransmissionConfirmations: TObjectList;
+  FTimer: TTimer;
+  FConfirmationSpielbeginnCounter: Integer;
   procedure processConnect(pClientIP: string; pMessage: TNetworkMessage);
   procedure processSpielbeginn(pClientIP: string; pMessage: TNetworkMessage);
   procedure processKarten(pClientIP: string; pMessage: TNetworkMessage);
@@ -19,13 +25,15 @@ private
   procedure processSolo (pClientIP: string; pMessage: TNetworkMessage);
   procedure processSoloBestaetigen (pClientIP: string; pMessage: TNetworkMessage);
   procedure processWelcheKarte (pClientIP: string; pMessage: TNetworkMessage);
-  procedure processWelcheKarteBestaetigen (pClientIP: string; pMessage: TNetworkMessage);
+  procedure processKarteLegen (pClientIP: string; pMessage: TNetworkMessage);
   procedure processAktuellerStich (pClientIP: string; pMessage: TNetworkMessage);
   procedure processGewinnerStich (pClientIP: string; pMessage: TNetworkMessage);
   procedure processGewinnerSpiel (pClientIP: string; pMessage: TNetworkMessage);
   procedure processAnsage (pClientIP: string; pMessage: TNetworkMessage);
   procedure processAnsageGemacht (pClientIP: string;pMessage: TNetworkMessage);
-  //procedure processUngueltigeKarte (pClientIP: string; pMessage: TNetworkMessage);
+
+  procedure processConfirmation(pConfirmationMessage: string);
+  procedure processTransmissionConfirmations(sender: TObject);
 public
   constructor Create(pPortNr: Integer);
   destructor Destroy; override;
@@ -39,7 +47,27 @@ implementation
 constructor TDoppelkopfServer.Create(pPortNr: Integer);
 begin
   inherited Create(pPortNr);
-  //FSpielerManager := TSpielerManager.Create;
+  FSpiel := TDoppelkopfSpiel.Create;
+  FTransmissionConfirmations := TObjectList.Create;
+  FTimer := TTimer.Create(self);
+  FTimer.Interval := 0.1;
+  FTimer.Enabled := True;
+  FTimer.OnTimer := processTransmissionConfirmations;
+  self.FConfirmationSpielbeginnCounter := 0;
+end;
+
+procedure TDoppelkopfServer.processTransmissionConfirmations(sender: TObject);
+var i: Integer;
+    temp: TExpectedTransmissionConfirmation;
+begin
+  for i := 0 to self.FTransmissionConfirmations.Count-1 do
+  begin
+    temp := TExpectedTransmissionConfirmation(self.FTransmissionConfirmations[i]);
+    if temp.alter > TimeOut then
+    begin
+      self.FTransmissionConfirmations.Remove(temp);
+    end;
+  end;
 end;
 
 destructor TDoppelkopfServer.Destroy;
@@ -60,9 +88,24 @@ begin
 
 end;
 
+procedure TDoppelkopfServer.processConfirmation(pConfirmationMessage: string);
+var i: Integer;
+    temp: TExpectedTransmissionConfirmation;
+begin
+  for i := 0 to self.FTransmissionConfirmations.Count-1 do
+  begin
+    temp := TExpectedTransmissionConfirmation(self.FTransmissionConfirmations[i]);
+    if temp.ExpectedConfirmationMessage = pConfirmationMessage then
+    begin
+      self.FTransmissionConfirmations.Remove(temp);
+      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(temp.OriginalMessage, temp.ExpectedConfirmationMessage, temp.ReceiverIP));
+      self.SendMessageToAll(temp.OriginalMessage);
+    end;
+  end;
+end;
+
 procedure TDoppelkopfServer.ProcessMessage(pMessage: string; pSenderIP: string);
 var msg: TNetworkMessage;
-    s: string;
 begin
   msg := TNetworkMessage.Create(pMessage);
   if (msg.key = CONNECT) then
@@ -113,9 +156,9 @@ begin
   begin
     self.processWelcheKarte(pSenderIP, msg);
   end;
-  if (msg.key = WELCHE_KARTE_BESTAETIGEN) then
+  if (msg.key = KARTE_LEGEN) then
   begin
-    self.processWelcheKarteBestaetigen(pSenderIP, msg);
+    self.processKarteLegen(pSenderIP, msg);
   end;
   if (msg.key = AKTUELLER_STICH) then
   begin
@@ -207,8 +250,25 @@ begin
 end;
 
 procedure TDoppelkopfServer.processConnect(pClientIP: string; pMessage: TNetworkMessage);
+var msg: string;
+    i: Integer;
 begin
-
+  if FSpiel.addPlayer(pClientIP, pMessage.parameter[0]) then
+  begin
+    self.SendMessage(CONNECT + '#' + YES, pClientIP);
+  end else
+  begin
+    self.SendMessage(CONNECT + '#' + NO, pClientIP);
+  end;
+  if FSpiel.CountConnectedPlayer = 4 then
+  begin
+    msg := SPIELBEGINN + '#' + FSpiel.PlayerNameForIndex(1) + '#' + FSpiel.PlayerNameForIndex(2) + '#' + FSpiel.PlayerNameForIndex(3) + '#' + FSpiel.PlayerNameForIndex(4) + '#';
+    for i := 1 to 4 do
+    begin
+      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, SPIELBEGINN + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
+    end;
+    self.SendMessageToAll(msg);
+  end;
 end;
 
 procedure TDoppelkopfServer.processSoloBestaetigen(pClientIP: string; pMessage: TNetworkMessage);
@@ -216,7 +276,7 @@ begin
 
 end;
 
-procedure TDoppelkopfServer.processWelcheKarteBestaetigen(pClientIP: string; pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processKarteLegen(pClientIP: string; pMessage: TNetworkMessage);
 begin
 
 end;
