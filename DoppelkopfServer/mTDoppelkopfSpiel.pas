@@ -21,7 +21,6 @@ private
   FZahlGelegteKarten: Integer;
 
   procedure setSpielModus(pModus: dkSpielModus);
-  function countConnectedPlayer: Integer;
 
   function aktuellerSpieler: TSpieler;
 public
@@ -33,6 +32,8 @@ public
   function aktuelleSpielerIP: string;
   function NameForSpielerIP(pIP: string): string;
   function SpielerIPForName(pName: string): string;
+  function PlayerNameForIndex(pIndex: Integer): string;
+  function PlayerIPForIndex(pIndex: Integer): string;
 
   procedure starteSpiel;
   function legeKarte(pKartenCode: string; pIP:string): Boolean;
@@ -50,6 +51,7 @@ public
   property SpielModus: dkSpielModus read FSpielModus;
   property SolistIP: string read FSolistIP; //Gibt '' zurueck wenn kein Solo gespielt wird
   property ZahlGelegteKarten: Integer read FZahlGelegteKarten;
+  function countConnectedPlayer: Integer;
 end;
 
 
@@ -62,6 +64,16 @@ begin
   FSolistIP := '';
   FSpielModus := dkNormal;
   self.FZahlGelegteKarten := 0;
+end;
+
+function TDoppelkopfSpiel.PlayerNameForIndex(pIndex: Integer): string;
+begin
+  result := self.FSpielerManager.playerForIndex(pIndex).Name;
+end;
+
+function TDoppelkopfSpiel.PlayerIPForIndex(pIndex: Integer): string;
+begin
+  result := self.FSpielerManager.playerForIndex(pIndex).IP;
 end;
 
 procedure TDoppelkopfSpiel.setSpielModus(pModus: dkSpielModus);
