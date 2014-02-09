@@ -9,6 +9,7 @@ const SPIELBEGINN = 'Spielbeginn';
       VORBEHALT_BUBENSOLO = 'Bubensolo';
       VORBEHALT_FLEISCHLOSER = 'Fleischloser';
       VORBEHALT_HOCHZEIT = 'Hochzeit';
+      VORBEHALT_NICHTS = 'Nichts';
       SOLO = 'Solo';
       SOLO_BESTAETIGEN = 'SoloBestaetigen';
       WELCHE_KARTE = 'WelcheKarte';
@@ -18,7 +19,7 @@ const SPIELBEGINN = 'Spielbeginn';
       GEWINNER_SPIEL = 'GewinnerSpiel';
       //ANSAGE = 'Ansage';
       ANSAGE_GEMACHT = 'AnsageGemacht';
-     // UNGUELTIGEKARTE = 'UngültigeKarte';
+     // UNGUELTIGEKARTE = 'Ungï¿½ltigeKarte';
      NO = 'NO';
      YES = 'YES';
 
@@ -27,7 +28,7 @@ const SPIELBEGINN = 'Spielbeginn';
       ANSAGE = 'Ansage';
 
 
-      //Müssen noch umgestellt werden!!!!!!
+      //Mï¿½ssen noch umgestellt werden!!!!!!
       KARO_ZEHN = 'KAZ';
       KARO_BUBE = 'KAB';
       KARO_DAME = 'KAD';
