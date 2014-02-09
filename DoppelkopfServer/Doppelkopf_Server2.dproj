@@ -80,11 +80,6 @@
         </DCCReference>
         <DCCReference Include="mTNetworkMessage.pas"/>
         <DCCReference Include="mTDoppelkopfserver.pas"/>
-        <DCCReference Include="netzklassen\mServerVerbindung.pas"/>
-        <DCCReference Include="netzklassen\mClient.pas"/>
-        <DCCReference Include="netzklassen\mConnection.pas"/>
-        <DCCReference Include="netzklassen\mList.pas"/>
-        <DCCReference Include="netzklassen\mServer.pas"/>
         <DCCReference Include="mTSpieler.pas"/>
         <DCCReference Include="mTDoppelkopfSpiel.pas"/>
         <DCCReference Include="mTStich.pas"/>
@@ -95,6 +90,7 @@
         <DCCReference Include="mTSoloAnfrage.pas"/>
         <DCCReference Include="StringKonstanten.pas"/>
         <DCCReference Include="mTSonderkarteEreignis.pas"/>
+        <DCCReference Include="mTServer.pas"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

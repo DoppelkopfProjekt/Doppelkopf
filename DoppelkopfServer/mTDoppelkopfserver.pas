@@ -2,7 +2,7 @@ unit mTDoppelkopfserver;
 
 interface
 
-uses Sysutils, classes, mServer, mTNetworkMessage, mTSpieler, mTDoppelkopfSpiel, StringKonstanten;
+uses Sysutils, classes, mTServer, mTNetworkMessage, mTSpieler, mTDoppelkopfSpiel, StringKonstanten;
 
 type
 
@@ -26,9 +26,9 @@ private
 public
   constructor Create(pPortNr: Integer);
   destructor Destroy; override;
-  procedure closeConnection(pClientIP: string; pClientPort: integer); override;
-  procedure processMessage(pClientIP: string; pClientPort: integer; pMessage: string); override;
-  procedure processNewConnection(pClientIP: string; pClientPort: integer); override;
+ (* procedure ProcessMessage(pMessage: string; pSenderIP: string); override;
+  procedure ClientHasConnected(pClientIP: string); override;
+  procedure ClientHasDisconnected(pClientIP: string); override;*)
 end;
 
 implementation
@@ -45,7 +45,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TDoppelkopfServer.processNewConnection(pClientIP: string; pClientPort: integer);
+(*procedure TDoppelkopfServer.processNewConnection(pClientIP: string; pClientPort: integer);
 //var spieler: TSpieler;
 begin
   //Spieler := TSpieler.create(pClientIP);
@@ -68,7 +68,7 @@ begin
   begin
     //player := FSpielerManager.playerForIP(pClientIP);
    // player.Name := msg.parameter[0];
-    self.send(pClientIP, pClientPort, msg.key + '#YES#');
+   // self.sendMessage(pClientIP, pClientPort, msg.key + '#YES#');
 
     s := SPIELBEGINN;
     //for i := 0 to FSpielerManager.countConnectedPlayer-1 do
@@ -78,10 +78,10 @@ begin
     s := s + '#';
     //if FSpielerManager.countConnectedPlayer = 4 then
     begin
-      Self.sendToAll(s);
+     // Self.sendToAll(s);
     end;
   end;
-end;
+end;   *)
 
 
 procedure TDoppelkopfServer.processSpielbeginn(pClientIP: string; pClientPort: integer; pMessage: TNetworkMessage);
