@@ -1,4 +1,4 @@
-unit mTDoppelkopfSpiel;
+﻿unit mTDoppelkopfSpiel;
 
 interface
 
@@ -141,7 +141,7 @@ begin
   if (self.FRundenNummer < 10) and (self.ZahlGelegteKarten < 40) then
   begin
     ShowMessage('Spiel noch nicht beendet und schon Sieger wissen wollen?!?');
-    result := -1;
+    result := Re;
   end
   else
   begin
@@ -156,7 +156,7 @@ var sieger: dkPartei;
     spieler: TSpieler;
 begin
   result := 1;  //Punkt fuer gewonnen
-  sieger := self.
+  sieger := self.getSiegerPartei;
   if sieger = Kontra then
   begin
     inc(result);//Extrapunkt wenn Kontra gewinnt
