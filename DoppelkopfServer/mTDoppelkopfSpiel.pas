@@ -6,7 +6,7 @@ uses mTSpielerManager, mTSpieler, mTStich, dialogs, mTDoppelkopfDeck, mTBlatt, m
 
 type
 
-dkAnsage = (dkSchwarz, dkKeine3, dkKeine6, dkKeine9, dkRe, dkKontra);
+dkAnsage = (dkSchwarz, dkKeine3, dkKeine6, dkKeine9, dkAnsageRe, dkAnsageKontra);
 
 TDoppelkopfSpiel = class
 private
@@ -136,7 +136,7 @@ begin
   result := 0;
   for i := 1 to 4 do
   begin
-    if self.FSpielerManager.playerForIndex(i).Partei = Re then
+    if self.FSpielerManager.playerForIndex(i).Partei = dkRe then
     begin
       inc(result, self.FSpielerManager.playerForIndex(i).gewonnenePunkte);
     end;
@@ -153,12 +153,12 @@ begin
   if (self.FRundenNummer < 10) and (self.ZahlGelegteKarten < 40) then
   begin
     ShowMessage('Spiel noch nicht beendet und schon Sieger wissen wollen?!?');
-    result := Re;
+    result := dkRe;
   end
   else
   begin
-    result := Re;getSiegerPartei;
-    if self.getKartenPunkteKontraPartei >= 120 then result := Kontra;
+    result := dkRe;
+    if self.getKartenPunkteKontraPartei >= 120 then result := dkKontra;
   end;
 end;
 
@@ -169,7 +169,7 @@ var sieger: dkPartei;
 begin
   result := 1;  //Punkt fuer gewonnen
   sieger := self.getSiegerPartei;
-  if sieger = Kontra then
+  if sieger = dkKontra then
   begin
     inc(result);//Extrapunkt wenn Kontra gewinnt
     temp := self.getKartenPunkteRePartei;

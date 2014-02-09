@@ -59,7 +59,7 @@ const SPIELBEGINN = 'Spielbeginn';
       ANSAGE_KEINESECHS = 'K6';
       ANSAGE_KEINEDREI = 'K3';
       ANSAGE_SCHWARZ = 'K0';
-     // ANSAGE_KEINE = 'No';
+      //ANSAGE_KEINE = 'No';
 
 implementation
 

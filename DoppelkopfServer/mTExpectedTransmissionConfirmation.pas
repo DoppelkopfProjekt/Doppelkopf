@@ -12,10 +12,10 @@ private
   FExpectedConfirmationMessage: string;
   FOriginalMessage: string;
   FReceiverIP: string;
-  function getAlterInSekunden: Integer;
+  function getAlterInSekunden: double;
 public
   constructor Create(pmsg: string; pconfirmation: string; pReceiverIP: string);
-  property Alter: Integer read getAlterInSekunden;
+  property Alter: double read getAlterInSekunden;
   property ExpectedConfirmationMessage: string read FExpectedConfirmationMessage;
   property OriginalMessage: string read FOriginalMessage;
   property ReceiverIP: string read FReceiverIP;
@@ -23,7 +23,7 @@ end;
 
 implementation
 
-constructor TExpectedTransmissionConfirmation.Create(pmsg: string; pconfirmation: string; preceiverIP);
+constructor TExpectedTransmissionConfirmation.Create(pmsg: string; pconfirmation: string; preceiverIP: string);
 begin
   FTime := Ticks;
   FExpectedConfirmationMessage := pconfirmation;
@@ -31,9 +31,9 @@ begin
   FReceiverIP := pReceiverIP;
 end;
 
-function TExpectedTransmissionConfirmation.getAlterInSekunden: Integer;
+function TExpectedTransmissionConfirmation.getAlterInSekunden: double;
 begin
-  result := (Ticks - FTime) * (1 / 24 / 60 / 60 / 1000));
+  result := (Integer(Ticks) - FTime) * (1.0 / 24.0 / 60.0 / 60.0 / 1000.0);
 end;
 
 end.

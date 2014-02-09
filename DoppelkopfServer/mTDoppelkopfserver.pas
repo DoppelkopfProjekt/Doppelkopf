@@ -2,7 +2,7 @@ unit mTDoppelkopfserver;
 
 interface
 
-uses Sysutils, classes, mTServer, mTNetworkMessage, mTSpieler, mTDoppelkopfSpiel, StringKonstanten, Contnrs, mTExpectedTransmissionConfirmation, ExtCtrls;
+uses Sysutils, Types, classes, mTServer, mTNetworkMessage, mTSpieler, mTDoppelkopfSpiel, StringKonstanten, Contnrs, mTExpectedTransmissionConfirmation, ExtCtrls;
 
 const TimeOut = 0.3;
 
@@ -49,8 +49,8 @@ begin
   inherited Create(pPortNr);
   FSpiel := TDoppelkopfSpiel.Create;
   FTransmissionConfirmations := TObjectList.Create;
-  FTimer := TTimer.Create(self);
-  FTimer.Interval := 0.1;
+  FTimer := TTimer.Create(nil);
+  FTimer.Interval := 100;
   FTimer.Enabled := True;
   FTimer.OnTimer := processTransmissionConfirmations;
   self.FConfirmationSpielbeginnCounter := 0;
@@ -180,8 +180,23 @@ end;
 
 
 procedure TDoppelkopfServer.processSpielbeginn(pClientIP: string;pMessage: TNetworkMessage);
+var msg: string;
+    i, k: Integer;
 begin
-
+  inc(self.FConfirmationSpielbeginnCounter);
+  if self.FConfirmationSpielbeginnCounter = 4 then
+  begin
+    //msg := SPIELBEGINN + '#' + FSpiel.PlayerNameForIndex(1) + '#' + FSpiel.PlayerNameForIndex(2) + '#' + FSpiel.PlayerNameForIndex(3) + '#' + FSpiel.PlayerNameForIndex(4) + '#';
+    for i := 1 to 4 do
+    begin
+      msg := KARTEN + '#';
+      for k := 0 to 9 do
+      begin
+       // msg := msg +
+      end;
+      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, KARTEN + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
+    end;
+  end;
 end;
 
 procedure TDoppelkopfServer.processKarten(pClientIP: string;pMessage: TNetworkMessage);

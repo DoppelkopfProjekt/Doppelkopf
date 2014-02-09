@@ -6,7 +6,7 @@ uses classes, sysutils, mTKarte, mTStich, dialogs, types, contnrs;
 
 type
 
-dkPartei = (Re, Kontra);
+dkPartei = (dkRe, dkKontra);
 
 TBlatt = class
 private
@@ -48,11 +48,11 @@ end;
 function TBlatt.bestimmePartei;
 var i: Integer;
 begin
-  result := Kontra;
+  result := dkKontra;
   //Partei muss bestimmt werden, wenn alle Karten da sind
   for i := 0 to 9 do
   begin
-    if TKarte(FKarten[i]).Code = 'KRD' then result := Re;
+    if TKarte(FKarten[i]).Code = 'KRD' then result := dkRe;
   end;
 end;
 
