@@ -22,9 +22,9 @@ TServer = class
     procedure SendMessageToAll(pMessage: string);
 
     //Procedures to override
-    procedure ProcessMessage(pMessage: string; pSenderIP: string);
-    procedure ClientHasConnected(pClientIP: string);
-    procedure ClientHasDisconnected(pClientIP: string);
+    procedure ProcessMessage(pMessage: string; pSenderIP: string); virtual;
+    procedure ClientHasConnected(pClientIP: string); virtual;
+    procedure ClientHasDisconnected(pClientIP: string); virtual;
 end;
 
 implementation
