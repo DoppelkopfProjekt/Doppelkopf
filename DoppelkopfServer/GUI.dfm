@@ -56,4 +56,21 @@ object Form1: TForm1
     Height = 193
     TabOrder = 4
   end
+  object Edit2: TEdit
+    Left = 152
+    Top = 176
+    Width = 121
+    Height = 21
+    TabOrder = 5
+    Text = '45678'
+  end
+  object Button3: TButton
+    Left = 56
+    Top = 207
+    Width = 75
+    Height = 25
+    Caption = 'Server beenden'
+    TabOrder = 6
+    OnClick = Button3Click
+  end
 end

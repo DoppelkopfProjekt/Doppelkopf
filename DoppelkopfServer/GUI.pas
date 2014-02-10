@@ -13,9 +13,12 @@ type
     Memo1: TMemo;
     Button2: TButton;
     MeLog: TMemo;
+    Edit2: TEdit;
+    Button3: TButton;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
   private
      FServer: TDoppelkopfServer;
   public
@@ -46,9 +49,15 @@ end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
-  FServer := TDoppelkopfServer.Create(45678);
+  FServer := TDoppelkopfServer.Create(StrToInt(edit2.text));
   FServer.MeLog := MeLog;
   FServer.Activate;
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+begin
+  FServer.Deactivate;
+  FServer.Free;
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
