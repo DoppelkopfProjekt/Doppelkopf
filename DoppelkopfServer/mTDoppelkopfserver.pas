@@ -210,9 +210,7 @@ end;
 
 
 procedure TDoppelkopfServer.processSpielbeginn(pClientIP: string;pMessage: TNetworkMessage);
-var msg: string;
-    i, k: Integer;
-    kartenList: TStringList;
+var i: Integer;
 begin
   inc(self.FConfirmationSpielbeginnCounter);
   if self.FConfirmationSpielbeginnCounter = 4 then
