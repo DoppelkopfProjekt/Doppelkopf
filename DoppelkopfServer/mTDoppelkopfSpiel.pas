@@ -281,7 +281,7 @@ begin
   deck := TDoppelkopfDeck.Create;
   for i := 1 to 4 do
   begin
-    spieler := self.FSpielerManager.playerForIndex(i-1);
+    spieler := self.FSpielerManager.playerForIndex(i);
     for k := 1 to 10 do
     begin
       spieler.gibKarte(deck.getRandomCard);

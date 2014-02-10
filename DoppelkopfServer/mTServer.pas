@@ -40,7 +40,7 @@ end;
 
 procedure TServer.OnClientConnect(Sender: TObject; Socket: TCustomWinSocket);
 begin
-  ShowMessage('ClientConnect');
+  //ShowMessage('ClientConnect');
   self.ClientHasConnected(socket.RemoteAddress);
 end;
 

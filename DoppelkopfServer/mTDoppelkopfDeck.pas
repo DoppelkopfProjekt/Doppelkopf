@@ -1,16 +1,16 @@
-unit mTDoppelkopfDeck;
+﻿unit mTDoppelkopfDeck;
 
 /////////************** An das randomize; denken!!!!!!!!!!!!! *************************///////////////
 
 interface
 
-uses Classes, mTKarte;
+uses Classes, mTKarte, contnrs;
 
 type
 
 TDoppelkopfDeck = class
 private
-  FKarten: TList;
+  FKarten: TObjectList;
 public
   constructor Create;
   function getRandomCard: TKarte;
@@ -20,6 +20,8 @@ implementation
 
 constructor TDoppelkopfDeck.Create;
 begin
+  FKarten := TObjectList.Create;
+
   FKarten.Add(TKarte.create('KA10'));
   FKarten.Add(TKarte.create('KAB'));
   FKarten.Add(TKarte.create('KAD'));
@@ -70,7 +72,7 @@ function TDoppelkopfDeck.getRandomCard: TKarte;
 var index: Integer;
 begin
   index := random(FKarten.Count)-1;
-  result := FKarten[index];
+  result := TKarte(FKarten[index]);
   FKarten.Delete(index);
 end;
 

@@ -63,15 +63,15 @@ begin
   FTimer.Enabled := True;
   FTimer.Enabled := False;
   FTimer.OnTimer := processTransmissionConfirmations;
-  self.FConfirmationSpielbeginnCounter := 1;
-  self.FConfirmationKartenCounter := 1;
-  self.FConfirmatinVorbehaltAnmeldenCounter := 1;
-  self.FConfirmationSoloCounter := 1;
+  self.FConfirmationSpielbeginnCounter := 0;
+  self.FConfirmationKartenCounter := 0;
+  self.FConfirmatinVorbehaltAnmeldenCounter := 0;
+  self.FConfirmationSoloCounter := 0;
 end;
 
 procedure TDoppelkopfServer.ClientHasConnected(pClientIP: string);
 begin
-  ShowMessage('Client-IP ist ' + pClientIP);
+  self.MeLog.Lines.Add('Client-IP ist ' + pClientIP);
 end;
 
 procedure TDoppelkopfServer.processTransmissionConfirmations(sender: TObject);
@@ -105,13 +105,15 @@ procedure TDoppelkopfServer.processConfirmation(pConfirmationMessage: string; pS
 var i: Integer;
     temp: TExpectedTransmissionConfirmation;
 begin
-  for i := 0 to self.FTransmissionConfirmations.Count-1 do
+  i := 0;
+  while i <= self.FTransmissionConfirmations.Count-1 do
   begin
     temp := TExpectedTransmissionConfirmation(self.FTransmissionConfirmations[i]);
     if (temp.ExpectedConfirmationMessage = pConfirmationMessage) and (temp.ReceiverIP = pSenderIP) then
     begin
       self.FTransmissionConfirmations.Remove(temp);
     end;
+    inc(i);
   end;
 end;
 
@@ -373,6 +375,7 @@ begin
   end;
   if FSpiel.CountConnectedPlayer = 4 then
   begin
+    self.FSpiel.starteSpiel;
     msg := SPIELBEGINN + '#' + FSpiel.PlayerNameForIndex(1) + '#' + FSpiel.PlayerNameForIndex(2) + '#' + FSpiel.PlayerNameForIndex(3) + '#' + FSpiel.PlayerNameForIndex(4) + '#';
     for i := 1 to 4 do
     begin
