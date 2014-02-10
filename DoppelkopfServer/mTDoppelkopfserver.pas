@@ -276,10 +276,10 @@ var msg: string;
 begin
   if FSpiel.addPlayer(pClientIP, pMessage.parameter[0]) then
   begin
-    self.SendMessage(CONNECT + '#' + YES, pClientIP);
+    self.SendMessage(CONNECT + '#' + YES + '#', pClientIP);
   end else
   begin
-    self.SendMessage(CONNECT + '#' + NO, pClientIP);
+    self.SendMessage(CONNECT + '#' + NO + '#', pClientIP);
   end;
   if FSpiel.CountConnectedPlayer = 4 then
   begin
