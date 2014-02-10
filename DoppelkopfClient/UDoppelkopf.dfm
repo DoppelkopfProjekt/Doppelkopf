@@ -299,6 +299,14 @@ object Form1: TForm1
     TabOrder = 9
     OnClick = Button5Click
   end
+  object Edit3: TEdit
+    Left = 513
+    Top = 509
+    Width = 121
+    Height = 21
+    TabOrder = 10
+    Text = 'TESTNAME'
+  end
   object MainMenu1: TMainMenu
     Left = 288
     Top = 8

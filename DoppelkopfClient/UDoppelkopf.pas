@@ -51,6 +51,7 @@ type
     Button4: TButton;
     ClientSocket1: TClientSocket;
     Button5: TButton;
+    Edit3: TEdit;
     procedure Terminalstarten1Click(Sender: TObject);
     procedure Konsoleschlieen1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -156,7 +157,7 @@ end;
 
 procedure TForm1.Button4Click(Sender: TObject);
 begin
-  ClientSocket1.Socket.SendText(CONNECT + '#' +inputbox ('Name','Wie ist dein Name', 'TESTNAME')+'#');
+  ClientSocket1.Socket.SendText(CONNECT + '#' + Edit3.Text +'#');
 end;
 
 procedure TForm1.Button5Click(Sender: TObject);
@@ -168,7 +169,6 @@ procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
 var
 i: Integer;
 begin
-Memo1.Lines.add(Socket.receivetext);
 Netzwerknachricht:=tNetworkmessage.Create(Socket.ReceiveText);
 if Netzwerknachricht.key = CONNECT then                             //connect Verbindnug erstellt
     begin
@@ -183,7 +183,7 @@ if Netzwerknachricht.key = CONNECT then                             //connect Ve
 else if Netzwerknachricht.key = SPIELBEGINN then                          //Name der Spieler werden geschickt
     begin
       ClientSocket1.Socket.SendText(SPIELBEGINN+ '#YES#');
-        for i := 1 to 4 - 1 do
+        for i := 1 to 4  do
         begin
           allespieler[i]:=Netzwerknachricht.parameter[i];
           tLabel(FindComponent('Label'+inttostr(i+2))).caption:=allespieler[i];
