@@ -2,8 +2,8 @@ object Form1: TForm1
   Left = 225
   Top = 279
   Caption = 'Form1'
-  ClientHeight = 230
-  ClientWidth = 324
+  ClientHeight = 258
+  ClientWidth = 857
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -48,5 +48,12 @@ object Form1: TForm1
     Caption = 'Server starten'
     TabOrder = 3
     OnClick = Button2Click
+  end
+  object MeLog: TMemo
+    Left = 304
+    Top = 32
+    Width = 537
+    Height = 193
+    TabOrder = 4
   end
 end

@@ -12,6 +12,7 @@ type
     Button1: TButton;
     Memo1: TMemo;
     Button2: TButton;
+    MeLog: TMemo;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -46,6 +47,7 @@ end;
 procedure TForm1.Button2Click(Sender: TObject);
 begin
   FServer := TDoppelkopfServer.Create(45678);
+  FServer.MeLog := MeLog;
   FServer.Activate;
 end;
 

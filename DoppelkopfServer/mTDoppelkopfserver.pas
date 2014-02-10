@@ -2,7 +2,7 @@ unit mTDoppelkopfserver;
 
 interface
 
-uses Sysutils, Types, classes, mTServer, mTNetworkMessage, mTSpieler, mTDoppelkopfSpiel, StringKonstanten, Contnrs, mTExpectedTransmissionConfirmation, ExtCtrls, dialogs;
+uses Sysutils, Types, classes, mTServer, mTNetworkMessage, StdCtrls, mTSpieler, mTDoppelkopfSpiel, StringKonstanten, Contnrs, mTExpectedTransmissionConfirmation, ExtCtrls, dialogs;
 
 const TimeOut = 0.3;
 
@@ -36,6 +36,8 @@ private
   procedure processConfirmation(pConfirmationMessage: string; pSenderIP: string);
   procedure processTransmissionConfirmations(sender: TObject);
 public
+  MeLog: TMemo;
+
   constructor Create(pPortNr: Integer);
   destructor Destroy; override;
   procedure ProcessMessage(pMessage: string; pSenderIP: string); override;
@@ -60,7 +62,7 @@ end;
 
 procedure TDoppelkopfServer.ClientHasConnected(pClientIP: string);
 begin
-  ShowMessage('lol');
+  ShowMessage('Client-IP ist ' + pClientIP);
 end;
 
 procedure TDoppelkopfServer.processTransmissionConfirmations(sender: TObject);
@@ -107,6 +109,7 @@ end;
 procedure TDoppelkopfServer.ProcessMessage(pMessage: string; pSenderIP: string);
 var msg: TNetworkMessage;
 begin
+  self.MeLog.Lines.Add(pSenderIP + ': ' + pMessage);
   self.processConfirmation(pMessage, pSenderIP);
   msg := TNetworkMessage.Create(pMessage);
   if (msg.key = CONNECT) then
