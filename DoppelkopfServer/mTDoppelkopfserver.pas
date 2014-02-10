@@ -16,6 +16,7 @@ private
   FConfirmationSpielbeginnCounter: Integer;
   FConfirmationKartenCounter: Integer;
   FConfirmatinVorbehaltAnmeldenCounter: Integer;
+  FConfirmationSoloCounter: Integer;
 
   procedure sendCardsToClientWithIndex(pIndex: Integer);
 
@@ -65,6 +66,7 @@ begin
   self.FConfirmationSpielbeginnCounter := 1;
   self.FConfirmationKartenCounter := 1;
   self.FConfirmatinVorbehaltAnmeldenCounter := 1;
+  self.FConfirmationSoloCounter := 1;
 end;
 
 procedure TDoppelkopfServer.ClientHasConnected(pClientIP: string);
@@ -210,9 +212,7 @@ end;
 
 
 procedure TDoppelkopfServer.processSpielbeginn(pClientIP: string;pMessage: TNetworkMessage);
-var msg: string;
-    i, k: Integer;
-    kartenList: TStringList;
+var i: Integer;
 begin
   inc(self.FConfirmationSpielbeginnCounter);
   if self.FConfirmationSpielbeginnCounter = 4 then
@@ -242,7 +242,7 @@ end;
 
 procedure TDoppelkopfServer.processVorbehalteAbfragen(pClientIP: string; pMessage: TNetworkMessage);
 begin
-
+ //////
 end;
 
 procedure TDoppelkopfServer.processVorbehaltAnmelden(pClientIP: string;pMessage: TNetworkMessage);
@@ -319,8 +319,16 @@ begin
 end; *)
 
 procedure TDoppelkopfServer.processSolo (pClientIP: string;pMessage: TNetworkMessage);
+var i: Integer;
+    msg: string;
 begin
-
+  inc(self.FConfirmationSoloCounter);
+  if (self.FConfirmationSoloCounter = 4) then
+  begin
+    msg := WELCHE_KARTE + '#';
+    self.SendMessage(msg, self.FSpiel.aktuelleSpielerIP);
+    self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, msg + YES + '#', self.FSpiel.aktuelleSpielerIP))
+  end;
 end;
 
 procedure TDoppelkopfServer.processWelcheKarte (pClientIP: string;pMessage: TNetworkMessage);
@@ -377,12 +385,12 @@ end;
 
 procedure TDoppelkopfServer.processSoloBestaetigen(pClientIP: string; pMessage: TNetworkMessage);
 begin
-
+//////////////////////////
 end;
 
 procedure TDoppelkopfServer.processKarteLegen(pClientIP: string; pMessage: TNetworkMessage);
 begin
-
+  ShowMessage('Karte gelegt');
 end;
 
 

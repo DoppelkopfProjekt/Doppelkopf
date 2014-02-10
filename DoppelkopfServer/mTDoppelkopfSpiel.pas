@@ -72,7 +72,7 @@ end;
 
 function TDoppelkopfSpiel.getSolistName;
 begin
-  if not self.SolistIP = '' then
+  if not (self.SolistIP = '') then
   begin
     result := self.FSpielerManager.playerForIP(self.SolistIP).Name;
   end;
