@@ -50,6 +50,7 @@ type
     Button3: TButton;
     Button4: TButton;
     ClientSocket1: TClientSocket;
+    Button5: TButton;
     procedure Terminalstarten1Click(Sender: TObject);
     procedure Konsoleschlieen1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -62,6 +63,7 @@ type
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
+    procedure Button5Click(Sender: TObject);
   private
     { Private-Deklarationen }
   public
@@ -86,7 +88,7 @@ var
   alleansagenNummer: Integer;
   amzug:boolean;
   Vorbehaltabfrage: UVorbehaltabfrage.TForm2;
-  Vorbehaltabfrage_geglueckt: Boolean;
+  Vorbehaltabfrage_geglueckt, vorbehaltangemeldet: Boolean;
 implementation
 
 {$R *.DFM}
@@ -136,7 +138,7 @@ var
 sendung: String;
 begin
 sendung := Karten[strtoint(markiertekarte)];
-ClientSocket1.Socket.SendText(KARTE_LEGEN+'#sendung#');
+ClientSocket1.Socket.SendText(KARTE_LEGEN+'#'+sendung+'#');
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -153,7 +155,12 @@ end;
 
 procedure TForm1.Button4Click(Sender: TObject);
 begin
-  ClientSocket1.Socket.SendText('connect#'+inputbox ('Name','Wie ist dein Name', 'TESTNAME')+'#');
+  ClientSocket1.Socket.SendText(CONNECT + '#' +inputbox ('Name','Wie ist dein Name', 'TESTNAME')+'#');
+end;
+
+procedure TForm1.Button5Click(Sender: TObject);
+begin
+  clientsocket1.Close;
 end;
 
 procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
@@ -195,8 +202,13 @@ else if Netzwerknachricht.key = KARTEN then                        //Karten Spie
     end
 else if Netzwerknachricht.key = VORBEHALTE_ABFRAGEN then              //Vorbehaltabfrage Hat der Spieler einen Vorbahlt?
     begin
-      if Netzwerknachricht.parameter[0] = YES then Vorbehaltabfrage_geglueckt:=true;
-      ClientSocket1.Socket.SendText('Vorbehalte#' + inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+'#');
+      ClientSocket1.Socket.SendText(VORBEHALTE_ABFRAGEN + '#Yes#');
+      ClientSocket1.Socket.SendText(VORBEHALT_ANMELDEN +'#' + inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+'#');
+    end
+else if Netzwerknachricht.key = VORBEHALT_ANMELDEN then
+    begin
+      if Netzwerknachricht.parameter[0] = YES then
+        vorbehaltangemeldet:=true;
     end
 else if Netzwerknachricht.key = SOLO then                     //Vorbehalt Ein Spieler hat einen gültigen Vorbehalt gelegt
     begin

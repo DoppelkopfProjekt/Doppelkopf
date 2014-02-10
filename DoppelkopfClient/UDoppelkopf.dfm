@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   BorderStyle = bsSingle
   Caption = 'Form1'
-  ClientHeight = 776
+  ClientHeight = 895
   ClientWidth = 1009
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -224,21 +224,21 @@ object Form1: TForm1
     Left = 8
     Top = 400
     Width = 465
-    Height = 305
+    Height = 153
     Lines.Strings = (
       '//Terminal gestartet')
     TabOrder = 1
   end
   object Memo2: TMemo
     Left = 8
-    Top = 703
+    Top = 575
     Width = 417
     Height = 113
     TabOrder = 2
   end
   object Memo3: TMemo
     Left = 8
-    Top = 823
+    Top = 711
     Width = 417
     Height = 25
     Lines.Strings = (
@@ -251,7 +251,7 @@ object Form1: TForm1
     Width = 121
     Height = 21
     TabOrder = 4
-    Text = '80.201.107.166'
+    Text = '192.168.0.3'
   end
   object Edit2: TEdit
     Left = 513
@@ -271,11 +271,11 @@ object Form1: TForm1
     OnClick = Button2Click
   end
   object Button3: TButton
-    Left = 658
-    Top = 416
-    Width = 75
+    Left = 624
+    Top = 440
+    Width = 157
     Height = 25
-    Caption = 'Button3'
+    Caption = 'Ansage abgeben(am Zug)'
     TabOrder = 7
     OnClick = Button3Click
   end
@@ -287,6 +287,15 @@ object Form1: TForm1
     Caption = 'Name geben'
     TabOrder = 8
     OnClick = Button4Click
+  end
+  object Button5: TButton
+    Left = 640
+    Top = 696
+    Width = 177
+    Height = 25
+    Caption = 'Verbindung trennen'
+    TabOrder = 9
+    OnClick = Button5Click
   end
   object MainMenu1: TMainMenu
     Left = 288
