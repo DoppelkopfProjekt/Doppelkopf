@@ -32,7 +32,7 @@ implementation
 
 constructor TBlatt.Create;
 begin
-  FKarten.Create;
+  FKarten := TObjectList.Create;
 end;
 
 function TBlatt.getKarten: TStringList;

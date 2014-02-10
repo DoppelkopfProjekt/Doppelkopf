@@ -319,8 +319,7 @@ begin
 end; *)
 
 procedure TDoppelkopfServer.processSolo (pClientIP: string;pMessage: TNetworkMessage);
-var i: Integer;
-    msg: string;
+var msg: string;
 begin
   inc(self.FConfirmationSoloCounter);
   if (self.FConfirmationSoloCounter = 4) then
