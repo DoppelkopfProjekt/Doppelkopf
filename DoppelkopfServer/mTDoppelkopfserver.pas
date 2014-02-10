@@ -198,6 +198,7 @@ begin
         msg := msg + kartenList[k] + '#';
       end;
       self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, KARTEN + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
+      self.sendMessage(msg, self.FSpiel.playerIPForIndex(i));
     end;
   end;
 end;
