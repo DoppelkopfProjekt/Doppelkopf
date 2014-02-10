@@ -168,6 +168,7 @@ procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
 var
 i: Integer;
 begin
+Memo1.Lines.add(Socket.receivetext);
 Netzwerknachricht:=tNetworkmessage.Create(Socket.ReceiveText);
 if Netzwerknachricht.key = CONNECT then                             //connect Verbindnug erstellt
     begin
