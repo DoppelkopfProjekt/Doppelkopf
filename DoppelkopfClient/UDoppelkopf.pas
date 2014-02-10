@@ -146,6 +146,7 @@ begin
   ClientSocket1.Host:=Edit1.Text; //Die IP oder der Hostname wird festgelegt
   ClientSocket1.Port:=StrToInt(Edit2.Text); //Der Port wird festgelegt
   ClientSocket1.Open; //Verbindung zum Server wird hergestellt
+  Button4.Enabled:=true;
 end;
 
 procedure TForm1.Button3Click(Sender: TObject);

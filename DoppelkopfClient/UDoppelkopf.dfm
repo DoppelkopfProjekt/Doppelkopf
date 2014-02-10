@@ -251,7 +251,7 @@ object Form1: TForm1
     Width = 121
     Height = 21
     TabOrder = 4
-    Text = '192.168.0.3'
+    Text = '84.63.62.143'
   end
   object Edit2: TEdit
     Left = 513
@@ -276,6 +276,7 @@ object Form1: TForm1
     Width = 157
     Height = 25
     Caption = 'Ansage abgeben(am Zug)'
+    Enabled = False
     TabOrder = 7
     OnClick = Button3Click
   end
@@ -285,6 +286,7 @@ object Form1: TForm1
     Width = 75
     Height = 25
     Caption = 'Name geben'
+    Enabled = False
     TabOrder = 8
     OnClick = Button4Click
   end
