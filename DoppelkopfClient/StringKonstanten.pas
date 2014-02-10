@@ -19,6 +19,7 @@ const SPIELBEGINN = 'Spielbeginn';
       AKTUELLER_STICH = 'AktuellerStich';
       GEWINNER_STICH = 'GewinnerStich';
       GEWINNER_SPIEL = 'GewinnerSpiel';
+      VORBEHALT_ANMELDEN = 'VorbehaltAnmelden';
       //ANSAGE = 'Ansage';
       ANSAGE_GEMACHT = 'AnsageGemacht';
      // UNGUELTIGEKARTE = 'UngültigeKarte';
