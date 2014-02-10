@@ -52,7 +52,8 @@ begin
   FTransmissionConfirmations := TObjectList.Create;
   FTimer := TTimer.Create(nil);
   FTimer.Interval := 100;
-  FTimer.Enabled := True;
+ // FTimer.Enabled := True;
+  FTimer.Enabled := False;
   FTimer.OnTimer := processTransmissionConfirmations;
   self.FConfirmationSpielbeginnCounter := 0;
 end;
@@ -72,6 +73,8 @@ begin
     if temp.alter > TimeOut then
     begin
       self.FTransmissionConfirmations.Remove(temp);
+      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(temp.OriginalMessage, temp.ExpectedConfirmationMessage, temp.ReceiverIP));
+      self.SendMessageToAll(temp.OriginalMessage);
     end;
   end;
 end;
@@ -97,8 +100,6 @@ begin
     if (temp.ExpectedConfirmationMessage = pConfirmationMessage) and (temp.ReceiverIP = pSenderIP) then
     begin
       self.FTransmissionConfirmations.Remove(temp);
-      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(temp.OriginalMessage, temp.ExpectedConfirmationMessage, temp.ReceiverIP));
-      self.SendMessageToAll(temp.OriginalMessage);
     end;
   end;
 end;
