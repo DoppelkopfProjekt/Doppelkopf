@@ -23,6 +23,7 @@ private
   procedure setSpielModus(pModus: dkSpielModus);
 
   function aktuellerSpieler: TSpieler;
+  function getSolistName: string;
 public
   constructor Create;
 
@@ -52,6 +53,7 @@ public
   property RundenNummer: Integer read FRundenNummer;
   property SpielModus: dkSpielModus read FSpielModus;
   property SolistIP: string read FSolistIP; //Gibt '' zurueck wenn kein Solo gespielt wird
+  property SolistName: string read getSolistName;
   property ZahlGelegteKarten: Integer read FZahlGelegteKarten;
   function countConnectedPlayer: Integer;
 end;
@@ -66,6 +68,14 @@ begin
   FSolistIP := '';
   FSpielModus := dkNormal;
   self.FZahlGelegteKarten := 0;
+end;
+
+function TDoppelkopfSpiel.getSolistName;
+begin
+  if not self.SolistIP = '' then
+  begin
+    result := self.FSpielerManager.playerForIP(self.SolistIP).Name;
+  end;
 end;
 
 function TDoppelkopfSpiel.getKartenForSpielerWithIndex(pIndex: Integer): TStringList;
@@ -137,6 +147,8 @@ begin
   if pAnsageCode = VORBEHALT_FLEISCHLOSER then AnsageArt := dkFleischloser;
   if pAnsageCode = VORBEHALT_DAMENSOLO then AnsageArt := dkDamensolo;
   if pAnsageCode = VORBEHALT_BUBENSOLO then AnsageArt := dkBubensolo;
+  if pAnsageCode = VORBEHALT_HOCHZEIT then ShowMessage('Hochzeit ist noch nicht unterstützt');
+
   if AnsageArt = dkNormal then ShowMessage('Zum Normal-Spielen braucht man keine Ansage?!?');
 
   self.FSoloAnfragen.Add(TSoloAnfrage.Create(AnsageArt, spieler));

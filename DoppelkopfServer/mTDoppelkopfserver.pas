@@ -2,7 +2,7 @@ unit mTDoppelkopfserver;
 
 interface
 
-uses Sysutils, Types, classes, mTServer, mTNetworkMessage, StdCtrls, mTSpieler, mTDoppelkopfSpiel, StringKonstanten, Contnrs, mTExpectedTransmissionConfirmation, ExtCtrls, dialogs;
+uses Sysutils, mTKarte, Types, classes, mTServer, mTNetworkMessage, StdCtrls, mTSpieler, mTDoppelkopfSpiel, StringKonstanten, Contnrs, mTExpectedTransmissionConfirmation, ExtCtrls, dialogs;
 
 const TimeOut = 0.3;
 
@@ -14,15 +14,20 @@ private
   FTransmissionConfirmations: TObjectList;
   FTimer: TTimer;
   FConfirmationSpielbeginnCounter: Integer;
-  FKartenConfirmationCounter: Integer;
+  FConfirmationKartenCounter: Integer;
+  FConfirmatinVorbehaltAnmeldenCounter: Integer;
+
+  procedure sendCardsToClientWithIndex(pIndex: Integer);
+
   procedure processConnect(pClientIP: string; pMessage: TNetworkMessage);
   procedure processSpielbeginn(pClientIP: string; pMessage: TNetworkMessage);
   procedure processKarten(pClientIP: string; pMessage: TNetworkMessage);
+  procedure processVorbehaltAnmelden (pClientIP: string; pMessage: TNetworkMessage);
   procedure processVorbehalteAbfragen (pClientIP: string; pMessage: TNetworkMessage);
-  procedure processDamensolo (pClientIP: string; pMessage: TNetworkMessage);
+  (*procedure processDamensolo (pClientIP: string; pMessage: TNetworkMessage);
   procedure processBubensolo (pClientIP: string; pMessage: TNetworkMessage);
   procedure processFleischloser (pClientIP: string; pMessage: TNetworkMessage);
-  procedure processHochzeit (pClientIP: string; pMessage: TNetworkMessage);
+  procedure processHochzeit (pClientIP: string; pMessage: TNetworkMessage); *)
   procedure processSolo (pClientIP: string; pMessage: TNetworkMessage);
   procedure processSoloBestaetigen (pClientIP: string; pMessage: TNetworkMessage);
   procedure processWelcheKarte (pClientIP: string; pMessage: TNetworkMessage);
@@ -54,10 +59,12 @@ begin
   FTransmissionConfirmations := TObjectList.Create;
   FTimer := TTimer.Create(nil);
   FTimer.Interval := 100;
- // FTimer.Enabled := True;
+  FTimer.Enabled := True;
   FTimer.Enabled := False;
   FTimer.OnTimer := processTransmissionConfirmations;
-  self.FConfirmationSpielbeginnCounter := 0;
+  self.FConfirmationSpielbeginnCounter := 1;
+  self.FConfirmationKartenCounter := 1;
+  self.FConfirmatinVorbehaltAnmeldenCounter := 1;
 end;
 
 procedure TDoppelkopfServer.ClientHasConnected(pClientIP: string);
@@ -132,7 +139,11 @@ begin
   begin
     self.processVorbehalteAbfragen(pSenderIP, msg);
   end;
-  if (msg.key = VORBEHALT_DAMENSOLO) then
+  if (msg.key = VORBEHALT_ANMELDEN) then
+  begin
+    self.processVorbehaltAnmelden(pSenderIP, msg);
+  end;
+ (* if (msg.key = VORBEHALT_DAMENSOLO) then
   begin
     self.processDamensolo(pSenderIP, msg);
   end;
@@ -147,7 +158,7 @@ begin
   if (msg.key = VORBEHALT_HOCHZEIT) then
   begin
     self.processHochzeit(pSenderIP, msg);
-  end;
+  end;  *)
   if (msg.key = SOLO) then
   begin
     self.processSolo(pSenderIP, msg);
@@ -182,6 +193,21 @@ begin
   end;
 end;
 
+procedure TDoppelkopfServer.sendCardsToClientWithIndex(pIndex: Integer);
+var msg: string;
+    kartenList: TStringList;
+    k: Integer;
+begin
+  msg := KARTEN + '#';
+  kartenList := self.FSpiel.getKartenForSpielerWithIndex(pIndex);
+  for k := 0 to kartenList.Count-1 do
+  begin
+    msg := msg + kartenList[k] + '#';
+  end;
+  self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, KARTEN + '#' + YES + '#', FSpiel.playerIPForIndex(pIndex)));
+  self.sendMessage(msg, self.FSpiel.playerIPForIndex(pIndex));
+end;
+
 
 procedure TDoppelkopfServer.processSpielbeginn(pClientIP: string;pMessage: TNetworkMessage);
 var msg: string;
@@ -191,36 +217,88 @@ begin
   inc(self.FConfirmationSpielbeginnCounter);
   if self.FConfirmationSpielbeginnCounter = 4 then
   begin
-    //msg := SPIELBEGINN + '#' + FSpiel.PlayerNameForIndex(1) + '#' + FSpiel.PlayerNameForIndex(2) + '#' + FSpiel.PlayerNameForIndex(3) + '#' + FSpiel.PlayerNameForIndex(4) + '#';
     for i := 1 to 4 do
     begin
-      msg := KARTEN + '#';
-      kartenList := self.FSpiel.getKartenForSpielerWithIndex(i);
-      for k := 0 to 9 do
-      begin
-        msg := msg + kartenList[k] + '#';
-      end;
-      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, KARTEN + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
-      self.sendMessage(msg, self.FSpiel.playerIPForIndex(i));
+      self.sendCardsToClientWithIndex(i);
     end;
   end;
 end;
 
 procedure TDoppelkopfServer.processKarten(pClientIP: string;pMessage: TNetworkMessage);
+var i: Integer;
+    msg: string;
 begin
-  inc(self.FKartenConfirmationCounter);
-  if (self.FKartenConfirmationCounter = 4) then
+  inc(self.FConfirmationKartenCounter);
+  if (self.FConfirmationKartenCounter = 4) then
   begin
-
+    msg := VORBEHALTE_ABFRAGEN + '#';
+    self.SendMessageToAll(msg);
+    for i := 1 to 4 do
+    begin
+      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, msg + YES + '#', FSpiel.PlayerIPForIndex(i)))
+    end;
   end;
 end;
 
-procedure TDoppelkopfServer.processVorbehalteAbfragen (pClientIP: string;pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processVorbehalteAbfragen(pClientIP: string; pMessage: TNetworkMessage);
 begin
 
 end;
 
-procedure TDoppelkopfServer.processDamensolo (pClientIP: string;pMessage: TNetworkMessage);
+procedure TDoppelkopfServer.processVorbehaltAnmelden(pClientIP: string;pMessage: TNetworkMessage);
+var i: Integer;
+    msg, confirmation, temp: string;
+begin
+  confirmation := pMessage.key + '#' + YES + '#';
+  if pMessage.parameter[0] = VORBEHALT_NICHTS then
+  begin
+    self.SendMessage(confirmation, pClientIP);
+  end else
+  if pMessage.parameter[0] = VORBEHALT_DAMENSOLO then
+  begin
+    self.FSpiel.MacheSoloAnsage(pClientIP, VORBEHALT_DAMENSOLO);
+    self.SendMessage(confirmation, pClientIP);
+  end else
+  if pMessage.parameter[0] = VORBEHALT_BUBENSOLO then
+  begin
+    self.FSpiel.MacheSoloAnsage(pClientIP, VORBEHALT_BUBENSOLO);
+    self.SendMessage(confirmation, pClientIP);
+  end else
+  if pMessage.parameter[0] = VORBEHALT_FLEISCHLOSER then
+  begin
+    self.FSpiel.MacheSoloAnsage(pClientIP, VORBEHALT_FLEISCHLOSER);
+    self.SendMessage(confirmation, pClientIP);
+  end else
+  if pMessage.parameter[0] = VORBEHALT_HOCHZEIT then
+  begin
+    self.FSpiel.MacheSoloAnsage(pClientIP, VORBEHALT_HOCHZEIT);
+    self.SendMessage(pMessage.key + '#' + NO + '#', pClientIP);
+  end else
+  begin
+    self.SendMessage(pMessage.key + '#' + NO + '#', pClientIP);
+  end;
+
+  inc(self.FConfirmatinVorbehaltAnmeldenCounter);
+  if (self.FConfirmatinVorbehaltAnmeldenCounter = 4) then
+  begin
+    msg := SOLO + '#';
+    self.FSpiel.EntscheideWelchesSolo;
+    if self.FSpiel.SpielModus = dkNormal then temp := VORBEHALT_NICHTS;
+    if self.FSpiel.SpielModus = dkDamensolo then temp := VORBEHALT_DAMENSOLO;
+    if self.FSpiel.SpielModus = dkBubensolo then temp := VORBEHALT_BUBENSOLO;
+    if self.FSpiel.SpielModus = dkFleischloser then temp := VORBEHALT_FLEISCHLOSER;
+    if self.FSpiel.SpielModus = dkHochzeit then ShowMessage('Hochzeit nicht implementiert');
+
+    msg := msg + FSpiel.SolistName + '#' + temp + '#';
+    self.SendMessageToAll(msg);
+    for i := 1 to 4 do
+    begin
+      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, SOLO + '#' + YES + '#', FSpiel.PlayerIPForIndex(i)))
+    end;
+  end;
+end;
+
+(*procedure TDoppelkopfServer.processDamensolo (pClientIP: string;pMessage: TNetworkMessage);
 begin
 
 end;
@@ -238,7 +316,7 @@ end;
 procedure TDoppelkopfServer.processHochzeit (pClientIP: string;pMessage: TNetworkMessage);
 begin
 
-end;
+end; *)
 
 procedure TDoppelkopfServer.processSolo (pClientIP: string;pMessage: TNetworkMessage);
 begin
@@ -247,32 +325,32 @@ end;
 
 procedure TDoppelkopfServer.processWelcheKarte (pClientIP: string;pMessage: TNetworkMessage);
 begin
-
+ ///////
 end;
 
 procedure TDoppelkopfServer.processAktuellerStich (pClientIP: string;pMessage: TNetworkMessage);
 begin
-
+ ////////
 end;
 
 procedure TDoppelkopfServer.processGewinnerStich (pClientIP: string;pMessage: TNetworkMessage);
 begin
-
+ ///////
 end;
 
 procedure TDoppelkopfServer.processGewinnerSpiel (pClientIP: string;pMessage: TNetworkMessage);
 begin
-
+ ///////
 end;
 
 procedure TDoppelkopfServer.processAnsage (pClientIP: string;pMessage: TNetworkMessage);
 begin
-
+  ShowMessage('Im Moment sind Ansagen nicht unterstützt!');
 end;
 
 procedure TDoppelkopfServer.processAnsageGemacht (pClientIP: string;pMessage: TNetworkMessage);
 begin
-
+ //////
 end;
 
 procedure TDoppelkopfServer.processConnect(pClientIP: string; pMessage: TNetworkMessage);

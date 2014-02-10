@@ -5,6 +5,7 @@ interface
 const SPIELBEGINN = 'Spielbeginn';
       KARTEN = 'Karten';
       VORBEHALTE_ABFRAGEN = 'Vorbehalte';
+      VORBEHALT_ANMELDEN = 'VorbehaltAnmelden';
       VORBEHALT_DAMENSOLO = 'Damensolo';
       VORBEHALT_BUBENSOLO = 'Bubensolo';
       VORBEHALT_FLEISCHLOSER = 'Fleischloser';
