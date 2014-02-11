@@ -15,6 +15,7 @@ type
     MeLog: TMemo;
     Edit2: TEdit;
     Button3: TButton;
+    Label1: TLabel;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -52,6 +53,7 @@ begin
   FServer := TDoppelkopfServer.Create(StrToInt(edit2.text));
   FServer.MeLog := MeLog;
   FServer.Activate;
+  label1.Caption := FServer.Server.Socket.LocalAddress;
 end;
 
 procedure TForm1.Button3Click(Sender: TObject);

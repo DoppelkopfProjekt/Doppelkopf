@@ -21,10 +21,12 @@ TServer = class
     procedure SendMessage(pMessage: string; pClientIP: string);
     procedure SendMessageToAll(pMessage: string);
 
+
     //Procedures to override
     procedure ProcessMessage(pMessage: string; pSenderIP: string); virtual;
     procedure ClientHasConnected(pClientIP: string); virtual;
     procedure ClientHasDisconnected(pClientIP: string); virtual;
+    property Server: TServerSocket read FServer;
 end;
 
 implementation
