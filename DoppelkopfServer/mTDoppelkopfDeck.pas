@@ -71,7 +71,7 @@ end;
 function TDoppelkopfDeck.getRandomCard: TKarte;
 var index: Integer;
 begin
-  index := random(FKarten.Count)-1;
+  index := random(FKarten.Count);
   result := TKarte(FKarten[index]);
   FKarten.Delete(index);
 end;
