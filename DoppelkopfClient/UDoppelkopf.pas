@@ -183,10 +183,10 @@ if Netzwerknachricht.key = CONNECT then                             //connect Ve
 else if Netzwerknachricht.key = SPIELBEGINN then                          //Name der Spieler werden geschickt
     begin
       ClientSocket1.Socket.SendText(SPIELBEGINN+ '#YES#');
-        for i := 1 to 4  do
+        for i := 0 to 3  do
         begin
           allespieler[i]:=Netzwerknachricht.parameter[i];
-          tLabel(FindComponent('Label'+inttostr(i+2))).caption:=allespieler[i];
+          tLabel(FindComponent('Label'+inttostr(i+3))).caption:=allespieler[i];
         end;
     end
 else if Netzwerknachricht.key = KARTEN then                        //Karten Spieler bekommt die Karten geschickt
