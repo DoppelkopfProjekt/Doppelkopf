@@ -58,7 +58,8 @@ end;
 
 procedure TForm1.Button3Click(Sender: TObject);
 begin
-  FServer.Deactivate;
+  if not (FServer = nil) then
+    FServer.Deactivate;
   FServer.Free;
 end;
 

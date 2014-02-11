@@ -18,8 +18,8 @@ TServer = class
     procedure Activate;
     procedure Deactivate;
 
-    procedure SendMessage(pMessage: string; pClientIP: string);
-    procedure SendMessageToAll(pMessage: string);
+    procedure SendMessage(pMessage: string; pClientIP: string); virtual;
+    procedure SendMessageToAll(pMessage: string); virtual;
 
 
     //Procedures to override

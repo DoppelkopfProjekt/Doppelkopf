@@ -44,6 +44,9 @@ private
 public
   MeLog: TMemo;
 
+  procedure SendMessage(pMessage: string; pClientIP: string); override;
+  procedure SendMessageToAll(pMessage: string); override;
+
   constructor Create(pPortNr: Integer);
   destructor Destroy; override;
   procedure ProcessMessage(pMessage: string; pSenderIP: string); override;
@@ -69,9 +72,21 @@ begin
   self.FConfirmationSoloCounter := 0;
 end;
 
+procedure TDoppelkopfserver.SendMessage(pMessage: string; pClientIP: string);
+begin
+  inherited SendMessage(pMessage, pClientIP);
+  self.MeLog.Lines.Add('GESENDET: ' + pMessage + ' an IP: ' + pClientIP);
+end;
+
+procedure TDoppelkopfServer.SendMessageToAll(pMessage: string);
+begin
+  inherited SendMessageToAll(pMessage);
+  self.MeLog.Lines.Add('GESENDET AN ALLE: ' + pMessage);
+end;
+
 procedure TDoppelkopfServer.ClientHasConnected(pClientIP: string);
 begin
-  self.MeLog.Lines.Add('Client-IP ist ' + pClientIP);
+  self.MeLog.Lines.Add('Client ' + pClientIP + ' ist verbunden');
 end;
 
 procedure TDoppelkopfServer.processTransmissionConfirmations(sender: TObject);
@@ -85,7 +100,8 @@ begin
     begin
       self.FTransmissionConfirmations.Remove(temp);
       self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(temp.OriginalMessage, temp.ExpectedConfirmationMessage, temp.ReceiverIP));
-      self.SendMessageToAll(temp.OriginalMessage);
+      self.SendMessage(temp.OriginalMessage, temp.ReceiverIP);
+      MeLog.Lines.Add('Nachricht erneut gesendet: ' + temp.OriginalMessage + ' an IP: ' + temp.ReceiverIP);
     end;
   end;
 end;
@@ -98,7 +114,7 @@ end;
 
 procedure TDoppelkopfServer.ClientHasDisconnected(pClientIP: string);
 begin
-
+  self.MeLog.Lines.Add('Client ' + pClientIP + ' ist getrennt');
 end;
 
 procedure TDoppelkopfServer.processConfirmation(pConfirmationMessage: string; pSenderIP: string);
@@ -120,7 +136,7 @@ end;
 procedure TDoppelkopfServer.ProcessMessage(pMessage: string; pSenderIP: string);
 var msg: TNetworkMessage;
 begin
-  self.MeLog.Lines.Add(pSenderIP + ': ' + pMessage);
+  self.MeLog.Lines.Add('EMPFANGEN: ' + pSenderIP + ': ' + pMessage);
   self.processConfirmation(pMessage, pSenderIP);
   msg := TNetworkMessage.Create(pMessage);
   if (msg.key = CONNECT) then

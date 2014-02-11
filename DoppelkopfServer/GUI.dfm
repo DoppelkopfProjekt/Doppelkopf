@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 279
   Caption = 'Form1'
   ClientHeight = 258
-  ClientWidth = 857
+  ClientWidth = 1066
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -59,7 +59,7 @@ object Form1: TForm1
   object MeLog: TMemo
     Left = 304
     Top = 32
-    Width = 537
+    Width = 721
     Height = 193
     TabOrder = 4
   end
