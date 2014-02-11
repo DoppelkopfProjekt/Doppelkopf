@@ -247,22 +247,29 @@ function TDoppelkopfSpiel.legeKarte(pKartenCode: string; pIP: string): Boolean;
 var //istLegal: Boolean;
     spieler: TSpieler;
 begin
-  spieler := self.FSpielerManager.playerForIP(pIP);
-  result := spieler.karteLegen(pKartenCode, self.FAktuellerStich);
-  //Wenn erfolgreich, ist der n�chste Spieler dran
-  if result then
+  if self.aktuelleSpielerIP = pIP then
   begin
-    inc(self.FAktuellerSpielerIndex);
-    inc(self.FZahlGelegteKarten);
-  end;
-  //Wenn Stich voll...
-  if self.FAktuellerStich.kartenCount >= 4 then
-  begin
-  //Gewinner kriegt seinen Stich
-    TSpieler(self.FAktuellerStich.AktuellerSieger).gibGewonnenenStich(self.FAktuellerStich);
+    //Wenn Stich voll...
+    if self.FAktuellerStich.kartenCount >= 4 then
+    begin
+    //Gewinner kriegt seinen Stich
+      TSpieler(self.FAktuellerStich.AktuellerSieger).gibGewonnenenStich(self.FAktuellerStich);
 
-    inc(self.FRundenNummer);
-    self.FAktuellerStich := TStich.Create(self.FRundenNummer);
+      inc(self.FRundenNummer);
+      self.FAktuellerStich := TStich.Create(self.FRundenNummer);
+    end;
+
+    spieler := self.FSpielerManager.playerForIP(pIP);
+    result := spieler.karteLegen(pKartenCode, self.FAktuellerStich);
+    //Wenn erfolgreich, ist der n�chste Spieler dran
+    if result then
+    begin
+      inc(self.FAktuellerSpielerIndex);
+      inc(self.FZahlGelegteKarten);
+    end;
+  end else
+  begin
+    result := false;
   end;
 end;
 

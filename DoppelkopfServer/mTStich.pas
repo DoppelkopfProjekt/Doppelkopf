@@ -1,4 +1,4 @@
-unit mTStich;
+﻿unit mTStich;
 
 interface
 
@@ -29,6 +29,8 @@ public
   procedure LegeKarte(pKarte: TKarte; pLegenderSpieler: TObject);
   constructor Create(pNummer: Integer);
 
+  function getGelegteKarten: TStringList;
+
   function getPunkte: Integer;
 end;
 
@@ -44,6 +46,16 @@ begin
   FKarten := TObjectList.Create;
   FSpielerListe := TObjectList.Create;
   FNummer := pNummer;
+end;
+
+function TStich.getGelegteKarten;
+var i: Integer;
+begin
+  result := TStringList.Create;
+  for i := 0 to self.FKarten.Count-1 do
+  begin
+    result.Add(TKarte(self.FKarten[i]).Code);
+  end;
 end;
 
 procedure TStich.erkenneSonderKarten(pNeueKarte: TKarte; pSpieler: Tobject);

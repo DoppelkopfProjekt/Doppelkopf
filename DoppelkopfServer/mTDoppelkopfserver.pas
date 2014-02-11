@@ -391,8 +391,55 @@ begin
 end;
 
 procedure TDoppelkopfServer.processKarteLegen(pClientIP: string; pMessage: TNetworkMessage);
+var success: Boolean;
+    counter, i: Integer;
+    msg: string;
+    karten: TStringList;
 begin
   ShowMessage('Karte gelegt');
+
+  success := self.FSpiel.legeKarte(pMessage.parameter[0], pClientIP);
+  if not success then
+  begin
+    self.SendMessage(KARTE_LEGEN + '#' + NO + '#', pClientIP);
+  end else
+  begin
+    self.SendMessage(KARTE_LEGEN + '#' + YES + '#', pClientIP);
+    counter := self.FSpiel.ZahlGelegteKarten;
+    msg := AKTUELLER_STICH + '#';
+    karten := self.FSpiel.AktuellerStich.getGelegteKarten;
+    //Aktuellen Stich an alle schicken
+    for i := 0 to karten.Count-1 do
+    begin
+      msg := msg + karten[i] + '#';
+    end;
+    self.SendMessageToAll(msg);
+    for i := 1 to 4 do
+    begin
+      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, AKTUELLER_STICH + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
+    end;
+    self.SendMessageToAll(msg);
+    //Wenn Stich fertig, Gewinner an alle schicken
+    if (counter mod 4) = 0 then
+    begin
+      msg := GEWINNER_STICH + '#' + TSpieler(self.FSpiel.AktuellerStich.AktuellerSieger).Name + '#';
+      self.SendMessageToAll(msg);
+      for i := 1 to 4 do
+      begin
+        self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, GEWINNER_STICH + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
+      end;
+    end;
+    //Wenn Spiel zuende, Sieger mitteilen
+    if (counter = 40) then
+    begin
+      msg := GEWINNER_SPIEL + '#' + 'Sag ich später' + '#' + '10' + '#';
+      self.SendMessageToAll(msg);
+      for i := 1 to 4 do
+      begin
+        self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, GEWINNER_SPIEL + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
+      end;
+    end;
+  end;
 end;
 
 
