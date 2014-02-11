@@ -49,7 +49,6 @@ type
     Button2: TButton;
     Button3: TButton;
     Button4: TButton;
-    ClientSocket1: TClientSocket;
     Button5: TButton;
     Edit3: TEdit;
     procedure Terminalstarten1Click(Sender: TObject);
@@ -83,7 +82,7 @@ var
   Netzwerknachricht: tNetworkmessage;
   nameistangegeben: Boolean;
   spielhatbegonnen: boolean;
-  allespieler: Array  [1..4] of String;
+  allespieler: Array  [0..3] of String;
   alleansagenAnsage: Array of String [10];
   alleansagenSpieler: Array of String [10];
   alleansagenNummer: Integer;
