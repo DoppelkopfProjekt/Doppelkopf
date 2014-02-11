@@ -237,6 +237,7 @@ begin
   begin
     for i := 1 to 4 do
     begin
+      self.melog.lines.add('Karten werden an Spieler ' + IntToStr(i) + ' ausgegeben');
       self.sendCardsToClientWithIndex(i);
     end;
   end;
