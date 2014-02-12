@@ -66,6 +66,7 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   randomize;
+  self.Button2Click(nil);
 end;
 
 end.
