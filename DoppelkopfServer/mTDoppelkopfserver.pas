@@ -303,7 +303,7 @@ begin
   inc(self.FConfirmatinVorbehaltAnmeldenCounter);
   if (self.FConfirmatinVorbehaltAnmeldenCounter = 4) then
   begin
-    msg := SOLO + '#';
+    msg := SOLO + '#' + YES + '#';
     self.FSpiel.EntscheideWelchesSolo;
     if self.FSpiel.SpielModus = dkNormal then temp := VORBEHALT_NICHTS;
     if self.FSpiel.SpielModus = dkDamensolo then temp := VORBEHALT_DAMENSOLO;
@@ -346,7 +346,7 @@ begin
   inc(self.FConfirmationSoloCounter);
   if (self.FConfirmationSoloCounter = 4) then
   begin
-    msg := WELCHE_KARTE + '#';
+    msg := WELCHE_KARTE + '#' + YES + '#';
     self.SendMessage(msg, self.FSpiel.aktuelleSpielerIP);
     self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, msg + YES + '#', self.FSpiel.aktuelleSpielerIP))
   end;
