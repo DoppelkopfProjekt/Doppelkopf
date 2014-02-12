@@ -50,6 +50,7 @@ end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
+  self.MeLog.Clear;
   FServer := TDoppelkopfServer.Create(StrToInt(edit2.text));
   FServer.MeLog := MeLog;
   FServer.Activate;
