@@ -253,7 +253,7 @@ begin
   inc(self.FConfirmationKartenCounter);
   if (self.FConfirmationKartenCounter = 4) then
   begin
-    msg := VORBEHALTE_ABFRAGEN + '#';
+    msg := VORBEHALTE_ABFRAGEN + '#' + YES + '#';
     self.SendMessageToAll(msg);
     for i := 1 to 4 do
     begin
