@@ -138,7 +138,7 @@ procedure TForm1.Button1Click(Sender: TObject);
 var
 sendung: String;
 begin
-sendung := Karten[strtoint(markiertekarte)];
+sendung := Karten_client[strtoint(markiertekarte)];
 ClientSocket1.Socket.SendText(KARTE_LEGEN+'#'+sendung+'#');
 end;
 
@@ -152,7 +152,7 @@ end;
 
 procedure TForm1.Button3Click(Sender: TObject);
 begin
-  ClientSocket1.Socket.SendText(ANSAGE + '#' + inputbox('neue Ansage', ANSAGE_RE + ', ' + ANSAGE_KONTRA + ', ' + ANSAGE_KEINENEUN  + ', ' +  ANSAGE_KEINESECHS  + ', ' +  ANSAGE_KEINEDREI  + ', ' + ANSAGE_SCHWARZ,'')+ '#');
+  ClientSocket1.Socket.SendText(ANSAGE + '#'+inputbox('neue Ansage', ANSAGE_RE + ', ' + ANSAGE_KONTRA + ', ' + ANSAGE_KEINENEUN  + ', ' +  ANSAGE_KEINESECHS  + ', ' +  ANSAGE_KEINEDREI  + ', ' + ANSAGE_SCHWARZ,'')+ '#');
 end;
 
 procedure TForm1.Button4Click(Sender: TObject);
@@ -167,7 +167,7 @@ end;
 
 procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
 var
-i: Integer;
+i,y: Integer;
 begin
 Netzwerknachricht:=tNetworkmessage.Create(Socket.ReceiveText);
 memo1.lines.add('// '+Netzwerknachricht.key+';'+Netzwerknachricht.parameter[0]);
@@ -194,30 +194,35 @@ else if Netzwerknachricht.key = KARTEN then                        //Karten Spie
     begin
       ClientSocket1.Socket.SendText(KARTEN+'#YES#');
       spielhatbegonnen:=true;
-      Karten_client.Clear;
+      Karten_client.free;
       Karten_client := Netzwerknachricht.parameter;
       for i := 0 to 9 do
         tImage(FindComponent('image'+IntToStr(i))).Picture.assign(nil);
       for i := 0 to Karten_client.Count-1 do
       begin
-        tImage(FindComponent('image'+IntToStr(i))).picture.loadfromfile(Netzwerknachricht.parameter[i]);
+        tImage(FindComponent('image'+IntToStr(i))).picture.loadfromfile('Karten/'+Netzwerknachricht.parameter[i]+'.jpg');
       end;
     end
 else if Netzwerknachricht.key = VORBEHALTE_ABFRAGEN then              //Vorbehaltabfrage Hat der Spieler einen Vorbahlt?
     begin
       ClientSocket1.Socket.SendText(VORBEHALTE_ABFRAGEN + '#Yes#');
-      ClientSocket1.Socket.SendText(VORBEHALT_ANMELDEN +'#' + inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+'#');
+      ClientSocket1.Socket.SendText(VORBEHALT_ANMELDEN+ '#nichts#'); // inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+'#');
     end
 else if Netzwerknachricht.key = VORBEHALT_ANMELDEN then
     begin
       if Netzwerknachricht.parameter[0] = YES then
         vorbehaltangemeldet:=true;
+      //if Netzwerknachricht.parameter[0] = NO then
+      //  ClientSocket1.Socket.SendText(VORBEHALT_ANMELDEN +'#' + inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+'#');
     end
 else if Netzwerknachricht.key = SOLO then                     //Vorbehalt Ein Spieler hat einen gültigen Vorbehalt gelegt
     begin
+    if Netzwerknachricht.parameter.count = 2 then
+      begin
+        Vorbehalte_Art := Netzwerknachricht.parameter[1];
+        Vorbehaltgeber := Netzwerknachricht.parameter[0];
+      end;
       ClientSocket1.Socket.SendText(SOLO+ '#YES#');
-      Vorbehalte_Art := Netzwerknachricht.parameter[1];
-      Vorbehaltgeber := Netzwerknachricht.parameter[0];
     end
 else if Netzwerknachricht.key = WELCHE_KARTE then            //Welche Karte legen Spieler bekommt die Anweisung, dass er am Zug ist
     begin
@@ -243,6 +248,7 @@ else if Netzwerknachricht.key = KARTE_LEGEN then           //welche Karten teste
         if Netzwerknachricht.parameter[0] = 'YES' then
         begin
           Memo1.Lines.add ('Karte erfolgreich gelegt');
+          tImage(FindComponent('image'+markiertekarte)).Picture.loadfromfile('Karten/Back.jpg');
           amzug:=false
         end;
         if Netzwerknachricht.parameter[0] = 'NO' then

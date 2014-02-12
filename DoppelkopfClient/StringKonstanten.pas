@@ -1,39 +1,39 @@
-unit StringKonstanten;
+ï»¿unit StringKonstanten;
 
 interface
 
 const SPIELBEGINN = 'Spielbeginn';
-
-      VORBEHALTE_ABFRAGEN = 'Vorbehalte';
       KARTEN = 'Karten';
-      KARTE_LEGEN = 'KartenGeben';
+      VORBEHALTE_ABFRAGEN = 'Vorbehalte';
+      VORBEHALT_ANMELDEN = 'VorbehaltAnmelden';
       VORBEHALT_DAMENSOLO = 'Damensolo';
       VORBEHALT_BUBENSOLO = 'Bubensolo';
       VORBEHALT_FLEISCHLOSER = 'Fleischloser';
       VORBEHALT_HOCHZEIT = 'Hochzeit';
-      VORBEHALT_NICHTS = 'nichts';
+      VORBEHALT_NICHTS = 'Nichts';
       SOLO = 'Solo';
       SOLO_BESTAETIGEN = 'SoloBestaetigen';
       WELCHE_KARTE = 'WelcheKarte';
-      WELCHE_KARTE_BESTAETIGEN = 'WelcheKarteBestaetigen';
+     // WELCHE_KARTE_BESTAETIGEN = 'WelcheKarteBestaetigen';
+      KARTE_Legen = 'KarteLegen';
       AKTUELLER_STICH = 'AktuellerStich';
       GEWINNER_STICH = 'GewinnerStich';
       GEWINNER_SPIEL = 'GewinnerSpiel';
-      VORBEHALT_ANMELDEN = 'VorbehaltAnmelden';
       //ANSAGE = 'Ansage';
       ANSAGE_GEMACHT = 'AnsageGemacht';
-     // UNGUELTIGEKARTE = 'UngültigeKarte';
+     // UNGUELTIGEKARTE = 'Ungï¿½ltigeKarte';
      NO = 'NO';
      YES = 'YES';
-     RE = 'RE';
-     KONTRA ='KONTRA';
+
+     KONTRA = 'Kontra';
+     RE = 'Re';
 
       //Auf Client antworten
       CONNECT = 'Connect';
       ANSAGE = 'Ansage';
 
 
-      //Müssen noch umgestellt werden!!!!!!
+      //Mï¿½ssen noch umgestellt werden!!!!!!
       KARO_ZEHN = 'KAZ';
       KARO_BUBE = 'KAB';
       KARO_DAME = 'KAD';
@@ -60,7 +60,7 @@ const SPIELBEGINN = 'Spielbeginn';
       ANSAGE_KEINESECHS = 'K6';
       ANSAGE_KEINEDREI = 'K3';
       ANSAGE_SCHWARZ = 'K0';
-     // ANSAGE_KEINE = 'No';
+      //ANSAGE_KEINE = 'No';
 
 implementation
 
