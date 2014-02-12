@@ -151,7 +151,7 @@ end;
 procedure TStich.LegeKarte(pKarte: TKarte; pLegenderSpieler: TObject);
 var Ergebnis: dkErgebnis;
 begin
-  if FSpielerListe.Count = 4 then ShowMessage('Keine 4 Spieler zum Stich hinzugef�gt!');
+  if not FSpielerListe.Count = 4 then ShowMessage('Keine 4 Spieler zum Stich hinzugef�gt!');
   if FKarten.count >= 4 then ShowMessage('5 Karten auf einem Stich!?!');
 
   FKarten.add(pKarte);

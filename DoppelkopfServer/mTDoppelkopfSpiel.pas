@@ -246,6 +246,7 @@ end;
 function TDoppelkopfSpiel.legeKarte(pKartenCode: string; pIP: string): Boolean;
 var //istLegal: Boolean;
     spieler: TSpieler;
+    i: Integer;
 begin
   if self.aktuelleSpielerIP = pIP then
   begin
@@ -257,6 +258,10 @@ begin
 
       inc(self.FRundenNummer);
       self.FAktuellerStich := TStich.Create(self.FRundenNummer);
+      for i := 1 to 4 do
+      begin
+        self.FAktuellerStich.AddSpieler(self.FSpielerManager.playerForIndex(i));
+      end;
     end;
 
     spieler := self.FSpielerManager.playerForIP(pIP);
@@ -298,6 +303,10 @@ begin
   //1. Stich erstellen
   self.FRundenNummer := 1;
   self.FAktuellerStich := TStich.Create(self.FRundenNummer);
+  for i := 1 to 4 do
+  begin
+    self.FAktuellerStich.AddSpieler(self.FSpielerManager.playerForIndex(i));
+  end;
 
   //1. Spieler markieren
   self.FAktuellerSpielerIndex := 1;
