@@ -39,7 +39,7 @@ object Form1: TForm1
     ParentFont = False
   end
   object Label2: TLabel
-    Left = 624
+    Left = 648
     Top = 24
     Width = 109
     Height = 20
@@ -133,35 +133,35 @@ object Form1: TForm1
     OnClick = Image1Click
   end
   object Label3: TLabel
-    Left = 658
+    Left = 682
     Top = 335
     Width = 41
     Height = 13
     Caption = 'Spieler 1'
   end
   object Label4: TLabel
-    Left = 480
+    Left = 504
     Top = 184
     Width = 41
     Height = 13
     Caption = 'Spieler 4'
   end
   object Label5: TLabel
-    Left = 656
+    Left = 680
     Top = 69
     Width = 41
     Height = 13
     Caption = 'Spieler 2'
   end
   object Label6: TLabel
-    Left = 842
+    Left = 866
     Top = 184
     Width = 41
     Height = 13
     Caption = 'Spieler 3'
   end
   object Image12: TImage
-    Left = 640
+    Left = 664
     Top = 88
     Width = 73
     Height = 105
@@ -169,7 +169,7 @@ object Form1: TForm1
     Stretch = True
   end
   object Image11: TImage
-    Left = 535
+    Left = 559
     Top = 140
     Width = 73
     Height = 105
@@ -177,7 +177,7 @@ object Form1: TForm1
     Stretch = True
   end
   object Image10: TImage
-    Left = 640
+    Left = 664
     Top = 224
     Width = 73
     Height = 105
@@ -185,7 +185,7 @@ object Form1: TForm1
     Stretch = True
   end
   object Image13: TImage
-    Left = 744
+    Left = 768
     Top = 140
     Width = 73
     Height = 105
@@ -234,7 +234,9 @@ object Form1: TForm1
     Top = 575
     Width = 417
     Height = 113
+    Enabled = False
     TabOrder = 2
+    Visible = False
   end
   object Memo3: TMemo
     Left = 8
@@ -246,24 +248,24 @@ object Form1: TForm1
     TabOrder = 3
   end
   object Edit1: TEdit
-    Left = 513
-    Top = 597
+    Left = 521
+    Top = 484
     Width = 121
     Height = 21
     TabOrder = 4
     Text = '84.63.62.143'
   end
   object Edit2: TEdit
-    Left = 513
-    Top = 624
+    Left = 521
+    Top = 511
     Width = 121
     Height = 21
     TabOrder = 5
     Text = '45678'
   end
   object Button2: TButton
-    Left = 640
-    Top = 604
+    Left = 648
+    Top = 491
     Width = 119
     Height = 25
     Caption = 'Verbinden'
@@ -271,8 +273,8 @@ object Form1: TForm1
     OnClick = Button2Click
   end
   object Button3: TButton
-    Left = 624
-    Top = 440
+    Left = 456
+    Top = 304
     Width = 157
     Height = 25
     Caption = 'Ansage abgeben(am Zug)'
@@ -281,8 +283,8 @@ object Form1: TForm1
     OnClick = Button3Click
   end
   object Button4: TButton
-    Left = 640
-    Top = 505
+    Left = 648
+    Top = 435
     Width = 75
     Height = 25
     Caption = 'Name geben'
@@ -291,8 +293,8 @@ object Form1: TForm1
     OnClick = Button4Click
   end
   object Button5: TButton
-    Left = 640
-    Top = 696
+    Left = 648
+    Top = 559
     Width = 177
     Height = 25
     Caption = 'Verbindung trennen'
@@ -300,8 +302,8 @@ object Form1: TForm1
     OnClick = Button5Click
   end
   object Edit3: TEdit
-    Left = 513
-    Top = 509
+    Left = 521
+    Top = 439
     Width = 121
     Height = 21
     TabOrder = 10
@@ -347,7 +349,7 @@ object Form1: TForm1
     ClientType = ctNonBlocking
     Port = 0
     OnRead = ClientSocket1Read
-    Left = 840
-    Top = 536
+    Left = 872
+    Top = 58
   end
 end

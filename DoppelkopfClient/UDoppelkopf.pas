@@ -50,6 +50,7 @@ type
     Button3: TButton;
     Button4: TButton;
     Button5: TButton;
+    Clientsocket1 : tClientsocket;
     Edit3: TEdit;
     procedure Terminalstarten1Click(Sender: TObject);
     procedure Konsoleschlieen1Click(Sender: TObject);
@@ -119,12 +120,12 @@ procedure TForm1.FormCreate(Sender: TObject);
 var
 i:Integer;
 begin
-  Form1.ClientHeight:=780;
-  Memo1.visible:=true;
+  Form1.ClientHeight:=630;
+  //Memo1.visible:=true;
   Form1.clientwidth:=895;
-  chatoffen:=true;
+  //chatoffen:=true;
   High:=226;
-  Memo1.Visible:=false;
+  //Memo1.Visible:=false;
   alleansagenNummer:=0;
   amzug:=false;
 
@@ -169,6 +170,7 @@ var
 i: Integer;
 begin
 Netzwerknachricht:=tNetworkmessage.Create(Socket.ReceiveText);
+memo1.lines.add('// '+Netzwerknachricht.key+';'+Netzwerknachricht.parameter[0]);
 if Netzwerknachricht.key = CONNECT then                             //connect Verbindnug erstellt
     begin
       if Netzwerknachricht.parameter[0] = 'YES' then
