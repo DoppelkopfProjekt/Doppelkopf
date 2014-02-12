@@ -219,7 +219,10 @@ var msg: string;
     k: Integer;
 begin
   msg := KARTEN + '#';
+  //ShowMessage('Test');
+  //ShowMessage(IntToStr(kartenlist.Count));
   kartenList := self.FSpiel.getKartenForSpielerWithIndex(pIndex);
+  //ShowMessage(kartenList.CommaText);
   for k := 0 to kartenList.Count-1 do
   begin
     msg := msg + kartenList[k] + '#';

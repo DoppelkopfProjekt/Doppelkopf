@@ -33,14 +33,17 @@ implementation
 constructor TBlatt.Create;
 begin
   FKarten := TObjectList.Create;
+  FKarten.OwnsObjects := False;
 end;
 
 function TBlatt.getKarten: TStringList;
 var i: Integer;
 begin
   result := TStringList.Create;
+  //ShowMessage(IntToStr(FKarten.Count));
   for i := 0 to 9 do
   begin
+    //ShowMessage(TKarte(FKarten[i]).Code);
     result.add(TKarte(FKarten[i]).Code);
   end;
 end;
@@ -58,11 +61,13 @@ end;
 
 function TBlatt.bestimmePartei;
 var i: Integer;
+   // temp: TKarte;
 begin
   result := dkKontra;
   //Partei muss bestimmt werden, wenn alle Karten da sind
   for i := 0 to 9 do
   begin
+    //temp := TKarte(FKarten[i]);
     if TKarte(FKarten[i]).Code = 'KRD' then result := dkRe;
   end;
 end;

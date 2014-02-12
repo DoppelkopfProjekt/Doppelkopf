@@ -41,10 +41,13 @@ uses mTSpieler;
 constructor TStich.Create(pNummer: Integer);
 begin
   FSonderkarten := TObjectList.Create;
+  FSonderkarten.OwnsObjects := False;
   FAktuellerSieger := nil;
   FAktuellBesteKarte := nil;
   FKarten := TObjectList.Create;
+  FKarten.OwnsObjects := False;
   FSpielerListe := TObjectList.Create;
+  FSpielerListe.OwnsObjects := False;
   FNummer := pNummer;
 end;
 

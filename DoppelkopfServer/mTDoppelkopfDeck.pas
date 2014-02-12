@@ -4,7 +4,7 @@
 
 interface
 
-uses Classes, mTKarte, contnrs;
+uses Classes, mTKarte, contnrs, dialogs;
 
 type
 
@@ -21,7 +21,7 @@ implementation
 constructor TDoppelkopfDeck.Create;
 begin
   FKarten := TObjectList.Create;
-
+  FKarten.ownsObjects := False;
   FKarten.Add(TKarte.create('KA10'));
   FKarten.Add(TKarte.create('KAB'));
   FKarten.Add(TKarte.create('KAD'));
@@ -73,6 +73,7 @@ var index: Integer;
 begin
   index := random(FKarten.Count);
   result := TKarte(FKarten[index]);
+  //ShowMessage(result.Code);
   FKarten.Delete(index);
 end;
 

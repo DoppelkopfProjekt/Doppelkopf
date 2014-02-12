@@ -49,6 +49,7 @@ begin
   FIP := pIP;
   FBlatt := TBlatt.Create;
   FGewonneneStiche := TObjectList.Create;
+  FGewonneneStiche.OwnsObjects := False;
   FExtraPunkte := 0;
   FSpieltSolo := false;
 end;

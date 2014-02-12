@@ -25,6 +25,7 @@ implementation
 constructor TSpielerManager.create;
 begin
   FSpieler := TObjectList.create;
+  FSpieler.OwnsObjects := False;
 end;
 
 function TSpielerManager.PlayerForIndex(pIndex: Integer): TSpieler;
