@@ -416,7 +416,7 @@ var success: Boolean;
     msg: string;
     karten: TStringList;
 begin
-  ShowMessage('Karte gelegt');
+  MeLog.Lines.Add('Karte gelegt');
 
   success := self.FSpiel.legeKarte(pMessage.parameter[0], pClientIP);
   if not success then
@@ -433,7 +433,7 @@ begin
     begin
       msg := msg + karten[i] + '#';
     end;
-    self.SendMessageToAll(msg);
+    //self.SendMessageToAll(msg);
     for i := 1 to 4 do
     begin
       self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, AKTUELLER_STICH + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
@@ -458,6 +458,11 @@ begin
       begin
         self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, GEWINNER_SPIEL + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
       end;
+    end else
+    begin
+      msg := WELCHE_KARTE + '#' + YES + '#';
+      self.SendMessage(msg, self.FSpiel.aktuelleSpielerIP);
+      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, msg + YES + '#', self.FSpiel.aktuelleSpielerIP))
     end;
   end;
 end;
