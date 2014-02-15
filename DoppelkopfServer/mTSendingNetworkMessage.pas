@@ -9,8 +9,10 @@ type
 TSendingNetworkMessage = class
 private
   msg: string;
+  key: string;
   paramCount: Integer;
   function getMsg: string;
+  function getConfirmation: string;
 public
   constructor Create(pKey: string);
   procedure addParameter(pParameter: string); overload;
@@ -18,6 +20,7 @@ public
   procedure addParameter(pParameter1, pParameter2, pParameter3: string); overload;
   procedure addParameter(pParameter1, pParameter2, pParameter3, pParameter4: string); overload;
   property resultingMessage: string read getmsg;
+  property confirmationMessage: string read getConfirmation;
 end;
 
 implementation
@@ -25,6 +28,7 @@ implementation
 constructor TSendingNetworkMessage.Create(pKey: string);
 begin
   msg := KEY_STRING + pKey + '#';
+  key := pKey;
   paramCount := 0;
 end;
 
@@ -56,6 +60,11 @@ function TSendingNetworkMessage.getMsg;
 begin
   result := msg;
   if paramCount = 0 then msg := msg + YES + '#';
+end;
+
+function TSendingNetworkMessage.getConfirmation;
+begin
+  result := key + '#' + YES + '#';
 end;
 
 end.
