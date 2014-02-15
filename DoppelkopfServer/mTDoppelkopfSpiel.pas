@@ -35,6 +35,7 @@ public
   function SpielerIPForName(pName: string): string;
   function PlayerNameForIndex(pIndex: Integer): string;
   function PlayerIPForIndex(pIndex: Integer): string;
+  function PlayerForIndex(pIndex: Integer): TSpieler;
 
   procedure starteSpiel;
   function legeKarte(pKartenCode: string; pIP:string): Boolean;
@@ -76,6 +77,11 @@ begin
   begin
     result := self.FSpielerManager.playerForIP(self.SolistIP).Name;
   end;
+end;
+
+function TDoppelkopfSpiel.PlayerForIndex(pIndex: Integer): TSpieler;
+begin
+  result := self.FSpielerManager.playerForIndex(pIndex);
 end;
 
 function TDoppelkopfSpiel.getKartenForSpielerWithIndex(pIndex: Integer): TStringList;
