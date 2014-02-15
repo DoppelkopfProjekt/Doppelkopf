@@ -12,6 +12,7 @@ const SPIELBEGINN = 'Spielbeginn';
       VORBEHALT_HOCHZEIT = 'Hochzeit';
       VORBEHALT_NICHTS = 'Nichts';
       SOLO = 'Solo';
+      DELAY = 50;
       SOLO_BESTAETIGEN = 'SoloBestaetigen';
       WELCHE_KARTE = 'WelcheKarte';
      // WELCHE_KARTE_BESTAETIGEN = 'WelcheKarteBestaetigen';
