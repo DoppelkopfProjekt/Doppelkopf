@@ -41,7 +41,7 @@ begin
   index := self.FSpieler.IndexOf(pSpieler);
   for i := 1 to 3 do
   begin
-    inc(i);
+    inc(index);
     newList.Add(self.FSpieler[index mod 4])
   end;
   self.FSpieler.Free;
