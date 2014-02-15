@@ -2,7 +2,7 @@ unit mTDoppelkopfserver;
 
 interface
 
-uses Sysutils, mTKarte, Types, classes, mTServer, mTNetworkMessage, StdCtrls, mTSpieler, mTDoppelkopfSpiel, StringKonstanten, Contnrs, mTExpectedTransmissionConfirmation, ExtCtrls, dialogs;
+uses Sysutils, mTReceivingNetworkMessage, mTSendingNetworkMessage, mTKarte, Types, classes, mTServer, mTNetworkMessage, StdCtrls, mTSpieler, mTDoppelkopfSpiel, StringKonstanten, Contnrs, mTExpectedTransmissionConfirmation, ExtCtrls, dialogs;
 
 const TimeOut = 0.3;
 
@@ -19,6 +19,7 @@ private
   FConfirmationSoloCounter: Integer;
 
   procedure sendCardsToClientWithIndex(pIndex: Integer);
+  procedure processNetworkMessage(msg: TNetworkMessage; pSenderIP: string);
 
   procedure processConnect(pClientIP: string; pMessage: TNetworkMessage);
   procedure processSpielbeginn(pClientIP: string; pMessage: TNetworkMessage);
@@ -133,12 +134,8 @@ begin
   end;
 end;
 
-procedure TDoppelkopfServer.ProcessMessage(pMessage: string; pSenderIP: string);
-var msg: TNetworkMessage;
+procedure TDoppelkopfServer.processNetworkMessage(msg: TNetworkMessage; pSenderIP: string);
 begin
-  self.MeLog.Lines.Add('EMPFANGEN: ' + pSenderIP + ': ' + pMessage);
-  self.processConfirmation(pMessage, pSenderIP);
-  msg := TNetworkMessage.Create(pMessage);
   if (msg.key = CONNECT) then
   begin
     self.processConnect(pSenderIP, msg);
@@ -213,22 +210,38 @@ begin
   end;
 end;
 
+procedure TDoppelkopfServer.ProcessMessage(pMessage: string; pSenderIP: string);
+var msg: TReceivingNetworkMessage;
+    i: Integer;
+begin
+  self.MeLog.Lines.Add('EMPFANGEN: ' + pSenderIP + ': ' + pMessage);
+  msg := TReceivingNetworkMessage.Create(pMessage);
+  for i := 0 to msg.Count-1 do
+  begin
+    self.processConfirmation(msg.messageStringForIndex(i), pSenderIP);
+    self.processNetworkMessage(msg.messageForIndex(i), pSenderIP);
+  end;
+
+end;
+
 procedure TDoppelkopfServer.sendCardsToClientWithIndex(pIndex: Integer);
-var msg: string;
+var msg: TSendingNetworkMessage;
     kartenList: TStringList;
     k: Integer;
 begin
-  msg := KARTEN + '#';
+  //msg := KARTEN + '#';
+  msg := TSendingNetworkMessage.Create(KARTEN);
   //ShowMessage('Test');
   //ShowMessage(IntToStr(kartenlist.Count));
   kartenList := self.FSpiel.getKartenForSpielerWithIndex(pIndex);
   //ShowMessage(kartenList.CommaText);
   for k := 0 to kartenList.Count-1 do
   begin
-    msg := msg + kartenList[k] + '#';
+    //msg := msg + kartenList[k] + '#';
+    msg.addParameter(kartenList[k]);
   end;
-  self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, KARTEN + '#' + YES + '#', FSpiel.playerIPForIndex(pIndex)));
-  self.sendMessage(msg, self.FSpiel.playerIPForIndex(pIndex));
+  self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, KEY_STRING + KARTEN + '#' + YES + '#', FSpiel.playerIPForIndex(pIndex)));
+  self.sendMessage(msg.resultingMessage, self.FSpiel.playerIPForIndex(pIndex));
 end;
 
 
@@ -248,16 +261,17 @@ end;
 
 procedure TDoppelkopfServer.processKarten(pClientIP: string;pMessage: TNetworkMessage);
 var i: Integer;
-    msg: string;
+    msg: TSendingNetworkMessage;
 begin
   inc(self.FConfirmationKartenCounter);
   if (self.FConfirmationKartenCounter = 4) then
   begin
-    msg := VORBEHALTE_ABFRAGEN + '#' + YES + '#';
-    self.SendMessageToAll(msg);
+    //msg := VORBEHALTE_ABFRAGEN + '#' + YES + '#';
+    msg := TSendingNetworkMessage.Create(VORBEHALTE_ABFRAGEN);
+    self.SendMessageToAll(msg.resultingMessage);
     for i := 1 to 4 do
     begin
-      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, msg + YES + '#', FSpiel.PlayerIPForIndex(i)))
+      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, TSendingNetworkMessage.Create(VORBEHALTE_ABFRAGEN).resultingMessage, FSpiel.PlayerIPForIndex(i)))
     end;
   end;
 end;
@@ -269,41 +283,43 @@ end;
 
 procedure TDoppelkopfServer.processVorbehaltAnmelden(pClientIP: string;pMessage: TNetworkMessage);
 var i: Integer;
-    msg, confirmation, temp: string;
+    temp: string;
+    msg, confirmation: TSendingNetworkMessage;
 begin
-  confirmation := pMessage.key + '#' + YES + '#';
+  //confirmation := pMessage.key + '#' + YES + '#';
+  confirmation := TSendingNetworkMessage.Create(pMessage.key);
   if pMessage.parameter[0] = VORBEHALT_NICHTS then
   begin
-    self.SendMessage(confirmation, pClientIP);
+    self.SendMessage(confirmation.resultingMessage, pClientIP);
   end else
   if pMessage.parameter[0] = VORBEHALT_DAMENSOLO then
   begin
     self.FSpiel.MacheSoloAnsage(pClientIP, VORBEHALT_DAMENSOLO);
-    self.SendMessage(confirmation, pClientIP);
+    self.SendMessage(confirmation.resultingMessage, pClientIP);
   end else
   if pMessage.parameter[0] = VORBEHALT_BUBENSOLO then
   begin
     self.FSpiel.MacheSoloAnsage(pClientIP, VORBEHALT_BUBENSOLO);
-    self.SendMessage(confirmation, pClientIP);
+    self.SendMessage(confirmation.resultingMessage, pClientIP);
   end else
   if pMessage.parameter[0] = VORBEHALT_FLEISCHLOSER then
   begin
     self.FSpiel.MacheSoloAnsage(pClientIP, VORBEHALT_FLEISCHLOSER);
-    self.SendMessage(confirmation, pClientIP);
+    self.SendMessage(confirmation.resultingMessage, pClientIP);
   end else
   if pMessage.parameter[0] = VORBEHALT_HOCHZEIT then
   begin
     self.FSpiel.MacheSoloAnsage(pClientIP, VORBEHALT_HOCHZEIT);
-    self.SendMessage(pMessage.key + '#' + NO + '#', pClientIP);
+    self.SendMessage(KEY_STRING + pMessage.key + '#' + NO + '#', pClientIP);
   end else
   begin
-    self.SendMessage(pMessage.key + '#' + NO + '#', pClientIP);
+    self.SendMessage(KEY_STRING + pMessage.key + '#' + NO + '#', pClientIP);
   end;
 
   inc(self.FConfirmatinVorbehaltAnmeldenCounter);
   if (self.FConfirmatinVorbehaltAnmeldenCounter = 4) then
   begin
-    msg := SOLO + '#' + YES + '#';
+    msg := KEY_STRING + SOLO + '#' + YES + '#';
     self.FSpiel.EntscheideWelchesSolo;
     if self.FSpiel.SpielModus = dkNormal then temp := VORBEHALT_NICHTS;
     if self.FSpiel.SpielModus = dkDamensolo then temp := VORBEHALT_DAMENSOLO;
@@ -315,7 +331,7 @@ begin
     self.SendMessageToAll(msg);
     for i := 1 to 4 do
     begin
-      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, SOLO + '#' + YES + '#', FSpiel.PlayerIPForIndex(i)))
+      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, KEY_STRING + SOLO + '#' + YES + '#', FSpiel.PlayerIPForIndex(i)))
     end;
   end;
 end;
@@ -346,9 +362,9 @@ begin
   inc(self.FConfirmationSoloCounter);
   if (self.FConfirmationSoloCounter = 4) then
   begin
-    msg := WELCHE_KARTE + '#' + YES + '#';
+    msg := KEY_STRING + WELCHE_KARTE + '#' + YES + '#';
     self.SendMessage(msg, self.FSpiel.aktuelleSpielerIP);
-    self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, msg + YES + '#', self.FSpiel.aktuelleSpielerIP))
+    self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, msg, self.FSpiel.aktuelleSpielerIP))
   end;
 end;
 
@@ -388,18 +404,18 @@ var msg: string;
 begin
   if FSpiel.addPlayer(pClientIP, pMessage.parameter[0]) then
   begin
-    self.SendMessage(CONNECT + '#' + YES + '#', pClientIP);
+    self.SendMessage(KEY_STRING + CONNECT + '#' + YES + '#', pClientIP);
   end else
   begin
-    self.SendMessage(CONNECT + '#' + NO + '#', pClientIP);
+    self.SendMessage(KEY_STRING + CONNECT + '#' + NO + '#', pClientIP);
   end;
   if FSpiel.CountConnectedPlayer = 4 then
   begin
     self.FSpiel.starteSpiel;
-    msg := SPIELBEGINN + '#' + FSpiel.PlayerNameForIndex(1) + '#' + FSpiel.PlayerNameForIndex(2) + '#' + FSpiel.PlayerNameForIndex(3) + '#' + FSpiel.PlayerNameForIndex(4) + '#';
+    msg := KEY_STRING + SPIELBEGINN + '#' + FSpiel.PlayerNameForIndex(1) + '#' + FSpiel.PlayerNameForIndex(2) + '#' + FSpiel.PlayerNameForIndex(3) + '#' + FSpiel.PlayerNameForIndex(4) + '#';
     for i := 1 to 4 do
     begin
-      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, SPIELBEGINN + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
+      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, KEY_STRING + SPIELBEGINN + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
     end;
     self.SendMessageToAll(msg);
   end;
@@ -421,12 +437,13 @@ begin
   success := self.FSpiel.legeKarte(pMessage.parameter[0], pClientIP);
   if not success then
   begin
-    self.SendMessage(KARTE_LEGEN + '#' + NO + '#', pClientIP);
+    self.SendMessage(KEY_STRING + KARTE_LEGEN + '#' + NO + '#', pClientIP);
   end else
   begin
-    self.SendMessage(KARTE_LEGEN + '#' + YES + '#', pClientIP);
+    self.SendMessage(KEY_STRING + KARTE_LEGEN + '#' + YES + '#', pClientIP);
+   // self.sendCardsToClientWithIndex(self.FSpiel.play);
     counter := self.FSpiel.ZahlGelegteKarten;
-    msg := AKTUELLER_STICH + '#';
+    msg := KEY_STRING + AKTUELLER_STICH + '#';
     karten := self.FSpiel.AktuellerStich.getGelegteKarten;
     //Aktuellen Stich an alle schicken
     for i := 0 to karten.Count-1 do
@@ -436,33 +453,37 @@ begin
     //self.SendMessageToAll(msg);
     for i := 1 to 4 do
     begin
-      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, AKTUELLER_STICH + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
+      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, KEY_STRING + AKTUELLER_STICH + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
     end;
     self.SendMessageToAll(msg);
-    //Wenn Stich fertig, Gewinner an alle schicken
+    //Wenn Stich fertig, Gewinner an alle schicken und neue Reihenfolge schicken
+    for i := 1 to 4 do
+    begin
+      msg := KEY_STRING + SPIELER_REIHENFOLGE;
+    end;
     if (counter mod 4) = 0 then
     begin
-      msg := GEWINNER_STICH + '#' + TSpieler(self.FSpiel.AktuellerStich.AktuellerSieger).Name + '#';
+      msg := KEY_STRING + GEWINNER_STICH + '#' + TSpieler(self.FSpiel.AktuellerStich.AktuellerSieger).Name + '#';
       self.SendMessageToAll(msg);
       for i := 1 to 4 do
       begin
-        self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, GEWINNER_STICH + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
+        self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, KEY_STRING + GEWINNER_STICH + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
       end;
     end;
     //Wenn Spiel zuende, Sieger mitteilen
     if (counter = 40) then
     begin
-      msg := GEWINNER_SPIEL + '#' + 'Sag ich später' + '#' + '10' + '#';
+      msg := KEY_STRING + GEWINNER_SPIEL + '#' + 'Sag ich später' + '#' + '10' + '#';
       self.SendMessageToAll(msg);
       for i := 1 to 4 do
       begin
-        self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, GEWINNER_SPIEL + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
+        self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, KEY_STRING + GEWINNER_SPIEL + '#' + YES + '#', FSpiel.playerIPForIndex(i)));
       end;
     end else
     begin
-      msg := WELCHE_KARTE + '#' + YES + '#';
+      msg := KEY_STRING + WELCHE_KARTE + '#' + YES + '#';
       self.SendMessage(msg, self.FSpiel.aktuelleSpielerIP);
-      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, msg + YES + '#', self.FSpiel.aktuelleSpielerIP))
+      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, KEY_STRING + msg + YES + '#', self.FSpiel.aktuelleSpielerIP))
     end;
   end;
 end;
