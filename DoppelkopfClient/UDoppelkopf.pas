@@ -188,9 +188,15 @@ end;
 procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
 var
 i,y: Integer;
+para:String;
 begin
 Netzwerknachricht:=tNetworkmessage.Create(Socket.ReceiveText);
-memo1.lines.add('// '+Netzwerknachricht.key+';'+Netzwerknachricht.parameter[0]);
+para:='';
+for i := 0 to Netzwerknachricht.parameter.count - 1 do
+begin
+  para:=para+', '+Netzwerknachricht.parameter[i];
+end;
+memo1.lines.add('// '+Netzwerknachricht.key+';'+para);
 if Netzwerknachricht.key = CONNECT then                             //connect Verbindnug erstellt
     begin
       if Netzwerknachricht.parameter[0] = 'YES' then
@@ -278,6 +284,7 @@ else if Netzwerknachricht.key = KARTE_LEGEN then           //welche Karten teste
 else if Netzwerknachricht.key = AKTUELLER_STICH then               //aktueller Stich gibt den kompletten momentanen Stich
       begin
         ClientSocket1.Socket.SendText(AKTUELLER_STICH+'#YES#');
+        showmessage(inttostr(netzwerknachricht.parameter.count-1));
         for I := 0 to Netzwerknachricht.parameter.count-1 do
         begin
         //  tImage(FindComponent('image'+IntToStr(i+10))).Picture.loadfromfile('Karten/'+Netzwerknachricht.parameter[i]+'.jpg');
