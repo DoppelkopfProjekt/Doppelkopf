@@ -278,7 +278,7 @@ begin
     begin
       //Gewinner kriegt seinen Stich
       TSpieler(self.FAktuellerStich.AktuellerSieger).gibGewonnenenStich(self.FAktuellerStich);
-      self.FSpielerManager.setNewGewinnner(TSpieler(self.FAktuellerStich.AktuellerSieger));
+      //self.FSpielerManager.setNewGewinnner(TSpieler(self.FAktuellerStich.AktuellerSieger));
       self.FAktuellerSpielerIndex := 1;
     end
   end;
