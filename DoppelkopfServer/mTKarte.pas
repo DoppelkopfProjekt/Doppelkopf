@@ -64,10 +64,10 @@ begin
   if farbString = 'HE' then FFarbe := dkHerz;
   if farbString = 'PI' then FFarbe := dkPik;
   if farbString = 'KA' then FFarbe := dkKaro;
-  if typString = '10' then
+  if typString = '1' then
   begin
     FKartentyp := dkZehn;
-    FPunkte := 1;
+    FPunkte := 10;
   end;
   if typString = 'K' then
   begin
