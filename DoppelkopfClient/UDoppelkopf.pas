@@ -273,24 +273,28 @@ else if Netzwerknachricht.key = KARTE_LEGEN then           //welche Karten teste
         end;
         if Netzwerknachricht.parameter[0] = 'NO' then
           showmessage('neue Karte legen');
+        sleep(50);
       end
 else if Netzwerknachricht.key = AKTUELLER_STICH then               //aktueller Stich gibt den kompletten momentanen Stich
       begin
         ClientSocket1.Socket.SendText(AKTUELLER_STICH+'#YES#');
         for I := 0 to Netzwerknachricht.parameter.count-1 do
         begin
-          tImage(FindComponent('image'+IntToStr(i+10))).Picture.loadfromfile('Karten/'+Netzwerknachricht.parameter[i]+'.jpg');
+        //  tImage(FindComponent('image'+IntToStr(i+10))).Picture.loadfromfile('Karten/'+Netzwerknachricht.parameter[i]+'.jpg');
         end;
+      sleep(50);
       end
 else if Netzwerknachricht.key = GEWINNER_STICH then
       begin
         ClientSocket1.Socket.SendText(GEWINNER_STICH+'#YES#');
-        Memo1.lines.Add(Netzwerknachricht.parameter[0])
+        Memo1.lines.Add(Netzwerknachricht.parameter[0]);
+        sleep(50);
       end
 else if Netzwerknachricht.key = GEWINNER_SPIEL then                      //Gewinner Sieger werden genannt
       begin
         ClientSocket1.Socket.SendText(GEWINNER_SPIEL+'#YES#');
         Memo1.Lines.add('Team: ' + Netzwerknachricht.parameter[0] + ' hat ' + Netzwerknachricht.parameter[1] + ' Punkte.');
+        sleep(50);
       end
 else if Netzwerknachricht.key = 'aktueller Punktestand' then         //aktueller Punktestand Liste mit den Punkten der vielen Spieler wird gegeben
       begin
