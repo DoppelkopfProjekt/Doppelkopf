@@ -61,7 +61,9 @@ const SPIELBEGINN = 'Spielbeginn';
       ANSAGE_KEINEDREI = 'K3';
       ANSAGE_SCHWARZ = 'K0';
 
-      DELAY = 50;
+      SPIELER_REIHENFOLGE = 'Spieler_Reihenfolge';
+
+      DELAY = 100;
       //ANSAGE_KEINE = 'No';
 
 implementation
