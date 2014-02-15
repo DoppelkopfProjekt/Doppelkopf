@@ -116,11 +116,14 @@ begin
           if self.Farbe > pKarte.Farbe then result := dkschwaecher;
           if self.Farbe = pKarte.Farbe then result := dkgleich;
         end;
-        if (self.Kartentyp = dkZehn) and (self.Farbe = dkHerz) and not (pKarte.Kartentyp = dkZehn) and not (pKarte.Farbe = dkHerz) then result := dkschwaecher;
-        if (self.Kartentyp = dkZehn) and (self.Farbe = dkHerz) and (pKarte.Kartentyp = dkZehn) and (pKarte.Farbe = dkHerz) then result := dkgleich;
-        if not (self.Kartentyp = dkZehn) and not (self.Farbe = dkHerz) and (pKarte.Kartentyp = dkZehn) and (pKarte.Farbe = dkHerz) then result := dkstaerker;
       end;
     end;
+  end;
+  if self.FSpielModus = dkNormal then
+  begin
+    if (self.Kartentyp = dkZehn) and (self.Farbe = dkHerz) and not (pKarte.Kartentyp = dkZehn) and not (pKarte.Farbe = dkHerz) then result := dkschwaecher;
+    if (self.Kartentyp = dkZehn) and (self.Farbe = dkHerz) and (pKarte.Kartentyp = dkZehn) and (pKarte.Farbe = dkHerz) then result := dkgleich;
+    if not (self.Kartentyp = dkZehn) and not (self.Farbe = dkHerz) and (pKarte.Kartentyp = dkZehn) and (pKarte.Farbe = dkHerz) then result := dkstaerker;
   end;
 end;
 

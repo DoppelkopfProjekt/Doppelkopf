@@ -432,6 +432,7 @@ function TDoppelkopfServer.SucheSpielGewinner: TStringList;
 var siegerPartei: dkPartei;
     i: integer;
 begin
+  result := TStringList.Create;
   siegerPartei := FSpiel.getSiegerPartei;
   for i := 1 to 4 do
   begin
