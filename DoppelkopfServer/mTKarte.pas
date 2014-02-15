@@ -96,27 +96,31 @@ end;
 function TKarte.kannKarteMichStechen(pKarte: TKarte): dkErgebnis;
 begin
   result := dkgleich;
-  if not self.IstTrumpf and pKarte.IstTrumpf then result := dkstaerker
-  else
+  if not self.IstTrumpf and pKarte.IstTrumpf then
   begin
-    if self.IstTrumpf and not pKarte.IstTrumpf then result := dkschwaecher
-      else
+    result := dkstaerker
+  end else
+  begin
+    if self.IstTrumpf and not pKarte.IstTrumpf then
+    begin
+      result := dkschwaecher
+    end else
+    begin
+      if self.IstTrumpf = pKarte.IstTrumpf then
       begin
-        if self.IstTrumpf and pKarte.IstTrumpf then
+        if self.Kartentyp < pKarte.Kartentyp then result := dkstaerker;
+        if self.Kartentyp > pKarte.Kartentyp then result := dkschwaecher;
+        if self.Kartentyp = pKarte.Kartentyp then
         begin
-          if self.Kartentyp < pKarte.Kartentyp then result := dkstaerker;
-          if self.Kartentyp > pKarte.Kartentyp then result := dkschwaecher;
-          if self.Kartentyp = pKarte.Kartentyp then
-          begin
-            if self.Farbe < pKarte.Farbe then result := dkstaerker;
-            if self.Farbe > pKarte.Farbe then result := dkschwaecher;
-            if self.Farbe = pKarte.Farbe then result := dkgleich;
-          end;
+          if self.Farbe < pKarte.Farbe then result := dkstaerker;
+          if self.Farbe > pKarte.Farbe then result := dkschwaecher;
+          if self.Farbe = pKarte.Farbe then result := dkgleich;
         end;
         if (self.Kartentyp = dkZehn) and (self.Farbe = dkHerz) and not (pKarte.Kartentyp = dkZehn) and not (pKarte.Farbe = dkHerz) then result := dkschwaecher;
         if (self.Kartentyp = dkZehn) and (self.Farbe = dkHerz) and (pKarte.Kartentyp = dkZehn) and (pKarte.Farbe = dkHerz) then result := dkgleich;
         if not (self.Kartentyp = dkZehn) and not (self.Farbe = dkHerz) and (pKarte.Kartentyp = dkZehn) and (pKarte.Farbe = dkHerz) then result := dkstaerker;
       end;
+    end;
   end;
 end;
 
