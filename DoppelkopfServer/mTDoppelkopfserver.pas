@@ -2,7 +2,7 @@ unit mTDoppelkopfserver;
 
 interface
 
-uses Sysutils, mTReceivingNetworkMessage, mTSendingNetworkMessage, mTKarte, Types, classes, mTServer, mTNetworkMessage, StdCtrls, mTSpieler, mTDoppelkopfSpiel, StringKonstanten, Contnrs, mTExpectedTransmissionConfirmation, ExtCtrls, dialogs;
+uses Sysutils, mTBlatt, mTReceivingNetworkMessage, mTSendingNetworkMessage, mTKarte, Types, classes, mTServer, mTNetworkMessage, StdCtrls, mTSpieler, mTDoppelkopfSpiel, StringKonstanten, Contnrs, mTExpectedTransmissionConfirmation, ExtCtrls, dialogs;
 
 const TimeOut = 0.3;
 
@@ -17,6 +17,8 @@ private
   FConfirmationKartenCounter: Integer;
   FConfirmatinVorbehaltAnmeldenCounter: Integer;
   FConfirmationSoloCounter: Integer;
+
+  function SucheSpielGewinner: TStringList;
 
   procedure sendCardsToClientWithIndex(pIndex: Integer);
   procedure processNetworkMessage(msg: TNetworkMessage; pSenderIP: string);
@@ -341,7 +343,8 @@ procedure TDoppelkopfServer.processKarteLegen(pClientIP: string; pMessage: TNetw
 var success: Boolean;
     counter, i: Integer;
     msg: TSendingNetworkMessage;
-    karten: TStringList;
+    karten, gewinner: TStringList;
+    temp: string;
 begin
   MeLog.Lines.Add('Karte gelegt');
 
@@ -400,7 +403,13 @@ begin
     if (counter = 40) then
     begin
       msg := TSendingNetworkMessage.Create(GEWINNER_SPIEL);
-      msg.addParameter('Sag ich später', '10');
+      gewinner := self.SucheSpielGewinner;
+      for i := 0 to gewinner.Count-1 do
+      begin
+        msg.addParameter(gewinner[i]);
+      end;
+      msg.addParameter(IntToStr(FSpiel.getPunkteVonSieger));
+      //msg.addParameter('Sag ich später', '10');
       self.SendMessageToAll(msg.resultingMessage);
       for i := 1 to 4 do
       begin
@@ -416,6 +425,17 @@ begin
                                                                                    msg.confirmationMessage,
                                                                                    self.FSpiel.aktuelleSpielerIP))
     end;
+  end;
+end;
+
+function TDoppelkopfServer.SucheSpielGewinner: TStringList;
+var siegerPartei: dkPartei;
+    i: integer;
+begin
+  siegerPartei := FSpiel.getSiegerPartei;
+  for i := 1 to 4 do
+  begin
+    if FSpiel.PlayerForIndex(i).Partei = siegerPartei then result.Add(FSpiel.PlayerNameForIndex(i));
   end;
 end;
 
