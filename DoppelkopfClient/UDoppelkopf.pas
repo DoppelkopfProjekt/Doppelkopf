@@ -205,7 +205,7 @@ var
 i,y: Integer;
 para:String;
 begin
-Sleep2(1000);
+Sleep2(DELAY);
 Netzwerknachricht:=tNetworkmessage.Create(Socket.ReceiveText);
 para:='';
 for i := 0 to Netzwerknachricht.parameter.count - 1 do
