@@ -181,6 +181,7 @@ begin
     tImage(FindComponent('image'+IntToStr(i))).Picture.loadfromfile('Karten/Back.jpg');
     Memo1.Lines.Clear;
   end;
+  aktuelleRunde:=0;
 end;
 
 procedure TForm1.Button6Click(Sender: TObject);
