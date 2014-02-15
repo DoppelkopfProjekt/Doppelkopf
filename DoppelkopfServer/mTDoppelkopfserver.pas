@@ -240,7 +240,7 @@ begin
     //msg := msg + kartenList[k] + '#';
     msg.addParameter(kartenList[k]);
   end;
-  self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, KEY_STRING + KARTEN + '#' + YES + '#', FSpiel.playerIPForIndex(pIndex)));
+  self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg.resultingMessage, KEY_STRING + KARTEN + '#' + YES + '#', FSpiel.playerIPForIndex(pIndex)));
   self.sendMessage(msg.resultingMessage, self.FSpiel.playerIPForIndex(pIndex));
 end;
 
@@ -271,7 +271,7 @@ begin
     self.SendMessageToAll(msg.resultingMessage);
     for i := 1 to 4 do
     begin
-      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, TSendingNetworkMessage.Create(VORBEHALTE_ABFRAGEN).resultingMessage, FSpiel.PlayerIPForIndex(i)))
+      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg.resultingMessage, TSendingNetworkMessage.Create(VORBEHALTE_ABFRAGEN).resultingMessage, FSpiel.PlayerIPForIndex(i)))
     end;
   end;
 end;
@@ -319,7 +319,8 @@ begin
   inc(self.FConfirmatinVorbehaltAnmeldenCounter);
   if (self.FConfirmatinVorbehaltAnmeldenCounter = 4) then
   begin
-    msg := KEY_STRING + SOLO + '#' + YES + '#';
+    //msg := KEY_STRING + SOLO + '#' + YES + '#';
+    msg := TSendingNetworkMessage.Create(SOLO);
     self.FSpiel.EntscheideWelchesSolo;
     if self.FSpiel.SpielModus = dkNormal then temp := VORBEHALT_NICHTS;
     if self.FSpiel.SpielModus = dkDamensolo then temp := VORBEHALT_DAMENSOLO;
@@ -327,11 +328,12 @@ begin
     if self.FSpiel.SpielModus = dkFleischloser then temp := VORBEHALT_FLEISCHLOSER;
     if self.FSpiel.SpielModus = dkHochzeit then ShowMessage('Hochzeit nicht implementiert');
 
-    msg := msg + FSpiel.SolistName + '#' + temp + '#';
-    self.SendMessageToAll(msg);
+    //msg := msg + FSpiel.SolistName + '#' + temp + '#';
+    msg.addParameter(FSpiel.SolistName, temp);
+    self.SendMessageToAll(msg.resultingMessage);
     for i := 1 to 4 do
     begin
-      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg, KEY_STRING + SOLO + '#' + YES + '#', FSpiel.PlayerIPForIndex(i)))
+      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg.resultingMessage, KEY_STRING + SOLO + '#' + YES + '#', FSpiel.PlayerIPForIndex(i)))
     end;
   end;
 end;
