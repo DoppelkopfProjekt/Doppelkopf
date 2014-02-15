@@ -41,7 +41,7 @@ procedure TForm2.Button1Click(Sender: TObject);
 var
 i:integer;
 begin
-  for I := 0 to 29 do
+  for I := 0 to 9 do
   begin
     showmessage(zusortierendeKarten[3*i+1]);
     tImage(FindComponent('image'+zusortierendeKarten[3*i+1])).Picture.loadfromfile('Karten/'+ zusortierendeKarten[3*i+2] +'.jpg');
