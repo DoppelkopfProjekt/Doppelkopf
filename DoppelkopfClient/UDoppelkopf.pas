@@ -200,6 +200,12 @@ anzahl_keys:=Netzwerknachricht.count;
 //memo1.lines.add('// '+Netzwerknachricht.key+';'+para);
 for n := 0 to anzahl_keys - 1 do
 begin
+para:='';
+for i := 0 to Netzwerknachricht.messageForIndex(n).parameter.count - 1 do
+begin
+  para:=para+', '+Netzwerknachricht.messageForIndex(n).parameter[i];
+end;
+memo1.lines.add('// '+Netzwerknachricht.messageForIndex(n).key+';'+para);
 if Netzwerknachricht.messageForIndex(n).key = CONNECT then                             //connect Verbindnug erstellt
     begin
       if Netzwerknachricht.messageForIndex(n).parameter[0] = 'YES' then
