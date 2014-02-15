@@ -2,7 +2,7 @@ unit mTServer;
 
 interface
 
-uses ScktComp, dialogs;
+uses ScktComp, dialogs, StringKonstanten, sysutils;
 
 type
 
@@ -76,6 +76,7 @@ begin
     if temp.RemoteAddress = pClientIP then
       temp.SendText(AnsiString(pMessage));
   end;
+  sleep(DELAY);
 end;
 
 procedure TServer.SendMessageToAll(pMessage: string);
@@ -85,6 +86,7 @@ begin
   begin
     FServer.Socket.Connections[i].SendText(AnsiString(pMessage));
   end;
+  sleep(DELAY);
 end;
 
 procedure TServer.ProcessMessage(pMessage: string; pSenderIP: string);
