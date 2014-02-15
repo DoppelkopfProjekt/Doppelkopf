@@ -31,7 +31,7 @@ end;
 
 implementation
 
-procedure Sleep2(pZeit: Integer);
+(*procedure Sleep2(pZeit: Integer);
 var
 long,i:integer;
 begin
@@ -41,7 +41,7 @@ begin
     i:=i+1;
   end;
 
-end;
+end;    *)
 
 constructor TServer.Create(pPort: Integer);
 begin
@@ -88,7 +88,7 @@ begin
     if temp.RemoteAddress = pClientIP then
       temp.SendText(AnsiString(pMessage));
   end;
-  sleep2(DELAY);
+ // sleep2(DELAY);
 end;
 
 procedure TServer.SendMessageToAll(pMessage: string);
@@ -98,7 +98,7 @@ begin
   begin
     FServer.Socket.Connections[i].SendText(AnsiString(pMessage));
   end;
-  sleep2(DELAY);
+ // sleep2(DELAY);
 end;
 
 procedure TServer.ProcessMessage(pMessage: string; pSenderIP: string);
