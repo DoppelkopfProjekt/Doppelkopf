@@ -1,6 +1,7 @@
 object Form3: TForm3
   Left = 0
   Top = 0
+  BorderIcons = [biMinimize, biMaximize]
   Caption = 'Form3'
   ClientHeight = 150
   ClientWidth = 349
@@ -29,8 +30,8 @@ object Form3: TForm3
     Text = '45678'
   end
   object Button2: TButton
-    Left = 104
-    Top = 110
+    Left = 8
+    Top = 117
     Width = 145
     Height = 25
     Caption = 'Verbinden'
@@ -57,5 +58,14 @@ object Form3: TForm3
       '84.63.62.143'
       '192.168.0.26'
       '127.0.0.1')
+  end
+  object Button1: TButton
+    Left = 183
+    Top = 117
+    Width = 146
+    Height = 25
+    Caption = 'Abbrechen'
+    TabOrder = 4
+    OnClick = Button1Click
   end
 end
