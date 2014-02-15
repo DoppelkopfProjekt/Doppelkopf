@@ -36,7 +36,7 @@ var
 long,i:integer;
 begin
   long:=getTickCount;
-  while getTickCount<long+pZeit do
+  while (getTickCount<long+pZeit) do
   begin
     i:=i+1;
   end;

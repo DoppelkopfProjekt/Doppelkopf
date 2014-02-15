@@ -16,7 +16,9 @@ uses
   StringKonstanten in 'StringKonstanten.pas',
   mTSonderkarteEreignis in 'mTSonderkarteEreignis.pas',
   mTServer in 'mTServer.pas',
-  mTExpectedTransmissionConfirmation in 'mTExpectedTransmissionConfirmation.pas';
+  mTExpectedTransmissionConfirmation in 'mTExpectedTransmissionConfirmation.pas',
+  mTSendingNetworkMessage in 'mTSendingNetworkMessage.pas',
+  mTReceivingNetworkMessage in 'mTReceivingNetworkMessage.pas';
 
 {$R *.RES}
 
