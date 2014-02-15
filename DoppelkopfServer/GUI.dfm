@@ -24,7 +24,7 @@ object Form1: TForm1
   object Edit1: TEdit
     Left = 56
     Top = 32
-    Width = 121
+    Width = 154
     Height = 21
     TabOrder = 0
     Text = 'Edit1'
@@ -36,7 +36,7 @@ object Form1: TForm1
     Height = 25
     Caption = 'Button1'
     TabOrder = 1
-    OnClick = Button2Click
+    OnClick = Button1Click
   end
   object Memo1: TMemo
     Left = 56

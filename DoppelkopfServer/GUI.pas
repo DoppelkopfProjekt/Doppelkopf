@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, mTNetworkMessage, mTDoppelkopfServer;
+  StdCtrls, mTNetworkMessage, mTDoppelkopfServer, mTReceivingNetworkMessage;
 
 type
   TForm1 = class(TForm)
@@ -34,16 +34,20 @@ implementation
 {$R *.DFM}
 
 procedure TForm1.Button1Click(Sender: TObject);
-var msg: TNetworkMessage;
-    i: Integer;
+var msg: TReceivingNetworkMessage;
+    i, k: Integer;
 begin
-  msg := TNetworkMessage.Create(edit1.text);
-
-  memo1.lines.add(msg.key);
-  memo1.lines.add('');
-  for i := 0 to msg.parameter.count-1 do
+  memo1.Clear;
+  msg := TReceivingNetworkMessage.Create(edit1.text);
+  for k := 0 to msg.count-1 do
   begin
-    memo1.lines.add(msg.parameter[i]);
+    memo1.Lines.Add('Message ' + IntToStr(k));
+    memo1.lines.add(msg.messageForIndex(k).key);
+    //memo1.lines.add('');
+    for i := 0 to msg.messageForIndex(k).parameter.count-1 do
+    begin
+      memo1.lines.add(msg.messageForIndex(k).parameter[i]);
+    end;
   end;
 
 end;
