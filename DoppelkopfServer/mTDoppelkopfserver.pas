@@ -240,7 +240,7 @@ begin
     //msg := msg + kartenList[k] + '#';
     msg.addParameter(kartenList[k]);
   end;
-  self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg.resultingMessage, KEY_STRING + KARTEN + '#' + YES + '#', FSpiel.playerIPForIndex(pIndex)));
+  self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg.resultingMessage, TSendingNetworkMessage.Create(KARTEN).resultingMessage, FSpiel.playerIPForIndex(pIndex)));
   self.sendMessage(msg.resultingMessage, self.FSpiel.playerIPForIndex(pIndex));
 end;
 
