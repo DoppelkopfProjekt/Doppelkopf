@@ -251,15 +251,12 @@ var //istLegal: Boolean;
     spieler: TSpieler;
     i: Integer;
 begin
+  result := false;
   if self.aktuelleSpielerIP = pIP then
   begin
-    //Wenn Stich voll...
-    if self.FAktuellerStich.kartenCount >= 4 then
+    //Wenn Stich voll, neuen erstellen
+    if self.FAktuellerStich.kartenCount = 4 then
     begin
-    //Gewinner kriegt seinen Stich
-      TSpieler(self.FAktuellerStich.AktuellerSieger).gibGewonnenenStich(self.FAktuellerStich);
-      self.FSpielerManager.setNewGewinnner(TSpieler(self.FAktuellerStich.AktuellerSieger));
-
       inc(self.FRundenNummer);
       self.FAktuellerStich := TStich.Create(self.FRundenNummer);
       for i := 1 to 4 do
@@ -276,9 +273,14 @@ begin
       inc(self.FAktuellerSpielerIndex);
       inc(self.FZahlGelegteKarten);
     end;
-  end else
-  begin
-    result := false;
+
+    if (self.FAktuellerStich.kartenCount = 4) and result then
+    begin
+      //Gewinner kriegt seinen Stich
+      TSpieler(self.FAktuellerStich.AktuellerSieger).gibGewonnenenStich(self.FAktuellerStich);
+      self.FSpielerManager.setNewGewinnner(TSpieler(self.FAktuellerStich.AktuellerSieger));
+      self.FAktuellerSpielerIndex := 0;
+    end
   end;
 end;
 
