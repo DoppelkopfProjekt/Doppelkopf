@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   Menus, ExtCtrls, StdCtrls, jpeg, mtNetworkMessage, ScktComp, Stringkonstanten,
-  Kartensortieren;
+  Kartensortieren, mtSendingNetworkmessage, mtReceivingNetworkmessage;
 
 type
   TForm1 = class(TForm)
@@ -82,7 +82,7 @@ var
   karten_client: TStringList;
   verbunden: boolean;
   Vorbehalte_Art, Vorbehaltgeber: String;
-  Netzwerknachricht: tNetworkmessage;
+  Netzwerknachricht: tReceivingNetworkmessage;
   nameistangegeben: Boolean;
   spielhatbegonnen: boolean;
   allespieler: Array  [0..3] of String;
@@ -139,7 +139,7 @@ var
 sendung: String;
 begin
 sendung := Karten_client[strtoint(markiertekarte)];
-ClientSocket1.Socket.SendText(KARTE_LEGEN+'#'+sendung+'#');
+ClientSocket1.Socket.SendText(KEY_STRING+KARTE_LEGEN+'#'+sendung+'#');
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -152,12 +152,12 @@ end;
 
 procedure TForm1.Button3Click(Sender: TObject);
 begin
-  ClientSocket1.Socket.SendText(ANSAGE + '#'+inputbox('neue Ansage', ANSAGE_RE + ', ' + ANSAGE_KONTRA + ', ' + ANSAGE_KEINENEUN  + ', ' +  ANSAGE_KEINESECHS  + ', ' +  ANSAGE_KEINEDREI  + ', ' + ANSAGE_SCHWARZ,'')+ '#');
+  ClientSocket1.Socket.SendText(KEY_STRING+ANSAGE + '#'+inputbox('neue Ansage', ANSAGE_RE + ', ' + ANSAGE_KONTRA + ', ' + ANSAGE_KEINENEUN  + ', ' +  ANSAGE_KEINESECHS  + ', ' +  ANSAGE_KEINEDREI  + ', ' + ANSAGE_SCHWARZ,'')+ '#');
 end;
 
 procedure TForm1.Button4Click(Sender: TObject);
 begin
-  ClientSocket1.Socket.SendText(CONNECT + '#' + Edit3.Text +'#');
+  ClientSocket1.Socket.SendText(KEY_STRING+CONNECT + '#' + Edit3.Text +'#');
 end;
 
 procedure TForm1.Button5Click(Sender: TObject);
@@ -187,127 +187,131 @@ end;
 
 procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
 var
-i,y: Integer;
+i,y,n, Anzahl_keys: Integer;
 para:String;
 begin
-Netzwerknachricht:=tNetworkmessage.Create(Socket.ReceiveText);
-para:='';
-for i := 0 to Netzwerknachricht.parameter.count - 1 do
+Netzwerknachricht:=TreceivingNetworkMessage.Create(Socket.ReceiveText);
+anzahl_keys:=Netzwerknachricht.count;
+//para:='';
+//for i := 0 to Netzwerknachricht.parameter.count - 1 do
+//begin
+//  para:=para+', '+Netzwerknachricht.parameter[i];
+//end;
+//memo1.lines.add('// '+Netzwerknachricht.key+';'+para);
+for n := 0 to anzahl_keys - 1 do
 begin
-  para:=para+', '+Netzwerknachricht.parameter[i];
-end;
-memo1.lines.add('// '+Netzwerknachricht.key+';'+para);
-if Netzwerknachricht.key = CONNECT then                             //connect Verbindnug erstellt
+if Netzwerknachricht.messageForIndex(n).key = CONNECT then                             //connect Verbindnug erstellt
     begin
-      if Netzwerknachricht.parameter[0] = 'YES' then
+      if Netzwerknachricht.messageForIndex(n).parameter[0] = 'YES' then
       begin
         verbunden:=true;
         Memo1.Lines.add('zum Server verbunden');
       end
-      else if Netzwerknachricht.parameter[0] = 'NO' then
+      else if Netzwerknachricht.messageForIndex(n).parameter[0] = 'NO' then
         Memo1.Lines.add('Server ist voll');
     end
-else if Netzwerknachricht.key = SPIELBEGINN then                          //Name der Spieler werden geschickt
+else if Netzwerknachricht.messageForIndex(n).key = SPIELBEGINN then                          //Name der Spieler werden geschickt
     begin
-      ClientSocket1.Socket.SendText(SPIELBEGINN+ '#YES#');
+      ClientSocket1.Socket.SendText(KEY_STRING+SPIELBEGINN+ '#YES#');
         for i := 0 to 3  do
         begin
-          allespieler[i]:=Netzwerknachricht.parameter[i];
+          allespieler[i]:=Netzwerknachricht.messageForIndex(n).parameter[i];
           tLabel(FindComponent('Label'+inttostr(i+3))).caption:=allespieler[i];
         end;
     end
-else if Netzwerknachricht.key = KARTEN then                        //Karten Spieler bekommt die Karten geschickt
+else if Netzwerknachricht.messageForIndex(n).key = KARTEN then                        //Karten Spieler bekommt die Karten geschickt
     begin
-      ClientSocket1.Socket.SendText(KARTEN+'#YES#');
+      ClientSocket1.Socket.SendText(KEY_STRING+KARTEN+'#YES#');
       spielhatbegonnen:=true;
       Karten_client.free;
-      Karten_client := Netzwerknachricht.parameter;
+      Karten_client := Netzwerknachricht.messageForIndex(n).parameter;
       for i := 0 to 9 do
         tImage(FindComponent('image'+IntToStr(i))).Picture.assign(nil);
       for i := 0 to Karten_client.Count-1 do
       begin
-        tImage(FindComponent('image'+IntToStr(i))).picture.loadfromfile('Karten/'+Netzwerknachricht.parameter[i]+'.jpg');
+        tImage(FindComponent('image'+IntToStr(i))).picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i]+'.jpg');
       end;
     end
-else if Netzwerknachricht.key = VORBEHALTE_ABFRAGEN then              //Vorbehaltabfrage Hat der Spieler einen Vorbahlt?
+else if Netzwerknachricht.messageForIndex(n).key = VORBEHALTE_ABFRAGEN then              //Vorbehaltabfrage Hat der Spieler einen Vorbahlt?
     begin
-      ClientSocket1.Socket.SendText(VORBEHALTE_ABFRAGEN + '#Yes#');
-      ClientSocket1.Socket.SendText(VORBEHALT_ANMELDEN+ '#nichts#'); // inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+'#');
+      ClientSocket1.Socket.SendText(KEY_STRING+VORBEHALTE_ABFRAGEN + '#Yes#');
+      ClientSocket1.Socket.SendText(KEY_STRING+VORBEHALT_ANMELDEN+ '#nichts#'); // inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+'#');
     end
-else if Netzwerknachricht.key = VORBEHALT_ANMELDEN then
+else if Netzwerknachricht.messageForIndex(n).key = VORBEHALT_ANMELDEN then
     begin
-      if Netzwerknachricht.parameter[0] = YES then
+      if Netzwerknachricht.messageForIndex(n).parameter[0] = YES then
         vorbehaltangemeldet:=true;
       //if Netzwerknachricht.parameter[0] = NO then
       //  ClientSocket1.Socket.SendText(VORBEHALT_ANMELDEN +'#' + inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+'#');
     end
-else if Netzwerknachricht.key = SOLO then                     //Vorbehalt Ein Spieler hat einen gültigen Vorbehalt gelegt
+else if Netzwerknachricht.messageForIndex(n).key = SOLO then                     //Vorbehalt Ein Spieler hat einen gültigen Vorbehalt gelegt
     begin
-    if Netzwerknachricht.parameter.count = 2 then
+    if Netzwerknachricht.messageForIndex(n).parameter.count = 2 then
       begin
-        Vorbehalte_Art := Netzwerknachricht.parameter[1];
-        Vorbehaltgeber := Netzwerknachricht.parameter[0];
+        Vorbehalte_Art := Netzwerknachricht.messageForIndex(n).parameter[1];
+        Vorbehaltgeber := Netzwerknachricht.messageForIndex(n).parameter[0];
       end;
-      ClientSocket1.Socket.SendText(SOLO+ '#YES#');
+      ClientSocket1.Socket.SendText(KEY_STRING+SOLO+ '#YES#');
     end
-else if Netzwerknachricht.key = WELCHE_KARTE then            //Welche Karte legen Spieler bekommt die Anweisung, dass er am Zug ist
+else if Netzwerknachricht.messageForIndex(n).key = WELCHE_KARTE then            //Welche Karte legen Spieler bekommt die Anweisung, dass er am Zug ist
     begin
       ClientSocket1.Socket.SendText(WELCHE_KARTE+ '#YES#');                        //hier mit YES antworten
       Memo1.Lines.add('WELCHE KARTEN SOLL GESPIELT WERDEN?');
       amzug:=true;
     end
-else if Netzwerknachricht.key = ANSAGE_GEMACHT then                 //Ansageanfrage
+else if Netzwerknachricht.messageForIndex(n).key = ANSAGE_GEMACHT then                 //Ansageanfrage
     begin
-      if Netzwerknachricht.parameter[0] = 'YES' then showmessage ('deine Ansage ist geglückt');
-      if Netzwerknachricht.parameter[0] = 'NO' then showmessage ('deine Ansage ist fehlgeschlagen')
+      if Netzwerknachricht.messageForIndex(n).parameter[0] = 'YES' then showmessage ('deine Ansage ist geglückt');
+      if Netzwerknachricht.messageForIndex(n).parameter[0] = 'NO' then showmessage ('deine Ansage ist fehlgeschlagen')
       else
       begin
         alleansagenNummer:=alleansagenNummer+1;
-        alleansagenAnsage[alleansagenNummer] := Netzwerknachricht.parameter[1];
-        alleansagenSpieler[alleansagenNummer] := Netzwerknachricht.parameter[0];
+        alleansagenAnsage[alleansagenNummer] := Netzwerknachricht.messageForIndex(n).parameter[1];
+        alleansagenSpieler[alleansagenNummer] := Netzwerknachricht.messageForIndex(n).parameter[0];
         Memo1.lines.add('Spieler '+ alleansagenSpieler[alleansagenNummer] + ' hat folgende Ansage gemacht: ' + alleansagenAnsage[alleansagenNummer]);
-        ClientSocket1.Socket.SendText(ANSAGE_GEMACHT + '#YES#')
+        ClientSocket1.Socket.SendText(KEY_STRING+ANSAGE_GEMACHT + '#YES#')
       end;
     end
-else if Netzwerknachricht.key = KARTE_LEGEN then           //welche Karten testen gelegte Karte wird getestet
+else if Netzwerknachricht.messageForIndex(n).key = KARTE_LEGEN then           //welche Karten testen gelegte Karte wird getestet
       begin
-        if Netzwerknachricht.parameter[0] = 'YES' then
+        if Netzwerknachricht.messageForIndex(n).parameter[0] = 'YES' then
         begin
           Memo1.Lines.add ('Karte erfolgreich gelegt');
           tImage(FindComponent('image'+markiertekarte)).Picture.loadfromfile('Karten/Back.jpg');
           amzug:=false
         end;
-        if Netzwerknachricht.parameter[0] = 'NO' then
+        if Netzwerknachricht.messageForIndex(n).parameter[0] = 'NO' then
           showmessage('neue Karte legen');
       end
-else if Netzwerknachricht.key = AKTUELLER_STICH then               //aktueller Stich gibt den kompletten momentanen Stich
+else if Netzwerknachricht.messageForIndex(n).key = AKTUELLER_STICH then               //aktueller Stich gibt den kompletten momentanen Stich
       begin
-        ClientSocket1.Socket.SendText(AKTUELLER_STICH+'#YES#');
-        for I := 0 to Netzwerknachricht.parameter.count-1 do
+        ClientSocket1.Socket.SendText(KEY_STRING+AKTUELLER_STICH+'#YES#');
+        for I := 0 to Netzwerknachricht.messageForIndex(n).parameter.count-1 do
         begin
-          tImage(FindComponent('image'+IntToStr(i+10))).Picture.loadfromfile('Karten/'+Netzwerknachricht.parameter[i]+'.jpg');
+          tImage(FindComponent('image'+IntToStr(i+10))).Picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i]+'.jpg');
         end;
       end
-else if Netzwerknachricht.key = GEWINNER_STICH then
+else if Netzwerknachricht.messageForIndex(n).key = GEWINNER_STICH then
       begin
-        ClientSocket1.Socket.SendText(GEWINNER_STICH+'#YES#');
-        Memo1.lines.Add(Netzwerknachricht.parameter[0]);
+        ClientSocket1.Socket.SendText(KEY_STRING+GEWINNER_STICH+'#YES#');
+        Memo1.lines.Add(Netzwerknachricht.messageForIndex(n).parameter[0]);
         for i := 0 to 3 do
         begin
           tImage(FindComponent('image'+IntToStr(i+10))).picture.loadfromfile('Karten/Back.jpg');
         end;
       end
-else if Netzwerknachricht.key = GEWINNER_SPIEL then                      //Gewinner Sieger werden genannt
+else if Netzwerknachricht.messageForIndex(n).key = GEWINNER_SPIEL then                      //Gewinner Sieger werden genannt
       begin
-        ClientSocket1.Socket.SendText(GEWINNER_SPIEL+'#YES#');
-        Memo1.Lines.add('Team: ' + Netzwerknachricht.parameter[0] + ' hat ' + Netzwerknachricht.parameter[1] + ' Punkte.');
+        ClientSocket1.Socket.SendText(KEY_STRING+GEWINNER_SPIEL+'#YES#');
+        Memo1.Lines.add('Team: ' + Netzwerknachricht.messageForIndex(n).parameter[0] + ' hat ' + Netzwerknachricht.messageForIndex(n).parameter[1] + ' Punkte.');
       end
-else if Netzwerknachricht.key = 'aktueller Punktestand' then         //aktueller Punktestand Liste mit den Punkten der vielen Spieler wird gegeben
+else if Netzwerknachricht.messageForIndex(n).key = 'aktueller Punktestand' then         //aktueller Punktestand Liste mit den Punkten der vielen Spieler wird gegeben
       begin
-        ClientSocket1.Socket.SendText('Gewinner, YES');
+        ClientSocket1.Socket.SendText(KEY_STRING+'Gewinner, YES');
         for I := 0 to 3 do
-          Memo1.Lines.add(Netzwerknachricht.parameter[2*i] + ' hat ' + Netzwerknachricht.parameter[2*i+1] + ' Punkte.');
+          Memo1.Lines.add(Netzwerknachricht.messageForIndex(n).parameter[2*i] + ' hat ' + Netzwerknachricht.messageForIndex(n).parameter[2*i+1] + ' Punkte.');
       end;
+end;
 end;
 
 procedure TForm1.closechatClick(Sender: TObject);

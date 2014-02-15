@@ -12,7 +12,6 @@ const SPIELBEGINN = 'Spielbeginn';
       VORBEHALT_HOCHZEIT = 'Hochzeit';
       VORBEHALT_NICHTS = 'Nichts';
       SOLO = 'Solo';
-      DELAY = 50;
       SOLO_BESTAETIGEN = 'SoloBestaetigen';
       WELCHE_KARTE = 'WelcheKarte';
      // WELCHE_KARTE_BESTAETIGEN = 'WelcheKarteBestaetigen';
@@ -61,6 +60,11 @@ const SPIELBEGINN = 'Spielbeginn';
       ANSAGE_KEINESECHS = 'K6';
       ANSAGE_KEINEDREI = 'K3';
       ANSAGE_SCHWARZ = 'K0';
+
+      SPIELER_REIHENFOLGE = 'Spieler_Reihenfolge';
+
+      DELAY = 100;
+      KEY_STRING = '<Key>';
       //ANSAGE_KEINE = 'No';
 
 implementation
