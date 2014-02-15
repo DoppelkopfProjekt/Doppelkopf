@@ -14,6 +14,7 @@ public
   constructor Create(pMessage: string);
   property Count: Integer read getCount;
   function messageForIndex(pIndex: Integer): TNetworkmessage;
+  function messageStringForIndex(pIndex: Integer): string;
 end;
 
 implementation
@@ -38,6 +39,11 @@ begin
       self.FMessages.Add(temp);
     end;
   end;
+end;
+
+function TReceivingNetworkMessage.messageStringForIndex(pIndex: Integer): string;
+begin
+  result := self.messageForIndex(pIndex).creationString;
 end;
 
 function TReceivingNetworkMessage.messageForIndex(pIndex: Integer): TNetworkmessage;

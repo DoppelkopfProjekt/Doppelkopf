@@ -10,11 +10,13 @@ TNetworkMessage = class(TObject)
 private
   FKey: string;
   FParameter: TStringList;
+  FCreationString: string;
 public
   constructor Create(s: string);
   destructor Destroy; override;
   property key: string read FKey;
   property parameter: TStringList read FParameter;
+  property CreationString: string read FCreationString;
 end;
 implementation
 
@@ -32,6 +34,7 @@ constructor TNetworkMessage.Create(s: string);
 var posEndKey, posComma, i: Integer;
     temp: string;
 begin
+  FCreationString := s;
   FParameter := TStringlist.Create;
   posEndKey := pos('#', s);
   FKey := copy(s, 1, posEndKey-1);
