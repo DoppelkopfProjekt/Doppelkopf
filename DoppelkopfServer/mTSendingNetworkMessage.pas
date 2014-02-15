@@ -58,8 +58,8 @@ end;
 
 function TSendingNetworkMessage.getMsg;
 begin
-  result := msg;
   if paramCount = 0 then msg := msg + YES + '#';
+  result := msg;
 end;
 
 function TSendingNetworkMessage.getConfirmation;
