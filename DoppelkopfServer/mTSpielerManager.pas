@@ -17,6 +17,8 @@ type
     procedure deletePlayerWithIP(pIP: string);
     function countConnectedPlayer: Integer;
     constructor Create;
+
+    procedure setNewGewinnner(pSpieler: TSpieler);
   end;
 
 
@@ -26,6 +28,24 @@ constructor TSpielerManager.create;
 begin
   FSpieler := TObjectList.create;
   FSpieler.OwnsObjects := False;
+end;
+
+procedure TSpielerManager.setNewGewinnner(pSpieler: TSpieler);
+var newList: TObjectList;
+    index, i: Integer;
+begin
+  newList := TObjectList.Create;
+  newList.OwnsObjects := false;
+
+  newList.Add(pSpieler);
+  index := self.FSpieler.IndexOf(pSpieler);
+  for i := 1 to 3 do
+  begin
+    inc(i);
+    newList.Add(self.FSpieler[index mod 4])
+  end;
+  self.FSpieler.Free;
+  self.FSpieler := newList;
 end;
 
 function TSpielerManager.PlayerForIndex(pIndex: Integer): TSpieler;

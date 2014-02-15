@@ -258,6 +258,7 @@ begin
     begin
     //Gewinner kriegt seinen Stich
       TSpieler(self.FAktuellerStich.AktuellerSieger).gibGewonnenenStich(self.FAktuellerStich);
+      self.FSpielerManager.setNewGewinnner(TSpieler(self.FAktuellerStich.AktuellerSieger));
 
       inc(self.FRundenNummer);
       self.FAktuellerStich := TStich.Create(self.FRundenNummer);
