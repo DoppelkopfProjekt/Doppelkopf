@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   Menus, ExtCtrls, StdCtrls, jpeg, mtNetworkMessage, ScktComp, Stringkonstanten,
-  Kartensortieren, mtSendingNetworkmessage, mtReceivingNetworkmessage;
+  Kartensortieren, mtSendingNetworkmessage, mtReceivingNetworkmessage, mmsystem;
 
 type
   TForm1 = class(TForm)
@@ -54,6 +54,8 @@ type
     Button6: TButton;
     Edit4: TEdit;
     ComboBox1: TComboBox;
+    Button7: TButton;
+    Timer1: TTimer;
     procedure Terminalstarten1Click(Sender: TObject);
     procedure Konsoleschlieen1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -68,6 +70,8 @@ type
     procedure ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
     procedure Button5Click(Sender: TObject);
     procedure Button6Click(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
+    procedure Timerblub(sender: Tobject);
   private
     { Private-Deklarationen }
   public
@@ -92,7 +96,10 @@ var
   amzug:boolean;
   Vorbehaltabfrage_geglueckt, vorbehaltangemeldet: Boolean;
   kartenreihenfolge:Array [0..9] of Integer;
+  fTimer:Ttimer;
 implementation
+
+uses Verbinden;
 
 {$R *.DFM}
 
@@ -161,8 +168,14 @@ begin
 end;
 
 procedure TForm1.Button5Click(Sender: TObject);
+var
+  i: Integer;
 begin
   clientsocket1.Close;
+  for i := 0 to 13 do
+  begin
+    tImage(FindComponent('image'+IntToStr(i))).Picture.loadfromfile('Karten/Back.jpg');
+  end;
 end;
 
 procedure TForm1.Button6Click(Sender: TObject);
@@ -183,6 +196,25 @@ begin
   Form2.meinekarten := sortieren;;
   Form2.ShowModal;
  // Edit4.Text:=form2.meinekarten;
+end;
+
+procedure TForm1.Button7Click(Sender: TObject);
+begin
+  Form3.ShowModal;
+  ClientSocket1.Host:='192.168.0.26';//Form3.nachricht[0]; //Die IP oder der Hostname wird festgelegt
+  ClientSocket1.Port:=45678;//StrToInt(Form3.nachricht[1]); //Der Port wird festgelegt
+  ClientSocket1.Open; //Verbindung zum Server wird hergestellt
+  ftimer:=ttimer.create(nil);
+  ftimer.interval:=600;
+  ftimer.enabled:=true;
+  ftimer.ontimer := TimerBlub;
+
+end;
+
+procedure tform1.Timerblub(sender: Tobject);
+begin
+  ClientSocket1.Socket.SendText(KEY_STRING+CONNECT + '#' + Form3.Nachricht[2] +'#');
+  ftimer.enabled:=false;
 end;
 
 procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
@@ -368,20 +400,28 @@ end;
 
 
 procedure TForm1.Kartemarkieren(Nummer:string);
+var
+  I: Integer;
 begin
-tImage(FindComponent('image'+nummer)).Height:=tImage(FindComponent('image'+nummer)).Height+6;
-tImage(FindComponent('image'+nummer)).width:=tImage(FindComponent('image'+nummer)).width+6;
-tImage(FindComponent('image'+nummer)).left:=tImage(FindComponent('image'+nummer)).left-3;
-tImage(FindComponent('image'+nummer)).top:=tImage(FindComponent('image'+nummer)).top-3;
+  sndPlaySound(pChar('Sound.wav'),SND_ASYNC);
+  for I := 1 to 10 do
+  begin
+    tImage(FindComponent('image'+nummer)).Height:=tImage(FindComponent('image'+nummer)).Height+2;
+    tImage(FindComponent('image'+nummer)).width:=tImage(FindComponent('image'+nummer)).width+2;
+    tImage(FindComponent('image'+nummer)).left:=tImage(FindComponent('image'+nummer)).left-1;
+    tImage(FindComponent('image'+nummer)).top:=tImage(FindComponent('image'+nummer)).top-1;
 
-if (markiertekarte <> '') then
-begin
-  tImage(FindComponent('image'+markiertekarte)).Height:=tImage(FindComponent('image'+markiertekarte)).Height-6;
-  tImage(FindComponent('image'+markiertekarte)).width:=tImage(FindComponent('image'+markiertekarte)).width-6;
-  tImage(FindComponent('image'+markiertekarte)).left:=tImage(FindComponent('image'+markiertekarte)).left+3;
-  tImage(FindComponent('image'+markiertekarte)).top:=tImage(FindComponent('image'+markiertekarte)).top+3;
-end;
-markiertekarte:=nummer;
+    if (markiertekarte <> '') then
+    begin
+      tImage(FindComponent('image'+markiertekarte)).Height:=tImage(FindComponent('image'+markiertekarte)).Height-2;
+      tImage(FindComponent('image'+markiertekarte)).width:=tImage(FindComponent('image'+markiertekarte)).width-2;
+      tImage(FindComponent('image'+markiertekarte)).left:=tImage(FindComponent('image'+markiertekarte)).left+1;
+      tImage(FindComponent('image'+markiertekarte)).top:=tImage(FindComponent('image'+markiertekarte)).top+1;
+    end;
+  sleep(10);
+  application.ProcessMessages;
+  end;
+  markiertekarte:=nummer;
 end;
 
 end.
