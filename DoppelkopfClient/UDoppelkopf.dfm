@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   BorderStyle = bsSingle
   Caption = 'Form1'
-  ClientHeight = 662
+  ClientHeight = 715
   ClientWidth = 1009
   Color = clActiveCaption
   Font.Charset = DEFAULT_CHARSET
@@ -207,7 +207,7 @@ object Form1: TForm1
   end
   object Button1: TButton
     Left = 8
-    Top = 295
+    Top = 315
     Width = 425
     Height = 41
     Caption = 'ausgew'#228'hlte Karte legen'
@@ -249,7 +249,7 @@ object Form1: TForm1
   end
   object Edit2: TEdit
     Left = 521
-    Top = 511
+    Top = 599
     Width = 121
     Height = 21
     TabOrder = 4
@@ -257,7 +257,7 @@ object Form1: TForm1
   end
   object Button2: TButton
     Left = 682
-    Top = 472
+    Top = 560
     Width = 119
     Height = 25
     Caption = 'Verbinden'
@@ -265,8 +265,8 @@ object Form1: TForm1
     OnClick = Button2Click
   end
   object Button3: TButton
-    Left = 456
-    Top = 304
+    Left = 448
+    Top = 324
     Width = 157
     Height = 25
     Caption = 'Ansage abgeben(am Zug)'
@@ -276,7 +276,7 @@ object Form1: TForm1
   end
   object Button4: TButton
     Left = 648
-    Top = 435
+    Top = 523
     Width = 75
     Height = 25
     Caption = 'Name geben'
@@ -286,7 +286,7 @@ object Form1: TForm1
   end
   object Button5: TButton
     Left = 664
-    Top = 511
+    Top = 599
     Width = 177
     Height = 25
     Caption = 'Verbindung trennen'
@@ -295,15 +295,15 @@ object Form1: TForm1
   end
   object Edit3: TEdit
     Left = 521
-    Top = 439
+    Top = 527
     Width = 121
     Height = 21
     TabOrder = 9
     Text = 'TESTNAME'
   end
   object Button6: TButton
-    Left = 488
-    Top = 592
+    Left = 866
+    Top = 384
     Width = 75
     Height = 25
     Caption = 'Kartensortieren'
@@ -311,8 +311,8 @@ object Form1: TForm1
     OnClick = Button6Click
   end
   object Edit4: TEdit
-    Left = 488
-    Top = 637
+    Left = 866
+    Top = 429
     Width = 121
     Height = 21
     TabOrder = 11
@@ -320,7 +320,7 @@ object Form1: TForm1
   end
   object ComboBox1: TComboBox
     Left = 521
-    Top = 474
+    Top = 562
     Width = 145
     Height = 21
     ItemHeight = 13
@@ -330,6 +330,15 @@ object Form1: TForm1
       '84.63.62.143'
       '192.168.0.26'
       '127.0.0.1')
+  end
+  object Button7: TButton
+    Left = 521
+    Top = 398
+    Width = 202
+    Height = 25
+    Caption = 'Verbinden'
+    TabOrder = 13
+    OnClick = Button7Click
   end
   object MainMenu1: TMainMenu
     Left = 288
@@ -371,7 +380,12 @@ object Form1: TForm1
     ClientType = ctNonBlocking
     Port = 0
     OnRead = ClientSocket1Read
-    Left = 872
-    Top = 58
+    Left = 328
+    Top = 10
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Left = 360
+    Top = 8
   end
 end
