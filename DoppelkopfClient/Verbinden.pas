@@ -13,7 +13,9 @@ type
     Edit3: TEdit;
     ComboBox1: TComboBox;
     Label1: TLabel;
+    Button1: TButton;
     procedure Button2Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     private ubergabenachricht: tStringList;
   public
@@ -26,6 +28,11 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TForm3.Button1Click(Sender: TObject);
+begin
+  form3.Close;
+end;
 
 procedure TForm3.Button2Click(Sender: TObject);
 begin

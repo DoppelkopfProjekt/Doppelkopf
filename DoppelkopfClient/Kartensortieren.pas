@@ -24,7 +24,7 @@ type
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
-  zusortierendeKarten:tstringlist;
+  zusortierendeKarten: tStringlist;
     { Private-Deklarationen }
   public
     property meinekarten: tStringlist read zusortierendeKarten write zusortierendeKarten;
@@ -41,13 +41,12 @@ procedure TForm2.Button1Click(Sender: TObject);
 var
 i:integer;
 begin
-  zusortierendekarten.clear;
-  for I := 0 to 9 do
+  for I := 0 to 29 do
   begin
-    zusortierendekarten.Add('Image'+inttostr(i));
-  //  zusortierendekarten.add(Karten_client[strtoint(i)])
+    showmessage(zusortierendeKarten[3*i+1]);
+    tImage(FindComponent('image'+zusortierendeKarten[3*i+1])).Picture.loadfromfile('Karten/'+ zusortierendeKarten[3*i+2] +'.jpg');
   end;
-end;
+  end;
 
 procedure TForm2.FormCreate(Sender: TObject);
 var

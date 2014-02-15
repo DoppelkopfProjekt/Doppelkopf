@@ -95,8 +95,10 @@ var
   alleansagenNummer: Integer;
   amzug:boolean;
   Vorbehaltabfrage_geglueckt, vorbehaltangemeldet: Boolean;
-  kartenreihenfolge:Array [0..9] of Integer;
+  kartensortierung: tStringList;
   fTimer:Ttimer;
+  spielerreihenfolge: Array [0..3] of String;
+  aktuellerunde: Integer;
 implementation
 
 uses Verbinden;
@@ -184,16 +186,8 @@ Sortieren:tStringlist;
 
   I: Integer;
 begin
-  for I := 0 to 9 do
-  begin
-
-  end;
-  for I := 0 to 9 do
-  begin
-    sortieren.Add('Image'+inttostr(i));
-  //  sortieren.add(Karten_client[strtoint(i)])
-  end;
-  Form2.meinekarten := sortieren;;
+  kartensortierung:=tstringlist.Create;
+  Form2.meinekarten := kartensortierung;
   Form2.ShowModal;
  // Edit4.Text:=form2.meinekarten;
 end;
@@ -201,8 +195,8 @@ end;
 procedure TForm1.Button7Click(Sender: TObject);
 begin
   Form3.ShowModal;
-  ClientSocket1.Host:='192.168.0.26';//Form3.nachricht[0]; //Die IP oder der Hostname wird festgelegt
-  ClientSocket1.Port:=45678;//StrToInt(Form3.nachricht[1]); //Der Port wird festgelegt
+  ClientSocket1.Host:=Form3.nachricht[0]; //Die IP oder der Hostname wird festgelegt
+  ClientSocket1.Port:=StrToInt(Form3.nachricht[1]); //Der Port wird festgelegt
   ClientSocket1.Open; //Verbindung zum Server wird hergestellt
   ftimer:=ttimer.create(nil);
   ftimer.interval:=600;
@@ -219,17 +213,11 @@ end;
 
 procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
 var
-i,y,n, Anzahl_keys: Integer;
+i,n,y, Anzahl_keys: Integer;        //wird y gebraucht?
 para:String;
 begin
 Netzwerknachricht:=TreceivingNetworkMessage.Create(Socket.ReceiveText);
 anzahl_keys:=Netzwerknachricht.count;
-//para:='';
-//for i := 0 to Netzwerknachricht.parameter.count - 1 do
-//begin
-//  para:=para+', '+Netzwerknachricht.parameter[i];
-//end;
-//memo1.lines.add('// '+Netzwerknachricht.key+';'+para);
 for n := 0 to anzahl_keys - 1 do
 begin
 para:='';
@@ -248,7 +236,7 @@ if Netzwerknachricht.messageForIndex(n).key = CONNECT then                      
       else if Netzwerknachricht.messageForIndex(n).parameter[0] = 'NO' then
         Memo1.Lines.add('Server ist voll');
     end
-else if Netzwerknachricht.messageForIndex(n).key = SPIELBEGINN then                          //Name der Spieler werden geschickt
+else if Netzwerknachricht.messageForIndex(n).key = SPIELBEGINN then                          //Spielbeginn Name der Spieler werden geschickt
     begin
       ClientSocket1.Socket.SendText(KEY_STRING+SPIELBEGINN+ '#YES#');
         for i := 0 to 3  do
@@ -268,6 +256,9 @@ else if Netzwerknachricht.messageForIndex(n).key = KARTEN then                  
       for i := 0 to Karten_client.Count-1 do
       begin
         tImage(FindComponent('image'+IntToStr(i))).picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i]+'.jpg');
+        kartensortierung.add(IntTostr(i));
+        kartensortierung.add(IntTostr(i));
+        kartensortierung.add(Netzwerknachricht.messageForIndex(n).parameter[i]);
       end;
     end
 else if Netzwerknachricht.messageForIndex(n).key = VORBEHALTE_ABFRAGEN then              //Vorbehaltabfrage Hat der Spieler einen Vorbahlt?
@@ -293,7 +284,7 @@ else if Netzwerknachricht.messageForIndex(n).key = SOLO then                    
     end
 else if Netzwerknachricht.messageForIndex(n).key = WELCHE_KARTE then            //Welche Karte legen Spieler bekommt die Anweisung, dass er am Zug ist
     begin
-      ClientSocket1.Socket.SendText(WELCHE_KARTE+ '#YES#');                        //hier mit YES antworten
+      ClientSocket1.Socket.SendText(KEY_STRING+WELCHE_KARTE+ '#YES#');                        //hier mit YES antworten
       Memo1.Lines.add('WELCHE KARTEN SOLL GESPIELT WERDEN?');
       amzug:=true;
     end
@@ -324,14 +315,30 @@ else if Netzwerknachricht.messageForIndex(n).key = KARTE_LEGEN then           //
 else if Netzwerknachricht.messageForIndex(n).key = AKTUELLER_STICH then               //aktueller Stich gibt den kompletten momentanen Stich
       begin
         ClientSocket1.Socket.SendText(KEY_STRING+AKTUELLER_STICH+'#YES#');
-        for I := 0 to Netzwerknachricht.messageForIndex(n).parameter.count-1 do
+        for I := aktuellerunde to Netzwerknachricht.messageForIndex(n).parameter.count-1+aktuellerunde do
         begin
-          tImage(FindComponent('image'+IntToStr(i+10))).Picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i]+'.jpg');
+          if i>3 then
+          tImage(FindComponent('image'+IntToStr(i+10-4))).Picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i]+'.jpg')
+          else
+          tImage(FindComponent('image'+IntToStr(i+10))).Picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i]+'.jpg')
         end;
+      inc(aktuelleRunde);
+      end
+else if Netzwerknachricht.messageForIndex(n).key = SPIELER_REIHENFOLGE then           //aktuelle Spielerreihenfolge
+      begin
+        ClientSocket1.Socket.SendText(KEY_STRING+SPIELER_REIHENFOLGE+'#YES#');
+        for I := 0 to 3 do
+        begin
+          spielerreihenfolge[i]:= Netzwerknachricht.messageForIndex(n).parameter[i];
+          if Spielerreihenfolge[1] = alleSpieler[i] then
+          aktuelleRunde:=i;
+        end;
+
       end
 else if Netzwerknachricht.messageForIndex(n).key = GEWINNER_STICH then
       begin
         ClientSocket1.Socket.SendText(KEY_STRING+GEWINNER_STICH+'#YES#');
+        aktuelleRunde:=0;
         Memo1.lines.Add(Netzwerknachricht.messageForIndex(n).parameter[0]);
         for i := 0 to 3 do
         begin
@@ -397,8 +404,6 @@ begin
 Kartemarkieren((Sender as TComponent).Name[6]);
 end;
 
-
-
 procedure TForm1.Kartemarkieren(Nummer:string);
 var
   I: Integer;
@@ -423,5 +428,4 @@ begin
   end;
   markiertekarte:=nummer;
 end;
-
 end.
