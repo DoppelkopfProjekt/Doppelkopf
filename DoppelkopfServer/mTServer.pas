@@ -2,7 +2,7 @@ unit mTServer;
 
 interface
 
-uses ScktComp, dialogs, StringKonstanten, sysutils;
+uses ScktComp, dialogs, StringKonstanten, sysutils, windows;
 
 type
 
@@ -30,6 +30,18 @@ TServer = class
 end;
 
 implementation
+
+procedure Sleep2(pZeit: Integer);
+var
+long,i:integer;
+begin
+  long:=getTickCount;
+  while getTickCount<long+pZeit do
+  begin
+    i:=i+1;
+  end;
+
+end;
 
 constructor TServer.Create(pPort: Integer);
 begin
@@ -76,7 +88,7 @@ begin
     if temp.RemoteAddress = pClientIP then
       temp.SendText(AnsiString(pMessage));
   end;
-  sleep(DELAY);
+  sleep2(DELAY);
 end;
 
 procedure TServer.SendMessageToAll(pMessage: string);
@@ -86,7 +98,7 @@ begin
   begin
     FServer.Socket.Connections[i].SendText(AnsiString(pMessage));
   end;
-  sleep(DELAY);
+  sleep2(DELAY);
 end;
 
 procedure TServer.ProcessMessage(pMessage: string; pSenderIP: string);
