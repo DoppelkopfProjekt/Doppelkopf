@@ -219,8 +219,11 @@ begin
 end;
 
 function TDoppelkopfSpiel.aktuellerSpieler: TSpieler;
+var temp: Integer;
 begin
-  result := self.FSpielerManager.playerForIndex(self.FAktuellerSpielerIndex mod 4);
+  temp := self.FAktuellerSpielerIndex mod 4;
+  if temp = 0 then temp := 4;
+  result := self.FSpielerManager.playerForIndex(temp);
 end;
 
 function TDoppelkopfSpiel.aktuellerSpielerName:string;
