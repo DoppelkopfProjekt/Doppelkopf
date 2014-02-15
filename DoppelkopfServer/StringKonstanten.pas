@@ -64,6 +64,7 @@ const SPIELBEGINN = 'Spielbeginn';
       SPIELER_REIHENFOLGE = 'Spieler_Reihenfolge';
 
       DELAY = 100;
+      KEY_STRING = '<Key>';
       //ANSAGE_KEINE = 'No';
 
 implementation
