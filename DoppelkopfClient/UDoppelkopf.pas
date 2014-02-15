@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  Menus, ExtCtrls, StdCtrls, jpeg, mtNetworkMessage, UVorbehaltabfrage,
-  ScktComp, Stringkonstanten;
+  Menus, ExtCtrls, StdCtrls, jpeg, mtNetworkMessage, ScktComp, Stringkonstanten,
+  Kartensortieren;
 
 type
   TForm1 = class(TForm)
@@ -52,6 +52,8 @@ type
     Button5: TButton;
     Clientsocket1 : tClientsocket;
     Edit3: TEdit;
+    Button6: TButton;
+    Edit4: TEdit;
     procedure Terminalstarten1Click(Sender: TObject);
     procedure Konsoleschlieen1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -65,10 +67,10 @@ type
     procedure Button4Click(Sender: TObject);
     procedure ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
     procedure Button5Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
   private
     { Private-Deklarationen }
   public
-    { Public-Deklarationen }
   end;
 
 var
@@ -88,8 +90,8 @@ var
   alleansagenSpieler: Array of String [10];
   alleansagenNummer: Integer;
   amzug:boolean;
-  Vorbehaltabfrage: UVorbehaltabfrage.TForm2;
   Vorbehaltabfrage_geglueckt, vorbehaltangemeldet: Boolean;
+  kartenreihenfolge:Array [0..9] of Integer;
 implementation
 
 {$R *.DFM}
@@ -122,14 +124,12 @@ i:Integer;
 begin
   Form1.ClientHeight:=630;
   //Memo1.visible:=true;
-  Form1.clientwidth:=895;
+  Form1.clientwidth:=960;
   //chatoffen:=true;
   High:=226;
   //Memo1.Visible:=false;
   alleansagenNummer:=0;
   amzug:=false;
-
-  Vorbehaltabfrage:=UVorbehaltabfrage.TForm2.Create(Form2);
   for I := 0 to 13 do
   tImage(FindComponent('image'+IntToStr(i))).Picture.loadfromfile('Karten/Back.jpg');
 end;
@@ -163,6 +163,26 @@ end;
 procedure TForm1.Button5Click(Sender: TObject);
 begin
   clientsocket1.Close;
+end;
+
+procedure TForm1.Button6Click(Sender: TObject);
+var
+Sortieren:tStringlist;
+
+  I: Integer;
+begin
+  for I := 0 to 9 do
+  begin
+
+  end;
+  for I := 0 to 9 do
+  begin
+    sortieren.Add('Image'+inttostr(i));
+  //  sortieren.add(Karten_client[strtoint(i)])
+  end;
+  Form2.meinekarten := sortieren;;
+  Form2.ShowModal;
+ // Edit4.Text:=form2.meinekarten;
 end;
 
 procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
@@ -325,6 +345,8 @@ begin
 Kartemarkieren((Sender as TComponent).Name[6]);
 end;
 
+
+
 procedure TForm1.Kartemarkieren(Nummer:string);
 begin
 tImage(FindComponent('image'+nummer)).Height:=tImage(FindComponent('image'+nummer)).Height+6;
@@ -341,4 +363,5 @@ begin
 end;
 markiertekarte:=nummer;
 end;
+
 end.
