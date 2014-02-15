@@ -61,7 +61,7 @@ const SPIELBEGINN = 'Spielbeginn';
       ANSAGE_KEINEDREI = 'K3';
       ANSAGE_SCHWARZ = 'K0';
 
-      SPIELER_REIHENFOLGE = 'Spieler_Reihenfolge';
+      SPIELER_REIHENFOLGE = 'SpielerReihenfolge';
 
       DELAY = 100;
       KEY_STRING = '<Key>';

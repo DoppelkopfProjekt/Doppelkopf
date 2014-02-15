@@ -370,11 +370,7 @@ begin
                                                                                    FSpiel.playerIPForIndex(i)));
     end;
     self.SendMessageToAll(msg.resultingMessage);
-    //Wenn Stich fertig, Gewinner an alle schicken und neue Reihenfolge schicken
-    for i := 1 to 4 do
-    begin
-     // msg := TSendingNetworkMessage.Create(SPIELER_REIHENFOLGE);
-    end;
+    //Wenn der Stich voll ist
     if (counter mod 4) = 0 then
     begin
       msg := TSendingNetworkMessage.Create(GEWINNER_STICH);
@@ -386,6 +382,19 @@ begin
                                                                                      msg.confirmationMessage,
                                                                                      FSpiel.playerIPForIndex(i)));
       end;
+      //Wenn Stich fertig, Gewinner an alle schicken und neue Reihenfolge schicken
+      msg := TSendingNetworkMessage.Create(SPIELER_REIHENFOLGE);
+      for i := 1 to 4 do
+      begin
+        msg.addParameter(FSpiel.PlayerNameForIndex(i));
+      end;
+      for i := 1 to 4 do
+      begin
+        self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg.resultingMessage,
+                                                                                   msg.confirmationMessage,
+                                                                                   FSpiel.playerIPForIndex(i)));
+      end;
+      self.SendMessageToAll(msg.resultingMessage);
     end;
     //Wenn Spiel zuende, Sieger mitteilen
     if (counter = 40) then
