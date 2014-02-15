@@ -295,6 +295,10 @@ else if Netzwerknachricht.key = GEWINNER_STICH then
         ClientSocket1.Socket.SendText(GEWINNER_STICH+'#YES#');
         Memo1.lines.Add(Netzwerknachricht.parameter[0]);
         sleep(DELAY);
+        for i := 0 to 3 do
+        begin
+          tImage(FindComponent('image'+IntToStr(i+10))).picture.loadfromfile('Karten/Back.jpg');
+        end;
       end
 else if Netzwerknachricht.key = GEWINNER_SPIEL then                      //Gewinner Sieger werden genannt
       begin
