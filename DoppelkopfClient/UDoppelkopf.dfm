@@ -247,29 +247,21 @@ object Form1: TForm1
       'Nachricht eingeben')
     TabOrder = 3
   end
-  object Edit1: TEdit
-    Left = 521
-    Top = 484
-    Width = 121
-    Height = 21
-    TabOrder = 4
-    Text = '84.63.62.143'
-  end
   object Edit2: TEdit
     Left = 521
     Top = 511
     Width = 121
     Height = 21
-    TabOrder = 5
+    TabOrder = 4
     Text = '45678'
   end
   object Button2: TButton
-    Left = 648
-    Top = 491
+    Left = 682
+    Top = 472
     Width = 119
     Height = 25
     Caption = 'Verbinden'
-    TabOrder = 6
+    TabOrder = 5
     OnClick = Button2Click
   end
   object Button3: TButton
@@ -279,7 +271,7 @@ object Form1: TForm1
     Height = 25
     Caption = 'Ansage abgeben(am Zug)'
     Enabled = False
-    TabOrder = 7
+    TabOrder = 6
     OnClick = Button3Click
   end
   object Button4: TButton
@@ -289,16 +281,16 @@ object Form1: TForm1
     Height = 25
     Caption = 'Name geben'
     Enabled = False
-    TabOrder = 8
+    TabOrder = 7
     OnClick = Button4Click
   end
   object Button5: TButton
-    Left = 648
-    Top = 559
+    Left = 664
+    Top = 511
     Width = 177
     Height = 25
     Caption = 'Verbindung trennen'
-    TabOrder = 9
+    TabOrder = 8
     OnClick = Button5Click
   end
   object Edit3: TEdit
@@ -306,33 +298,38 @@ object Form1: TForm1
     Top = 439
     Width = 121
     Height = 21
-    TabOrder = 10
+    TabOrder = 9
     Text = 'TESTNAME'
   end
   object Button6: TButton
-    Left = 832
-    Top = 392
+    Left = 488
+    Top = 592
     Width = 75
     Height = 25
     Caption = 'Kartensortieren'
-    TabOrder = 11
+    TabOrder = 10
     OnClick = Button6Click
   end
   object Edit4: TEdit
-    Left = 832
-    Top = 437
+    Left = 488
+    Top = 637
     Width = 121
     Height = 21
-    TabOrder = 12
+    TabOrder = 11
     Text = 'Edit4'
   end
-  object Button7: TButton
-    Left = 878
-    Top = 528
-    Width = 75
-    Height = 25
-    Caption = 'Button7'
-    TabOrder = 13
+  object ComboBox1: TComboBox
+    Left = 521
+    Top = 474
+    Width = 145
+    Height = 21
+    ItemHeight = 13
+    TabOrder = 12
+    Text = '84.63.62.143'
+    Items.Strings = (
+      '84.63.62.143'
+      '192.168.0.26'
+      '127.0.0.1')
   end
   object MainMenu1: TMainMenu
     Left = 288

@@ -43,7 +43,6 @@ type
     Image11: TImage;
     Image10: TImage;
     Image13: TImage;
-    Edit1: TEdit;
     Edit2: TEdit;
     Label7: TLabel;
     Button2: TButton;
@@ -54,7 +53,7 @@ type
     Edit3: TEdit;
     Button6: TButton;
     Edit4: TEdit;
-    Button7: TButton;
+    ComboBox1: TComboBox;
     procedure Terminalstarten1Click(Sender: TObject);
     procedure Konsoleschlieen1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -69,7 +68,6 @@ type
     procedure ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
     procedure Button5Click(Sender: TObject);
     procedure Button6Click(Sender: TObject);
-    procedure Sleep2(pZeit: Integer);
   private
     { Private-Deklarationen }
   public
@@ -146,7 +144,7 @@ end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
-  ClientSocket1.Host:=Edit1.Text; //Die IP oder der Hostname wird festgelegt
+  ClientSocket1.Host:=Combobox1.Text; //Die IP oder der Hostname wird festgelegt
   ClientSocket1.Port:=StrToInt(Edit2.Text); //Der Port wird festgelegt
   ClientSocket1.Open; //Verbindung zum Server wird hergestellt
   Button4.Enabled:=true;
@@ -187,25 +185,11 @@ begin
  // Edit4.Text:=form2.meinekarten;
 end;
 
-
-procedure TFORM1.Sleep2(pZeit: Integer);
-var
-long,i:integer;
-begin
-  long:=gettickcount;
-  while gettickcount<long+pZeit do
-  begin
-    i:=i+1;
-  end;
-
-end;
-
 procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
 var
 i,y: Integer;
 para:String;
 begin
-Sleep2(DELAY);
 Netzwerknachricht:=tNetworkmessage.Create(Socket.ReceiveText);
 para:='';
 for i := 0 to Netzwerknachricht.parameter.count - 1 do
