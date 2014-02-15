@@ -67,7 +67,7 @@ begin
   if typString = '10' then
   begin
     FKartentyp := dkZehn;
-    FPunkte := 10;
+    FPunkte := 1;
   end;
   if typString = 'K' then
   begin
