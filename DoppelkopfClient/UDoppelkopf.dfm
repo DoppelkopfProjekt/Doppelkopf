@@ -309,6 +309,23 @@ object Form1: TForm1
     TabOrder = 10
     Text = 'TESTNAME'
   end
+  object Button6: TButton
+    Left = 832
+    Top = 392
+    Width = 75
+    Height = 25
+    Caption = 'Kartensortieren'
+    TabOrder = 11
+    OnClick = Button6Click
+  end
+  object Edit4: TEdit
+    Left = 832
+    Top = 437
+    Width = 121
+    Height = 21
+    TabOrder = 12
+    Text = 'Edit4'
+  end
   object MainMenu1: TMainMenu
     Left = 288
     Top = 8
