@@ -54,6 +54,7 @@ type
     Edit3: TEdit;
     Button6: TButton;
     Edit4: TEdit;
+    Button7: TButton;
     procedure Terminalstarten1Click(Sender: TObject);
     procedure Konsoleschlieen1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -68,6 +69,7 @@ type
     procedure ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
     procedure Button5Click(Sender: TObject);
     procedure Button6Click(Sender: TObject);
+    procedure Sleep2(pZeit: Integer);
   private
     { Private-Deklarationen }
   public
@@ -185,11 +187,25 @@ begin
  // Edit4.Text:=form2.meinekarten;
 end;
 
+
+procedure TFORM1.Sleep2(pZeit: Integer);
+var
+long,i:integer;
+begin
+  long:=gettickcount;
+  while gettickcount<long+pZeit do
+  begin
+    i:=i+1;
+  end;
+
+end;
+
 procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
 var
 i,y: Integer;
 para:String;
 begin
+Sleep2(1000);
 Netzwerknachricht:=tNetworkmessage.Create(Socket.ReceiveText);
 para:='';
 for i := 0 to Netzwerknachricht.parameter.count - 1 do
@@ -253,7 +269,7 @@ else if Netzwerknachricht.key = SOLO then                     //Vorbehalt Ein Sp
 else if Netzwerknachricht.key = WELCHE_KARTE then            //Welche Karte legen Spieler bekommt die Anweisung, dass er am Zug ist
     begin
       ClientSocket1.Socket.SendText(WELCHE_KARTE+ '#YES#');                        //hier mit YES antworten
-      Showmessage ('Welche Karte soll gespielt werden?');
+      Memo1.Lines.add('WELCHE KARTEN SOLL GESPIELT WERDEN?');
       amzug:=true;
     end
 else if Netzwerknachricht.key = ANSAGE_GEMACHT then                 //Ansageanfrage
@@ -279,7 +295,6 @@ else if Netzwerknachricht.key = KARTE_LEGEN then           //welche Karten teste
         end;
         if Netzwerknachricht.parameter[0] = 'NO' then
           showmessage('neue Karte legen');
-        sleep(DELAY);
       end
 else if Netzwerknachricht.key = AKTUELLER_STICH then               //aktueller Stich gibt den kompletten momentanen Stich
       begin
@@ -288,13 +303,11 @@ else if Netzwerknachricht.key = AKTUELLER_STICH then               //aktueller S
         begin
           tImage(FindComponent('image'+IntToStr(i+10))).Picture.loadfromfile('Karten/'+Netzwerknachricht.parameter[i]+'.jpg');
         end;
-      sleep(DELAY);
       end
 else if Netzwerknachricht.key = GEWINNER_STICH then
       begin
         ClientSocket1.Socket.SendText(GEWINNER_STICH+'#YES#');
         Memo1.lines.Add(Netzwerknachricht.parameter[0]);
-        sleep(DELAY);
         for i := 0 to 3 do
         begin
           tImage(FindComponent('image'+IntToStr(i+10))).picture.loadfromfile('Karten/Back.jpg');
@@ -304,7 +317,6 @@ else if Netzwerknachricht.key = GEWINNER_SPIEL then                      //Gewin
       begin
         ClientSocket1.Socket.SendText(GEWINNER_SPIEL+'#YES#');
         Memo1.Lines.add('Team: ' + Netzwerknachricht.parameter[0] + ' hat ' + Netzwerknachricht.parameter[1] + ' Punkte.');
-        sleep(DELAY);
       end
 else if Netzwerknachricht.key = 'aktueller Punktestand' then         //aktueller Punktestand Liste mit den Punkten der vielen Spieler wird gegeben
       begin
