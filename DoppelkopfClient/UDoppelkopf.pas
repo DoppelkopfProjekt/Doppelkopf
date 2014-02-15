@@ -141,6 +141,8 @@ begin
   amzug:=false;
   for I := 0 to 13 do
   tImage(FindComponent('image'+IntToStr(i))).Picture.loadfromfile('Karten/Back.jpg');
+  aktuelleRunde:=0;
+  kartensortierung:=tstringlist.create;
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
@@ -177,6 +179,7 @@ begin
   for i := 0 to 13 do
   begin
     tImage(FindComponent('image'+IntToStr(i))).Picture.loadfromfile('Karten/Back.jpg');
+    Memo1.Lines.Clear;
   end;
 end;
 
@@ -189,7 +192,6 @@ begin
   kartensortierung:=tstringlist.Create;
   Form2.meinekarten := kartensortierung;
   Form2.ShowModal;
- // Edit4.Text:=form2.meinekarten;
 end;
 
 procedure TForm1.Button7Click(Sender: TObject);
@@ -213,7 +215,7 @@ end;
 
 procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
 var
-i,n,y, Anzahl_keys: Integer;        //wird y gebraucht?
+i,n,y,z, Anzahl_keys: Integer;        //wird y gebraucht?
 para:String;
 begin
 Netzwerknachricht:=TreceivingNetworkMessage.Create(Socket.ReceiveText);
@@ -317,33 +319,34 @@ else if Netzwerknachricht.messageForIndex(n).key = AKTUELLER_STICH then         
         ClientSocket1.Socket.SendText(KEY_STRING+AKTUELLER_STICH+'#YES#');
         for I := aktuellerunde to Netzwerknachricht.messageForIndex(n).parameter.count-1+aktuellerunde do
         begin
+          if i-aktuellerunde=0 then
+          for z := 0 to 3 do
+          begin
+            tImage(FindComponent('image'+IntToStr(z+10))).picture.loadfromfile('Karten/Back.jpg');
+          end;
           if i>3 then
-          tImage(FindComponent('image'+IntToStr(i+10-4))).Picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i]+'.jpg')
+          tImage(FindComponent('image'+IntToStr(i+10-4))).Picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i-aktuellerunde]+'.jpg')
           else
-          tImage(FindComponent('image'+IntToStr(i+10))).Picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i]+'.jpg')
+          tImage(FindComponent('image'+IntToStr(i+10))).Picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i-aktuellerunde]+'.jpg');
         end;
-      inc(aktuelleRunde);
       end
-else if Netzwerknachricht.messageForIndex(n).key = SPIELER_REIHENFOLGE then           //aktuelle Spielerreihenfolge
+else if Netzwerknachricht.messageForIndex(n).key = 'SpielerReihenfolge' then           //aktuelle Spielerreihenfolge
       begin
         ClientSocket1.Socket.SendText(KEY_STRING+SPIELER_REIHENFOLGE+'#YES#');
         for I := 0 to 3 do
         begin
           spielerreihenfolge[i]:= Netzwerknachricht.messageForIndex(n).parameter[i];
-          if Spielerreihenfolge[1] = alleSpieler[i] then
+          if Spielerreihenfolge[0] = alleSpieler[i] then
           aktuelleRunde:=i;
+          //showmessage(inttostr(aktuellerunde));
         end;
 
       end
-else if Netzwerknachricht.messageForIndex(n).key = GEWINNER_STICH then
+else if Netzwerknachricht.messageForIndex(n).key = GEWINNER_STICH then               //Gewinnerstich
       begin
         ClientSocket1.Socket.SendText(KEY_STRING+GEWINNER_STICH+'#YES#');
         aktuelleRunde:=0;
         Memo1.lines.Add(Netzwerknachricht.messageForIndex(n).parameter[0]);
-        for i := 0 to 3 do
-        begin
-          tImage(FindComponent('image'+IntToStr(i+10))).picture.loadfromfile('Karten/Back.jpg');
-        end;
       end
 else if Netzwerknachricht.messageForIndex(n).key = GEWINNER_SPIEL then                      //Gewinner Sieger werden genannt
       begin
