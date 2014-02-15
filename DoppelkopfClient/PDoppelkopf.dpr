@@ -4,8 +4,10 @@ uses
   Forms,
   UDoppelkopf in 'UDoppelkopf.pas' {Form1},
   mTNetworkMessage in 'mTNetworkMessage.pas',
-  StringKonstanten in 'StringKonstanten.pas',
-  Kartensortieren in 'Kartensortieren.pas' {Form2};
+  Kartensortieren in 'Kartensortieren.pas' {Form2},
+  mTReceivingNetworkMessage in 'mTReceivingNetworkMessage.pas',
+  mTSendingNetworkMessage in 'mTSendingNetworkMessage.pas',
+  StringKonstanten in 'StringKonstanten.pas';
 
 {$R *.RES}
 
