@@ -27,7 +27,6 @@ private
   procedure processSpielbeginn(pClientIP: string; pMessage: TNetworkMessage);
   procedure processKarten(pClientIP: string; pMessage: TNetworkMessage);
   procedure processVorbehaltAnmelden (pClientIP: string; pMessage: TNetworkMessage);
-  procedure processVorbehalteAbfragen (pClientIP: string; pMessage: TNetworkMessage);
   procedure processSolo (pClientIP: string; pMessage: TNetworkMessage);
   procedure processKarteLegen (pClientIP: string; pMessage: TNetworkMessage);
   procedure processAnsage (pClientIP: string; pMessage: TNetworkMessage);
@@ -146,10 +145,6 @@ begin
   begin
     self.processKarten(pSenderIP, msg);
   end;
-  if (msg.key = VORBEHALTE_ABFRAGEN) then
-  begin
-    self.processVorbehalteAbfragen(pSenderIP, msg);
-  end;
   if (msg.key = VORBEHALT_ANMELDEN) then
   begin
     self.processVorbehaltAnmelden(pSenderIP, msg);
@@ -245,11 +240,6 @@ begin
                                                                                    FSpiel.PlayerIPForIndex(i)))
     end;
   end;
-end;
-
-procedure TDoppelkopfServer.processVorbehalteAbfragen(pClientIP: string; pMessage: TNetworkMessage);
-begin
- //////
 end;
 
 procedure TDoppelkopfServer.processVorbehaltAnmelden(pClientIP: string;pMessage: TNetworkMessage);

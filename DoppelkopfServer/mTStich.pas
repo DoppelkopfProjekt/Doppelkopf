@@ -13,9 +13,7 @@ private
   FKarten: TObjectList;
   FAktuellerSieger: TObject;
   FAktuellBesteKarte: TKarte;
-  //FAktuellerSpieler: TObject;
   FNummer: Integer;
- // FReSonderPunkte: Integer;//Kann negativ werden
   FSonderkarten: TObjectList;
 
   procedure erkenneSonderKarten(pNeueKarte: TKarte; pSpieler: TObject);

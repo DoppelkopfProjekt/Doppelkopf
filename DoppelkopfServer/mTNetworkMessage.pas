@@ -47,7 +47,6 @@ begin
       self.parameter.add(temp);
     end;
   end;
-  //self.parameter.delete(self.parameter.count-1);
 end;
 
 destructor TNetworkmessage.Destroy;

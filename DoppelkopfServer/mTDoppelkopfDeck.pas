@@ -63,9 +63,6 @@ begin
   FKarten.Add(TKarte.create('KRD'));
   FKarten.Add(TKarte.create('KRK'));
   FKarten.Add(TKarte.create('KRA'));
- 
-  
-  //So m�ssen alle 40 Karten erstellt werden...
 end;
 
 function TDoppelkopfDeck.getRandomCard: TKarte;
@@ -73,7 +70,6 @@ var index: Integer;
 begin
   index := random(FKarten.Count);
   result := TKarte(FKarten[index]);
-  //ShowMessage(result.Code);
   FKarten.Delete(index);
 end;
 

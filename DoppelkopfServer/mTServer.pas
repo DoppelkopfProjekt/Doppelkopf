@@ -31,18 +31,6 @@ end;
 
 implementation
 
-(*procedure Sleep2(pZeit: Integer);
-var
-long,i:integer;
-begin
-  long:=getTickCount;
-  while (getTickCount<long+pZeit) do
-  begin
-    i:=i+1;
-  end;
-
-end;    *)
-
 constructor TServer.Create(pPort: Integer);
 begin
   FServer := TServerSocket.Create(nil);
@@ -54,7 +42,6 @@ end;
 
 procedure TServer.OnClientConnect(Sender: TObject; Socket: TCustomWinSocket);
 begin
-  //ShowMessage('ClientConnect');
   self.ClientHasConnected(socket.RemoteAddress);
 end;
 
@@ -88,7 +75,6 @@ begin
     if temp.RemoteAddress = pClientIP then
       temp.SendText(AnsiString(pMessage));
   end;
- // sleep2(DELAY);
 end;
 
 procedure TServer.SendMessageToAll(pMessage: string);
@@ -98,7 +84,6 @@ begin
   begin
     FServer.Socket.Connections[i].SendText(AnsiString(pMessage));
   end;
- // sleep2(DELAY);
 end;
 
 procedure TServer.ProcessMessage(pMessage: string; pSenderIP: string);
