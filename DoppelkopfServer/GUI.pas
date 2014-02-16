@@ -54,11 +54,13 @@ end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
+  Button2.Enabled := False;
   self.MeLog.Clear;
   FServer := TDoppelkopfServer.Create(StrToInt(edit2.text));
   FServer.MeLog := MeLog;
   FServer.Activate;
-  label1.Caption := FServer.Server.Socket.LocalAddress;
+  self.MeLog.Lines.Add('Server ist gestartet...');
+  //label1.Caption := FServer.Server.Socket.LocalAddress;
 end;
 
 procedure TForm1.Button3Click(Sender: TObject);
@@ -67,6 +69,7 @@ begin
     FServer.Deactivate;
   FServer.Free;
   Button2.Enabled := true;
+  self.MeLog.Lines.Add('Server ist beendet...');
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
