@@ -364,7 +364,6 @@ var success: Boolean;
     counter, i: Integer;
     msg: TSendingNetworkMessage;
     karten, gewinner: TStringList;
-    temp: string;
 begin
   MeLog.Lines.Add('Karte gelegt');
 
