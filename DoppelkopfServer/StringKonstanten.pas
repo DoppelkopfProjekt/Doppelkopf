@@ -65,6 +65,7 @@ const SPIELBEGINN = 'Spielbeginn';
 
       DELAY = 100;
       KEY_STRING = '<Key>';
+      TZ = '#';
       //ANSAGE_KEINE = 'No';
 
 implementation

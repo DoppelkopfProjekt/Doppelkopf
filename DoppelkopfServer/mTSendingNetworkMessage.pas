@@ -27,7 +27,7 @@ implementation
 
 constructor TSendingNetworkMessage.Create(pKey: string);
 begin
-  msg := KEY_STRING + pKey + '#';
+  msg := KEY_STRING + pKey + TZ;
   key := pKey;
   paramCount := 0;
 end;
@@ -35,36 +35,36 @@ end;
 procedure TSendingNetworkMessage.addParameter(pParameter: string);
 begin
   inc(paramCount);
-  msg := msg + pParameter + '#';
+  msg := msg + pParameter + TZ;
 end;
 
 procedure TSendingNetworkMessage.addParameter(pParameter1: string; pParameter2: string);
 begin
   inc(paramCount, 2);
-  msg := msg + pParameter1 + '#' + pParameter2 + '#';
+  msg := msg + pParameter1 + TZ + pParameter2 + TZ;
 end;
 
 procedure TSendingNetworkMessage.addParameter(pParameter1: string; pParameter2: string; pParameter3: string);
 begin
   inc(paramCount, 3);
-  msg := msg + pParameter1 + '#' + pParameter2 + '#' + pParameter3 + '#';
+  msg := msg + pParameter1 + TZ + pParameter2 + TZ + pParameter3 + TZ;
 end;
 
 procedure TSendingNetworkMessage.addParameter(pParameter1: string; pParameter2: string; pParameter3: string; pParameter4: string);
 begin
   inc(paramCount, 4);
-  msg := msg + pParameter1 + '#' + pParameter2 + '#' + pParameter3 + '#' + pParameter4 + '#';;
+  msg := msg + pParameter1 + TZ + pParameter2 + TZ + pParameter3 + TZ + pParameter4 + TZ;
 end;
 
 function TSendingNetworkMessage.getMsg;
 begin
-  if paramCount = 0 then msg := msg + YES + '#';
+  if paramCount = 0 then msg := msg + YES + TZ;
   result := msg;
 end;
 
 function TSendingNetworkMessage.getConfirmation;
 begin
-  result := key + '#' + YES + '#';
+  result := key + TZ + YES + TZ;
 end;
 
 end.

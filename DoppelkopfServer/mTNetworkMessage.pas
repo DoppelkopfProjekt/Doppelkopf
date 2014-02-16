@@ -2,7 +2,7 @@ unit mTNetworkMessage;
 
 interface
 
-uses Sysutils, Classes;
+uses Sysutils, Classes, StringKonstanten;
 
 type
 
@@ -36,13 +36,13 @@ var posEndKey, posComma, i: Integer;
 begin
   FCreationString := s;
   FParameter := TStringlist.Create;
-  posEndKey := pos('#', s);
+  posEndKey := pos(TZ, s);
   FKey := copy(s, 1, posEndKey-1);
   for i:=posEndKey to length(s) do
   begin
-    if (s[i] = '#') and (i <> length(s)) then
+    if (s[i] = TZ) and (i <> length(s)) then
     begin
-      posComma := posEx('#', s, i+1);
+      posComma := posEx(TZ, s, i+1);
       temp := copy(s, i+1, posComma-i-1);
       self.parameter.add(temp);
     end;
