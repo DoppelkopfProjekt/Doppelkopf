@@ -30237,98 +30237,89 @@ object Form1: TForm1
     ReadOnly = True
     TabOrder = 2
   end
-  object Memo3: TMemo
-    Left = 960
-    Top = 153
-    Width = 241
-    Height = 25
-    Lines.Strings = (
-      'Nachricht eingeben')
-    TabOrder = 3
-  end
   object Edit2: TEdit
-    Left = 737
+    Left = 504
     Top = 467
     Width = 121
     Height = 21
-    TabOrder = 4
+    TabOrder = 3
     Text = '45678'
   end
   object Button2: TButton
-    Left = 898
+    Left = 655
     Top = 428
     Width = 119
     Height = 25
     Caption = 'Verbinden'
-    TabOrder = 5
+    TabOrder = 4
     OnClick = Button2Click
   end
   object Button3: TButton
     Left = 448
-    Top = 324
+    Top = 335
     Width = 157
     Height = 25
     Caption = 'Ansage abgeben(am Zug)'
     Enabled = False
-    TabOrder = 6
+    TabOrder = 5
     OnClick = Button3Click
   end
   object Button4: TButton
-    Left = 864
-    Top = 391
+    Left = 655
+    Top = 399
     Width = 75
     Height = 25
     Caption = 'Name geben'
     Enabled = False
-    TabOrder = 7
+    TabOrder = 6
     OnClick = Button4Click
   end
   object Button5: TButton
-    Left = 529
-    Top = 433
-    Width = 177
-    Height = 49
+    Left = 655
+    Top = 459
+    Width = 119
+    Height = 29
     Caption = 'Verbindung trennen'
-    TabOrder = 8
+    TabOrder = 7
     OnClick = Button5Click
   end
   object Edit3: TEdit
-    Left = 737
+    Left = 504
     Top = 403
     Width = 121
     Height = 21
-    TabOrder = 9
+    TabOrder = 8
     Text = 'TESTNAME'
   end
   object Button6: TButton
-    Left = 521
-    Top = 528
-    Width = 75
+    Left = 448
+    Top = 304
+    Width = 157
     Height = 25
     Caption = 'Kartensortieren'
-    TabOrder = 10
+    TabOrder = 9
     OnClick = Button6Click
   end
   object ComboBox1: TComboBox
-    Left = 737
+    Left = 504
     Top = 430
     Width = 145
     Height = 21
     ItemHeight = 13
-    TabOrder = 11
+    TabOrder = 10
     Text = '87.67.69.82'
     Items.Strings = (
       '84.63.62.143'
       '127.0.0.1'
-      '87.67.69.82 ')
+      '87.67.69.82')
   end
   object Button7: TButton
-    Left = 521
-    Top = 398
+    Left = 448
+    Top = 670
     Width = 202
     Height = 25
     Caption = 'Verbinden'
-    TabOrder = 12
+    TabOrder = 11
     OnClick = Button7Click
   end
   object Button8: TButton
@@ -30337,8 +30328,17 @@ object Form1: TForm1
     Width = 105
     Height = 25
     Caption = 'Senden'
-    TabOrder = 13
+    TabOrder = 12
     OnClick = Button8Click
+  end
+  object Edit1: TEdit
+    Left = 960
+    Top = 154
+    Width = 250
+    Height = 24
+    TabOrder = 13
+    Text = 'Edit1'
+    OnClick = Edit1Click
   end
   object MainMenu1: TMainMenu
     Left = 696
