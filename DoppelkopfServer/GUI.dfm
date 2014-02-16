@@ -53,6 +53,7 @@ object Form1: TForm1
     Width = 75
     Height = 25
     Caption = 'Server starten'
+    Enabled = False
     TabOrder = 3
     OnClick = Button2Click
   end

@@ -66,6 +66,7 @@ begin
   if not (FServer = nil) then
     FServer.Deactivate;
   FServer.Free;
+  Button2.Enabled := true;
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
