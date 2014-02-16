@@ -10,7 +10,6 @@ type
   TForm2 = class(TForm)
     Button1: TButton;
     Edit1: TEdit;
-    Label1: TLabel;
     Image1: TImage;
     Image2: TImage;
     Image3: TImage;
@@ -21,8 +20,14 @@ type
     Image8: TImage;
     Image9: TImage;
     Image0: TImage;
-    procedure Button1Click(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
+    procedure Kartenlegen ();
+    procedure Image1StartDrag(Sender: TObject; var DragObject: TDragObject);
+    procedure Image1MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure Image1MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
   zusortierendeKarten: tStringlist;
     { Private-Deklarationen }
@@ -32,30 +37,51 @@ type
 
 var
   Form2: TForm2;
+  move:boolean;
+  pos:array [1..2] of integer;
 
 implementation
 
 {$R *.dfm}
 
-procedure TForm2.Button1Click(Sender: TObject);
+procedure tForm2.kartenlegen();
 var
 i:integer;
 begin
   for I := 0 to 9 do
   begin
-    showmessage(zusortierendeKarten[3*i+1]);
     tImage(FindComponent('image'+zusortierendeKarten[3*i+1])).Picture.loadfromfile('Karten/'+ zusortierendeKarten[3*i+2] +'.jpg');
   end;
-  end;
+end;
 
-procedure TForm2.FormCreate(Sender: TObject);
-var
-i:integer;
+procedure TForm2.Image1MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
 begin
-  for I := 0 to 9 do
+  move:=true;
+  pos[1]:=Mouse.CursorPos.X-Form2.Left-8-Button1.Left;
+  pos[2]:=Mouse.CursorPos.Y-Form2.Left-31-Button1.top;
+end;
+
+procedure TForm2.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+  if move then
   begin
-//    tImage(FindComponent(zusortierendekarten[i*2])).picture.loadfromfile('Karten/'+zusortierendekarten[i*2+1]+'.jpg');
+    Button1.left:=Mouse.CursorPos.X-Form2.Left-8-pos[1];
+    Button1.top:=Mouse.CursorPos.Y-Form2.Top-31-pos[2];
   end;
+end;
+
+procedure TForm2.Image1MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  move:=false;
+end;
+
+procedure TForm2.Image1StartDrag(Sender: TObject; var DragObject: TDragObject);
+begin
+  Button1.left:=Mouse.CursorPos.X-Form2.Left;
+  Button1.top:=Mouse.CursorPos.Y-Form2.Top;
 end;
 
 end.

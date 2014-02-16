@@ -24,6 +24,7 @@ object Form1: TForm1
     Cursor = crHandPoint
     Stretch = True
     OnClick = Image1Click
+    OnDblClick = Image2DblClick
   end
   object Label1: TLabel
     Left = 8
@@ -59,6 +60,7 @@ object Form1: TForm1
     Cursor = crHandPoint
     Stretch = True
     OnClick = Image1Click
+    OnDblClick = Image2DblClick
   end
   object Image3: TImage
     Left = 184
@@ -68,6 +70,7 @@ object Form1: TForm1
     Cursor = crHandPoint
     Stretch = True
     OnClick = Image1Click
+    OnDblClick = Image2DblClick
   end
   object Image4: TImage
     Left = 272
@@ -77,6 +80,7 @@ object Form1: TForm1
     Cursor = crHandPoint
     Stretch = True
     OnClick = Image1Click
+    OnDblClick = Image2DblClick
   end
   object Image5: TImage
     Left = 360
@@ -86,6 +90,7 @@ object Form1: TForm1
     Cursor = crHandPoint
     Stretch = True
     OnClick = Image1Click
+    OnDblClick = Image2DblClick
   end
   object Image6: TImage
     Left = 8
@@ -95,6 +100,7 @@ object Form1: TForm1
     Cursor = crHandPoint
     Stretch = True
     OnClick = Image1Click
+    OnDblClick = Image2DblClick
   end
   object Image7: TImage
     Left = 96
@@ -104,6 +110,7 @@ object Form1: TForm1
     Cursor = crHandPoint
     Stretch = True
     OnClick = Image1Click
+    OnDblClick = Image2DblClick
   end
   object Image8: TImage
     Left = 184
@@ -113,6 +120,7 @@ object Form1: TForm1
     Cursor = crHandPoint
     Stretch = True
     OnClick = Image1Click
+    OnDblClick = Image2DblClick
   end
   object Image9: TImage
     Left = 272
@@ -122,6 +130,7 @@ object Form1: TForm1
     Cursor = crHandPoint
     Stretch = True
     OnClick = Image1Click
+    OnDblClick = Image2DblClick
   end
   object Image0: TImage
     Left = 360
@@ -131,6 +140,7 @@ object Form1: TForm1
     Cursor = crHandPoint
     Stretch = True
     OnClick = Image1Click
+    OnDblClick = Image2DblClick
   end
   object Label3: TLabel
     Left = 682

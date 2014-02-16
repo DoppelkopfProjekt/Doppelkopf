@@ -72,6 +72,7 @@ type
     procedure Button6Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
     procedure Timerblub(sender: Tobject);
+    procedure Image2DblClick(Sender: TObject);
   private
     { Private-Deklarationen }
   public
@@ -186,13 +187,11 @@ end;
 
 procedure TForm1.Button6Click(Sender: TObject);
 var
-Sortieren:tStringlist;
-
-  I: Integer;
+  Sortieren:tStringlist;
 begin
-  kartensortierung:=tstringlist.Create;
   Form2.meinekarten := kartensortierung;
   Form2.ShowModal;
+  Form2.Kartenlegen;
 end;
 
 procedure TForm1.Button7Click(Sender: TObject);
@@ -406,6 +405,12 @@ end;
 procedure TForm1.Image1Click(Sender: TObject);
 begin
 Kartemarkieren((Sender as TComponent).Name[6]);
+end;
+
+procedure TForm1.Image2DblClick(Sender: TObject);
+begin
+  Kartemarkieren((Sender as TComponent).Name[6]);
+  self.Button1.Click;
 end;
 
 procedure TForm1.Kartemarkieren(Nummer:string);
