@@ -327,9 +327,12 @@ end;
 function TDoppelkopfSpiel.addPlayer(pIP, pName: string): Boolean;
 var spieler: TSpieler;
 begin
-  spieler := TSpieler.Create(pIP);
-  spieler.Name := pName;
-  result := self.FSpielerManager.addPlayer(spieler);
+  if self.FSpielerManager.playerForIP(pIP) = nil then
+  begin
+    spieler := TSpieler.Create(pIP);
+    spieler.Name := pName;
+    result := self.FSpielerManager.addPlayer(spieler);
+  end else result := false;
 end;
 
 function TDoppelkopfSpiel.countConnectedPlayer;
