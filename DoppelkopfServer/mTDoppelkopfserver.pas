@@ -2,7 +2,10 @@ unit mTDoppelkopfserver;
 
 interface
 
-uses Sysutils, mTBlatt, mTReceivingNetworkMessage, mTSendingNetworkMessage, mTKarte, Types, classes, mTServer, mTNetworkMessage, StdCtrls, mTSpieler, mTDoppelkopfSpiel, StringKonstanten, Contnrs, mTExpectedTransmissionConfirmation, ExtCtrls, dialogs;
+uses Sysutils, mTBlatt, mTReceivingNetworkMessage, mTSendingNetworkMessage,
+     mTKarte, Types, classes, mTServer, mTNetworkMessage, StdCtrls, mTSpieler,
+     mTDoppelkopfSpiel, StringKonstanten, Contnrs,
+     mTExpectedTransmissionConfirmation, ExtCtrls, dialogs;
 
 const TimeOut = 0.3;
 
@@ -201,7 +204,7 @@ begin
   msg := TSendingNetworkMessage.Create(CHAT_EMPFANGEN);
   msg.addParameter(pMessage.parameter[0], pMessage.parameter[1]);
   self.SendMessageToAll(msg.resultingMessage);
-    for i := 1 to 4 do
+    for i := 1 to self.FSpiel.countConnectedPlayer do
     begin
       self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg.resultingMessage,
                                                                                    msg.confirmationMessage,
