@@ -16,15 +16,15 @@ object Form1: TForm1
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
-  object Image1: TImage
+  object Image11: TImage
     Left = 8
-    Top = 64
+    Top = 73
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnClick = Image1Click
-    OnDblClick = Image2DblClick
+    OnClick = Image11Click
+    OnDblClick = Image12DblClick
   end
   object Label1: TLabel
     Left = 8
@@ -52,95 +52,95 @@ object Form1: TForm1
     Font.Style = [fsBold]
     ParentFont = False
   end
-  object Image2: TImage
+  object Image12: TImage
     Left = 96
-    Top = 64
+    Top = 73
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnClick = Image1Click
-    OnDblClick = Image2DblClick
+    OnClick = Image11Click
+    OnDblClick = Image12DblClick
   end
-  object Image3: TImage
+  object Image13: TImage
     Left = 184
-    Top = 64
+    Top = 73
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnClick = Image1Click
-    OnDblClick = Image2DblClick
+    OnClick = Image11Click
+    OnDblClick = Image12DblClick
   end
-  object Image4: TImage
+  object Image14: TImage
     Left = 272
-    Top = 64
+    Top = 73
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnClick = Image1Click
-    OnDblClick = Image2DblClick
+    OnClick = Image11Click
+    OnDblClick = Image12DblClick
   end
-  object Image5: TImage
+  object Image15: TImage
     Left = 360
-    Top = 64
+    Top = 73
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnClick = Image1Click
-    OnDblClick = Image2DblClick
+    OnClick = Image11Click
+    OnDblClick = Image12DblClick
   end
-  object Image6: TImage
+  object Image16: TImage
     Left = 8
-    Top = 184
+    Top = 192
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnClick = Image1Click
-    OnDblClick = Image2DblClick
+    OnClick = Image11Click
+    OnDblClick = Image12DblClick
   end
-  object Image7: TImage
+  object Image17: TImage
     Left = 96
-    Top = 184
+    Top = 192
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnClick = Image1Click
-    OnDblClick = Image2DblClick
+    OnClick = Image11Click
+    OnDblClick = Image12DblClick
   end
-  object Image8: TImage
+  object Image18: TImage
     Left = 184
-    Top = 184
+    Top = 192
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnClick = Image1Click
-    OnDblClick = Image2DblClick
+    OnClick = Image11Click
+    OnDblClick = Image12DblClick
   end
-  object Image9: TImage
+  object Image19: TImage
     Left = 272
-    Top = 184
+    Top = 192
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnClick = Image1Click
-    OnDblClick = Image2DblClick
+    OnClick = Image11Click
+    OnDblClick = Image12DblClick
   end
-  object Image0: TImage
+  object Image20: TImage
     Left = 360
-    Top = 184
+    Top = 192
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnClick = Image1Click
-    OnDblClick = Image2DblClick
+    OnClick = Image11Click
+    OnDblClick = Image12DblClick
   end
   object Label3: TLabel
     Left = 682
@@ -170,7 +170,7 @@ object Form1: TForm1
     Height = 13
     Caption = 'Spieler 3'
   end
-  object Image12: TImage
+  object Image23: TImage
     Left = 664
     Top = 88
     Width = 73
@@ -178,15 +178,15 @@ object Form1: TForm1
     Cursor = crHandPoint
     Stretch = True
   end
-  object Image11: TImage
-    Left = 559
+  object Image22: TImage
+    Left = 569
     Top = 140
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
   end
-  object Image10: TImage
+  object Image21: TImage
     Left = 664
     Top = 224
     Width = 73
@@ -194,7 +194,7 @@ object Form1: TForm1
     Cursor = crHandPoint
     Stretch = True
   end
-  object Image13: TImage
+  object Image24: TImage
     Left = 768
     Top = 140
     Width = 73

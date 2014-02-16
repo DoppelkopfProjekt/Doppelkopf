@@ -9,7 +9,6 @@ uses
 
 type
   TForm1 = class(TForm)
-    Image1: TImage;
     MainMenu1: TMainMenu;
     Spiel1: TMenuItem;
     NeuesSpiel1: TMenuItem;
@@ -25,24 +24,25 @@ type
     Memo1: TMemo;
     Memo2: TMemo;
     Memo3: TMemo;
-    Image2: TImage;
-    Image3: TImage;
-    Image4: TImage;
-    Image5: TImage;
-    Image6: TImage;
-    Image7: TImage;
-    Image8: TImage;
-    Image9: TImage;
-    Image0: TImage;
+    Image11: TImage;
+    Image12: TImage;
+    Image13: TImage;
+    Image14: TImage;
+    Image15: TImage;
+    Image16: TImage;
+    Image17: TImage;
+    Image18: TImage;
+    Image19: TImage;
+    Image20: TImage;
+    Image23: TImage;
+    Image22: TImage;
+    Image21: TImage;
+    Image24: TImage;
     Verbinden1: TMenuItem;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
-    Image12: TImage;
-    Image11: TImage;
-    Image10: TImage;
-    Image13: TImage;
     Edit2: TEdit;
     Label7: TLabel;
     Button2: TButton;
@@ -62,7 +62,7 @@ type
     procedure Button1Click(Sender: TObject);
     procedure closechatClick(Sender: TObject);
     procedure openchatClick(Sender: TObject);
-    procedure Image1Click(Sender: TObject);
+    procedure Image11Click(Sender: TObject);
     procedure Kartemarkieren(Nummer: string);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -72,7 +72,7 @@ type
     procedure Button6Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
     procedure Timerblub(sender: Tobject);
-    procedure Image2DblClick(Sender: TObject);
+    procedure Image12DblClick(Sender: TObject);
   private
     { Private-Deklarationen }
   public
@@ -82,7 +82,6 @@ var
   Form1: TForm1;
   Chatoffen: boolean;
   High: Integer;
-  chosencard: Integer;
   markiertekarte: string;
   karten_client: TStringList;
   verbunden: boolean;
@@ -132,18 +131,23 @@ procedure TForm1.FormCreate(Sender: TObject);
 var
 i:Integer;
 begin
+  kartensortierung:=tstringlist.create;
   Form1.ClientHeight:=630;
-  //Memo1.visible:=true;
   Form1.clientwidth:=960;
-  //chatoffen:=true;
   High:=226;
-  //Memo1.Visible:=false;
   alleansagenNummer:=0;
   amzug:=false;
-  for I := 0 to 13 do
-  tImage(FindComponent('image'+IntToStr(i))).Picture.loadfromfile('Karten/Back.jpg');
+  for I := 11 to 24 do
+  begin
+    tImage(FindComponent('image'+IntToStr(i))).Picture.loadfromfile('Karten/Back.jpg');
+    if i<21 then
+    begin
+      kartensortierung.add(IntTostr(i));
+      kartensortierung.add(IntTostr(i));
+      kartensortierung.add('Back');
+    end;
+  end;
   aktuelleRunde:=0;
-  kartensortierung:=tstringlist.create;
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
@@ -152,6 +156,7 @@ sendung: String;
 begin
 sendung := Karten_client[strtoint(markiertekarte)];
 ClientSocket1.Socket.SendText(KEY_STRING+KARTE_LEGEN+'#'+sendung+'#');
+Kartemarkieren('');
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -177,7 +182,7 @@ var
   i: Integer;
 begin
   clientsocket1.Close;
-  for i := 0 to 13 do
+  for i := 11 to 24 do
   begin
     tImage(FindComponent('image'+IntToStr(i))).Picture.loadfromfile('Karten/Back.jpg');
     Memo1.Lines.Clear;
@@ -253,14 +258,11 @@ else if Netzwerknachricht.messageForIndex(n).key = KARTEN then                  
       spielhatbegonnen:=true;
       Karten_client.free;
       Karten_client := Netzwerknachricht.messageForIndex(n).parameter;
-      for i := 0 to 9 do
+      for i := 11 to 20 do
         tImage(FindComponent('image'+IntToStr(i))).Picture.assign(nil);
-      for i := 0 to Karten_client.Count-1 do
+      for i := 21 to Karten_client.Count-1+21 do
       begin
         tImage(FindComponent('image'+IntToStr(i))).picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i]+'.jpg');
-        kartensortierung.add(IntTostr(i));
-        kartensortierung.add(IntTostr(i));
-        kartensortierung.add(Netzwerknachricht.messageForIndex(n).parameter[i]);
       end;
     end
 else if Netzwerknachricht.messageForIndex(n).key = VORBEHALTE_ABFRAGEN then              //Vorbehaltabfrage Hat der Spieler einen Vorbahlt?
@@ -320,14 +322,14 @@ else if Netzwerknachricht.messageForIndex(n).key = AKTUELLER_STICH then         
         for I := aktuellerunde to Netzwerknachricht.messageForIndex(n).parameter.count-1+aktuellerunde do
         begin
           if i-aktuellerunde=0 then
-          for z := 0 to 3 do
+          for z := 21 to 24 do
           begin
-            tImage(FindComponent('image'+IntToStr(z+10))).picture.loadfromfile('Karten/Back.jpg');
+            tImage(FindComponent('image'+IntToStr(z))).picture.loadfromfile('Karten/Back.jpg');
           end;
           if i>3 then
-          tImage(FindComponent('image'+IntToStr(i+10-4))).Picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i-aktuellerunde]+'.jpg')
+          tImage(FindComponent('image'+IntToStr(i+21-4))).Picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i-aktuellerunde]+'.jpg')
           else
-          tImage(FindComponent('image'+IntToStr(i+10))).Picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i-aktuellerunde]+'.jpg');
+          tImage(FindComponent('image'+IntToStr(i+21))).Picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i-aktuellerunde]+'.jpg');
         end;
       end
 else if Netzwerknachricht.messageForIndex(n).key = 'SpielerReihenfolge' then           //aktuelle Spielerreihenfolge
@@ -373,10 +375,10 @@ begin
   Label4.top:=Label4.top-High;
   Label5.top:=Label5.top-High;
   Label6.top:=Label6.top-High;
-  Image10.top:=Image10.top-High;
-  Image11.top:=Image11.top-High;
-  Image12.top:=Image12.top-High;
-  Image13.top:=Image13.top-High;
+  Image21.top:=Image21.top-High;
+  Image22.top:=Image22.top-High;
+  Image23.top:=Image23.top-High;
+  Image24.top:=Image24.top-High;
   chatoffen:=false;
   Terminalstarten1.Click;
   end;
@@ -393,23 +395,24 @@ begin
   Label4.top:=Label4.top+High;
   Label5.top:=Label5.top+High;
   Label6.top:=Label6.top+High;
-  Image10.top:=Image10.top+High;
-  Image11.top:=Image11.top+High;
-  Image12.top:=Image12.top+High;
-  Image13.top:=Image13.top+High;
+  Image21.top:=Image21.top+High;
+  Image22.top:=Image22.top+High;
+  Image23.top:=Image23.top+High;
+  Image24.top:=Image24.top+High;
   chatoffen:=true;
   Terminalstarten1.Click;
   end;
 end;
 
-procedure TForm1.Image1Click(Sender: TObject);
+procedure TForm1.Image11Click(Sender: TObject);
 begin
-Kartemarkieren((Sender as TComponent).Name[6]);
+Kartemarkieren((Sender as TComponent).Name[6]+(Sender as TComponent).Name[7]);
+sleep(20);
 end;
 
-procedure TForm1.Image2DblClick(Sender: TObject);
+procedure TForm1.Image12DblClick(Sender: TObject);
 begin
-  Kartemarkieren((Sender as TComponent).Name[6]);
+  Kartemarkieren((Sender as TComponent).Name[6]+(Sender as TComponent).Name[7]);
   self.Button1.Click;
 end;
 
@@ -420,11 +423,13 @@ begin
   sndPlaySound(pChar('Sound.wav'),SND_ASYNC);
   for I := 1 to 10 do
   begin
-    tImage(FindComponent('image'+nummer)).Height:=tImage(FindComponent('image'+nummer)).Height+2;
-    tImage(FindComponent('image'+nummer)).width:=tImage(FindComponent('image'+nummer)).width+2;
-    tImage(FindComponent('image'+nummer)).left:=tImage(FindComponent('image'+nummer)).left-1;
-    tImage(FindComponent('image'+nummer)).top:=tImage(FindComponent('image'+nummer)).top-1;
-
+    if nummer <> '' then
+    begin
+      tImage(FindComponent('image'+nummer)).Height:=tImage(FindComponent('image'+nummer)).Height+2;
+      tImage(FindComponent('image'+nummer)).width:=tImage(FindComponent('image'+nummer)).width+2;
+      tImage(FindComponent('image'+nummer)).left:=tImage(FindComponent('image'+nummer)).left-1;
+      tImage(FindComponent('image'+nummer)).top:=tImage(FindComponent('image'+nummer)).top-1;
+    end;
     if (markiertekarte <> '') then
     begin
       tImage(FindComponent('image'+markiertekarte)).Height:=tImage(FindComponent('image'+markiertekarte)).Height-2;

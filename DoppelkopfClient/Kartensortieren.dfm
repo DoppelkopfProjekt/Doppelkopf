@@ -14,88 +14,124 @@ object Form2: TForm2
   PixelsPerInch = 96
   TextHeight = 13
   object Image1: TImage
-    Left = 32
+    Left = 208
     Top = 40
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnMouseDown = Image1MouseDown
-    OnMouseMove = Image1MouseMove
-    OnMouseUp = Image1MouseUp
-    OnStartDrag = Image1StartDrag
+    OnMouseDown = Image0MouseDown
+    OnMouseMove = Image0MouseMove
+    OnMouseUp = Image0MouseUp
+    OnStartDrag = Image0StartDrag
   end
   object Image2: TImage
-    Left = 120
+    Left = 295
     Top = 40
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
+    OnMouseDown = Image0MouseDown
+    OnMouseMove = Image0MouseMove
+    OnMouseUp = Image0MouseUp
+    OnStartDrag = Image0StartDrag
   end
   object Image3: TImage
-    Left = 208
+    Left = 383
     Top = 40
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
+    OnMouseDown = Image0MouseDown
+    OnMouseMove = Image0MouseMove
+    OnMouseUp = Image0MouseUp
+    OnStartDrag = Image0StartDrag
   end
   object Image4: TImage
-    Left = 296
+    Left = 472
     Top = 40
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
+    OnMouseDown = Image0MouseDown
+    OnMouseMove = Image0MouseMove
+    OnMouseUp = Image0MouseUp
+    OnStartDrag = Image0StartDrag
   end
   object Image5: TImage
-    Left = 384
+    Left = 561
     Top = 40
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
+    OnMouseDown = Image0MouseDown
+    OnMouseMove = Image0MouseMove
+    OnMouseUp = Image0MouseUp
+    OnStartDrag = Image0StartDrag
   end
   object Image6: TImage
-    Left = 32
-    Top = 160
+    Left = 208
+    Top = 168
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
+    OnMouseDown = Image0MouseDown
+    OnMouseMove = Image0MouseMove
+    OnMouseUp = Image0MouseUp
+    OnStartDrag = Image0StartDrag
   end
   object Image7: TImage
-    Left = 120
-    Top = 160
+    Left = 295
+    Top = 168
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
+    OnMouseDown = Image0MouseDown
+    OnMouseMove = Image0MouseMove
+    OnMouseUp = Image0MouseUp
+    OnStartDrag = Image0StartDrag
   end
   object Image8: TImage
-    Left = 208
-    Top = 160
+    Left = 383
+    Top = 168
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
+    OnMouseDown = Image0MouseDown
+    OnMouseMove = Image0MouseMove
+    OnMouseUp = Image0MouseUp
+    OnStartDrag = Image0StartDrag
   end
   object Image9: TImage
-    Left = 296
-    Top = 160
+    Left = 472
+    Top = 168
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
+    OnMouseDown = Image0MouseDown
+    OnMouseMove = Image0MouseMove
+    OnMouseUp = Image0MouseUp
+    OnStartDrag = Image0StartDrag
   end
   object Image0: TImage
-    Left = 384
-    Top = 160
+    Left = 559
+    Top = 168
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
+    OnMouseDown = Image0MouseDown
+    OnMouseMove = Image0MouseMove
+    OnMouseUp = Image0MouseUp
+    OnStartDrag = Image0StartDrag
   end
   object Button1: TButton
     Left = 368
@@ -104,6 +140,7 @@ object Form2: TForm2
     Height = 25
     Caption = 'Button1'
     TabOrder = 0
+    OnClick = Button1Click
   end
   object Edit1: TEdit
     Left = 152
