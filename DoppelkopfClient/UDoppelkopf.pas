@@ -52,10 +52,10 @@ type
     Clientsocket1 : tClientsocket;
     Edit3: TEdit;
     Button6: TButton;
-    Edit4: TEdit;
     ComboBox1: TComboBox;
     Button7: TButton;
     Timer1: TTimer;
+    Button8: TButton;
     procedure Terminalstarten1Click(Sender: TObject);
     procedure Konsoleschlieen1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -73,32 +73,29 @@ type
     procedure Button7Click(Sender: TObject);
     procedure Timerblub(sender: Tobject);
     procedure Image12DblClick(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
   private
     { Private-Deklarationen }
   public
   end;
 
 var
-  Form1: TForm1;
+  Form1: TForm1;   
   Chatoffen: boolean;
-  High: Integer;
   markiertekarte: string;
   karten_client: TStringList;
   verbunden: boolean;
   Vorbehalte_Art, Vorbehaltgeber: String;
   Netzwerknachricht: tReceivingNetworkmessage;
-  nameistangegeben: Boolean;
-  spielhatbegonnen: boolean;
   allespieler: Array  [0..3] of String;
   alleansagenAnsage: Array of String [10];
   alleansagenSpieler: Array of String [10];
   alleansagenNummer: Integer;
-  amzug:boolean;
-  Vorbehaltabfrage_geglueckt, vorbehaltangemeldet: Boolean;
   kartensortierung: tStringList;
   fTimer:Ttimer;
   spielerreihenfolge: Array [0..3] of String;
   aktuellerunde: Integer;
+  spielhatbegonnen, amzug:boolean;
 implementation
 
 uses Verbinden;
@@ -131,10 +128,10 @@ procedure TForm1.FormCreate(Sender: TObject);
 var
 i:Integer;
 begin
+  verbunden:=false;
   kartensortierung:=tstringlist.create;
   Form1.ClientHeight:=630;
   Form1.clientwidth:=960;
-  High:=226;
   alleansagenNummer:=0;
   amzug:=false;
   for I := 11 to 24 do
@@ -155,7 +152,7 @@ var
 sendung: String;
 begin
 sendung := Karten_client[strtoint(markiertekarte)];
-ClientSocket1.Socket.SendText(KEY_STRING+KARTE_LEGEN+'#'+sendung+'#');
+ClientSocket1.Socket.SendText(KEY_STRING+KARTE_LEGEN+TZ+sendung+TZ);
 Kartemarkieren('');
 end;
 
@@ -169,12 +166,12 @@ end;
 
 procedure TForm1.Button3Click(Sender: TObject);
 begin
-  ClientSocket1.Socket.SendText(KEY_STRING+ANSAGE + '#'+inputbox('neue Ansage', ANSAGE_RE + ', ' + ANSAGE_KONTRA + ', ' + ANSAGE_KEINENEUN  + ', ' +  ANSAGE_KEINESECHS  + ', ' +  ANSAGE_KEINEDREI  + ', ' + ANSAGE_SCHWARZ,'')+ '#');
+  ClientSocket1.Socket.SendText(KEY_STRING+ANSAGE + TZ+inputbox('neue Ansage', ANSAGE_RE + ', ' + ANSAGE_KONTRA + ', ' + ANSAGE_KEINENEUN  + ', ' +  ANSAGE_KEINESECHS  + ', ' +  ANSAGE_KEINEDREI  + ', ' + ANSAGE_SCHWARZ,'')+ TZ);
 end;
 
 procedure TForm1.Button4Click(Sender: TObject);
 begin
-  ClientSocket1.Socket.SendText(KEY_STRING+CONNECT + '#' + Edit3.Text +'#');
+  ClientSocket1.Socket.SendText(KEY_STRING+CONNECT + TZ + Edit3.Text +TZ);
 end;
 
 procedure TForm1.Button5Click(Sender: TObject);
@@ -188,6 +185,7 @@ begin
     Memo1.Lines.Clear;
   end;
   aktuelleRunde:=0;
+  verbunden:=false
 end;
 
 procedure TForm1.Button6Click(Sender: TObject);
@@ -212,9 +210,14 @@ begin
 
 end;
 
+procedure TForm1.Button8Click(Sender: TObject);
+begin
+  ClientSocket1.Socket.SendText(KEY_STRING+CHAT_SENDEN+TZ+Edit3.Text+TZ);
+end;
+
 procedure tform1.Timerblub(sender: Tobject);
 begin
-  ClientSocket1.Socket.SendText(KEY_STRING+CONNECT + '#' + Form3.Nachricht[2] +'#');
+  ClientSocket1.Socket.SendText(KEY_STRING+CONNECT + TZ + Form3.Nachricht[2] +TZ);
   ftimer.enabled:=false;
 end;
 
@@ -235,17 +238,17 @@ end;
 memo1.lines.add('// '+Netzwerknachricht.messageForIndex(n).key+';'+para);
 if Netzwerknachricht.messageForIndex(n).key = CONNECT then                             //connect Verbindnug erstellt
     begin
-      if Netzwerknachricht.messageForIndex(n).parameter[0] = 'YES' then
+      if Netzwerknachricht.messageForIndex(n).parameter[0] = YES then
       begin
         verbunden:=true;
         Memo1.Lines.add('zum Server verbunden');
       end
-      else if Netzwerknachricht.messageForIndex(n).parameter[0] = 'NO' then
+      else if Netzwerknachricht.messageForIndex(n).parameter[0] = NO then
         Memo1.Lines.add('Server ist voll');
     end
 else if Netzwerknachricht.messageForIndex(n).key = SPIELBEGINN then                          //Spielbeginn Name der Spieler werden geschickt
     begin
-      ClientSocket1.Socket.SendText(KEY_STRING+SPIELBEGINN+ '#YES#');
+      ClientSocket1.Socket.SendText(KEY_STRING+SPIELBEGINN+ TZ+YES+TZ);
         for i := 0 to 3  do
         begin
           allespieler[i]:=Netzwerknachricht.messageForIndex(n).parameter[i];
@@ -254,7 +257,7 @@ else if Netzwerknachricht.messageForIndex(n).key = SPIELBEGINN then             
     end
 else if Netzwerknachricht.messageForIndex(n).key = KARTEN then                        //Karten Spieler bekommt die Karten geschickt
     begin
-      ClientSocket1.Socket.SendText(KEY_STRING+KARTEN+'#YES#');
+      ClientSocket1.Socket.SendText(KEY_STRING+KARTEN+TZ+YES+TZ);
       spielhatbegonnen:=true;
       Karten_client.free;
       Karten_client := Netzwerknachricht.messageForIndex(n).parameter;
@@ -267,15 +270,14 @@ else if Netzwerknachricht.messageForIndex(n).key = KARTEN then                  
     end
 else if Netzwerknachricht.messageForIndex(n).key = VORBEHALTE_ABFRAGEN then              //Vorbehaltabfrage Hat der Spieler einen Vorbahlt?
     begin
-      ClientSocket1.Socket.SendText(KEY_STRING+VORBEHALTE_ABFRAGEN + '#Yes#');
-      ClientSocket1.Socket.SendText(KEY_STRING+VORBEHALT_ANMELDEN+ '#nichts#'); // inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+'#');
+      ClientSocket1.Socket.SendText(KEY_STRING+VORBEHALTE_ABFRAGEN + TZ+YES+TZ);
+      ClientSocket1.Socket.SendText(KEY_STRING+VORBEHALT_ANMELDEN+ TZ+VORBEHALT_NICHTS+TZ); // inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+TZ);
     end
 else if Netzwerknachricht.messageForIndex(n).key = VORBEHALT_ANMELDEN then
     begin
       if Netzwerknachricht.messageForIndex(n).parameter[0] = YES then
-        vorbehaltangemeldet:=true;
       //if Netzwerknachricht.parameter[0] = NO then
-      //  ClientSocket1.Socket.SendText(VORBEHALT_ANMELDEN +'#' + inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+'#');
+      //  ClientSocket1.Socket.SendText(VORBEHALT_ANMELDEN +TZ + inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+TZ);
     end
 else if Netzwerknachricht.messageForIndex(n).key = SOLO then                     //Vorbehalt Ein Spieler hat einen gültigen Vorbehalt gelegt
     begin
@@ -284,41 +286,41 @@ else if Netzwerknachricht.messageForIndex(n).key = SOLO then                    
         Vorbehalte_Art := Netzwerknachricht.messageForIndex(n).parameter[1];
         Vorbehaltgeber := Netzwerknachricht.messageForIndex(n).parameter[0];
       end;
-      ClientSocket1.Socket.SendText(KEY_STRING+SOLO+ '#YES#');
+      ClientSocket1.Socket.SendText(KEY_STRING+SOLO+ TZ+YES+TZ);
     end
 else if Netzwerknachricht.messageForIndex(n).key = WELCHE_KARTE then            //Welche Karte legen Spieler bekommt die Anweisung, dass er am Zug ist
     begin
-      ClientSocket1.Socket.SendText(KEY_STRING+WELCHE_KARTE+ '#YES#');                        //hier mit YES antworten
+      ClientSocket1.Socket.SendText(KEY_STRING+WELCHE_KARTE+ TZ+YES+TZ);                        //hier mit YES antworten
       Memo1.Lines.add('WELCHE KARTEN SOLL GESPIELT WERDEN?');
       amzug:=true;
     end
 else if Netzwerknachricht.messageForIndex(n).key = ANSAGE_GEMACHT then                 //Ansageanfrage
     begin
-      if Netzwerknachricht.messageForIndex(n).parameter[0] = 'YES' then showmessage ('deine Ansage ist geglückt');
-      if Netzwerknachricht.messageForIndex(n).parameter[0] = 'NO' then showmessage ('deine Ansage ist fehlgeschlagen')
+      if Netzwerknachricht.messageForIndex(n).parameter[0] = YES then showmessage ('deine Ansage ist geglückt');
+      if Netzwerknachricht.messageForIndex(n).parameter[0] = NO then showmessage ('deine Ansage ist fehlgeschlagen')
       else
       begin
         alleansagenNummer:=alleansagenNummer+1;
         alleansagenAnsage[alleansagenNummer] := Netzwerknachricht.messageForIndex(n).parameter[1];
         alleansagenSpieler[alleansagenNummer] := Netzwerknachricht.messageForIndex(n).parameter[0];
         Memo1.lines.add('Spieler '+ alleansagenSpieler[alleansagenNummer] + ' hat folgende Ansage gemacht: ' + alleansagenAnsage[alleansagenNummer]);
-        ClientSocket1.Socket.SendText(KEY_STRING+ANSAGE_GEMACHT + '#YES#')
+        ClientSocket1.Socket.SendText(KEY_STRING+ANSAGE_GEMACHT + TZ+YES+TZ)
       end;
     end
 else if Netzwerknachricht.messageForIndex(n).key = KARTE_LEGEN then           //welche Karten testen gelegte Karte wird getestet
       begin
-        if Netzwerknachricht.messageForIndex(n).parameter[0] = 'YES' then
+        if Netzwerknachricht.messageForIndex(n).parameter[0] = YES then
         begin
           Memo1.Lines.add ('Karte erfolgreich gelegt');
           tImage(FindComponent('image'+markiertekarte)).Picture.loadfromfile('Karten/Back.jpg');
           amzug:=false
         end;
-        if Netzwerknachricht.messageForIndex(n).parameter[0] = 'NO' then
+        if Netzwerknachricht.messageForIndex(n).parameter[0] = NO then
           showmessage('neue Karte legen');
       end
 else if Netzwerknachricht.messageForIndex(n).key = AKTUELLER_STICH then               //aktueller Stich gibt den kompletten momentanen Stich
       begin
-        ClientSocket1.Socket.SendText(KEY_STRING+AKTUELLER_STICH+'#YES#');
+        ClientSocket1.Socket.SendText(KEY_STRING+AKTUELLER_STICH+TZ+YES+TZ);
         for I := aktuellerunde to Netzwerknachricht.messageForIndex(n).parameter.count-1+aktuellerunde do
         begin
           if i-aktuellerunde=0 then
@@ -334,7 +336,7 @@ else if Netzwerknachricht.messageForIndex(n).key = AKTUELLER_STICH then         
       end
 else if Netzwerknachricht.messageForIndex(n).key = 'SpielerReihenfolge' then           //aktuelle Spielerreihenfolge
       begin
-        ClientSocket1.Socket.SendText(KEY_STRING+SPIELER_REIHENFOLGE+'#YES#');
+        ClientSocket1.Socket.SendText(KEY_STRING+SPIELER_REIHENFOLGE+TZ+YES+TZ);
         for I := 0 to 3 do
         begin
           spielerreihenfolge[i]:= Netzwerknachricht.messageForIndex(n).parameter[i];
@@ -346,13 +348,13 @@ else if Netzwerknachricht.messageForIndex(n).key = 'SpielerReihenfolge' then    
       end
 else if Netzwerknachricht.messageForIndex(n).key = GEWINNER_STICH then               //Gewinnerstich
       begin
-        ClientSocket1.Socket.SendText(KEY_STRING+GEWINNER_STICH+'#YES#');
+        ClientSocket1.Socket.SendText(KEY_STRING+GEWINNER_STICH+TZ+YES+TZ);
         aktuelleRunde:=0;
         Memo1.lines.Add(Netzwerknachricht.messageForIndex(n).parameter[0]);
       end
 else if Netzwerknachricht.messageForIndex(n).key = GEWINNER_SPIEL then                      //Gewinner Sieger werden genannt
       begin
-        ClientSocket1.Socket.SendText(KEY_STRING+GEWINNER_SPIEL+'#YES#');
+        ClientSocket1.Socket.SendText(KEY_STRING+GEWINNER_SPIEL+TZ+YES+TZ);
         Memo1.Lines.add('Team: ' + Netzwerknachricht.messageForIndex(n).parameter[0] + ' hat ' + Netzwerknachricht.messageForIndex(n).parameter[1] + ' Punkte.');
       end
 else if Netzwerknachricht.messageForIndex(n).key = 'aktueller Punktestand' then         //aktueller Punktestand Liste mit den Punkten der vielen Spieler wird gegeben
@@ -360,48 +362,27 @@ else if Netzwerknachricht.messageForIndex(n).key = 'aktueller Punktestand' then 
         ClientSocket1.Socket.SendText(KEY_STRING+'Gewinner, YES');
         for I := 0 to 3 do
           Memo1.Lines.add(Netzwerknachricht.messageForIndex(n).parameter[2*i] + ' hat ' + Netzwerknachricht.messageForIndex(n).parameter[2*i+1] + ' Punkte.');
+      end
+else if Netzwerknachricht.messageForIndex(n).key = CHAT_EMPFANGEN then
+      begin
+        Memo2.Lines.add(Netzwerknachricht.messageForIndex(n).parameter[0]+': '+Netzwerknachricht.messageForIndex(n).parameter[1]);
       end;
+     
 end;
 end;
 
 procedure TForm1.closechatClick(Sender: TObject);
 begin
   if chatoffen=true then
-  begin
-  Memo2.Visible:=false;
-  Memo3.Visible:=false;
-  Label2.top:=Label2.top-High;
-  Label3.top:=Label3.top-High;
-  Label4.top:=Label4.top-High;
-  Label5.top:=Label5.top-High;
-  Label6.top:=Label6.top-High;
-  Image21.top:=Image21.top-High;
-  Image22.top:=Image22.top-High;
-  Image23.top:=Image23.top-High;
-  Image24.top:=Image24.top-High;
-  chatoffen:=false;
-  Terminalstarten1.Click;
-  end;
+    Form1.Width:=960;
+  chatoffen:=false
 end;
 
 procedure TForm1.openchatClick(Sender: TObject);
 begin
   if chatoffen=false then
-  begin
-  Memo2.Visible:=true;
-  Memo3.Visible:=true;
-  Label2.top:=Label2.top+High;
-  Label3.top:=Label3.top+High;
-  Label4.top:=Label4.top+High;
-  Label5.top:=Label5.top+High;
-  Label6.top:=Label6.top+High;
-  Image21.top:=Image21.top+High;
-  Image22.top:=Image22.top+High;
-  Image23.top:=Image23.top+High;
-  Image24.top:=Image24.top+High;
+    Form1.Width:=1335;
   chatoffen:=true;
-  Terminalstarten1.Click;
-  end;
 end;
 
 procedure TForm1.Image11Click(Sender: TObject);

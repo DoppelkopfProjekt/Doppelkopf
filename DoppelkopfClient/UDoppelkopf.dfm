@@ -3,8 +3,8 @@ object Form1: TForm1
   Top = 0
   BorderStyle = bsSingle
   Caption = 'Form1'
-  ClientHeight = 715
-  ClientWidth = 1009
+  ClientHeight = 735
+  ClientWidth = 1335
   Color = clActiveCaption
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -240,18 +240,17 @@ object Form1: TForm1
     TabOrder = 1
   end
   object Memo2: TMemo
-    Left = 8
-    Top = 575
-    Width = 417
+    Left = 960
+    Top = 26
+    Width = 361
     Height = 113
-    Enabled = False
+    ReadOnly = True
     TabOrder = 2
-    Visible = False
   end
   object Memo3: TMemo
-    Left = 8
-    Top = 711
-    Width = 417
+    Left = 960
+    Top = 153
+    Width = 241
     Height = 25
     Lines.Strings = (
       'Nachricht eingeben')
@@ -259,7 +258,7 @@ object Form1: TForm1
   end
   object Edit2: TEdit
     Left = 521
-    Top = 599
+    Top = 667
     Width = 121
     Height = 21
     TabOrder = 4
@@ -267,7 +266,7 @@ object Form1: TForm1
   end
   object Button2: TButton
     Left = 682
-    Top = 560
+    Top = 628
     Width = 119
     Height = 25
     Caption = 'Verbinden'
@@ -286,7 +285,7 @@ object Form1: TForm1
   end
   object Button4: TButton
     Left = 648
-    Top = 523
+    Top = 591
     Width = 75
     Height = 25
     Caption = 'Name geben'
@@ -295,8 +294,8 @@ object Form1: TForm1
     OnClick = Button4Click
   end
   object Button5: TButton
-    Left = 664
-    Top = 599
+    Left = 521
+    Top = 439
     Width = 177
     Height = 25
     Caption = 'Verbindung trennen'
@@ -305,36 +304,28 @@ object Form1: TForm1
   end
   object Edit3: TEdit
     Left = 521
-    Top = 527
+    Top = 595
     Width = 121
     Height = 21
     TabOrder = 9
     Text = 'TESTNAME'
   end
   object Button6: TButton
-    Left = 866
-    Top = 384
+    Left = 521
+    Top = 488
     Width = 75
     Height = 25
     Caption = 'Kartensortieren'
     TabOrder = 10
     OnClick = Button6Click
   end
-  object Edit4: TEdit
-    Left = 866
-    Top = 429
-    Width = 121
-    Height = 21
-    TabOrder = 11
-    Text = 'Edit4'
-  end
   object ComboBox1: TComboBox
     Left = 521
-    Top = 562
+    Top = 630
     Width = 145
     Height = 21
     ItemHeight = 13
-    TabOrder = 12
+    TabOrder = 11
     Text = '84.63.62.143'
     Items.Strings = (
       '84.63.62.143'
@@ -347,8 +338,17 @@ object Form1: TForm1
     Width = 202
     Height = 25
     Caption = 'Verbinden'
-    TabOrder = 13
+    TabOrder = 12
     OnClick = Button7Click
+  end
+  object Button8: TButton
+    Left = 1216
+    Top = 154
+    Width = 105
+    Height = 25
+    Caption = 'Senden'
+    TabOrder = 13
+    OnClick = Button8Click
   end
   object MainMenu1: TMainMenu
     Left = 288
