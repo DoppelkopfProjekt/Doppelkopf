@@ -16,7 +16,7 @@ private
   function getAnzahlTrumpfInBlatt: Integer;
   function istFehlfarbeInBlatt(pFarbe: dkFarbe): Boolean;
   function getAnzahlFehlfarbeInBlatt(pFarbe: dkFarbe): Integer;
-  function bestimmePartei: dkPartei;
+  procedure bestimmePartei: dkPartei;
 public
   constructor Create;
   function getKarteMitCode(pCode: string): TKarte;
@@ -57,14 +57,14 @@ begin
   end;
 end;
 
-function TBlatt.bestimmePartei;
+procedure TBlatt.bestimmePartei;
 var i: Integer;
 begin
-  result := dkKontra;
+  self.FPartei := dkKontra;
   //Partei muss bestimmt werden, wenn alle Karten da sind
   for i := 0 to 9 do
   begin
-    if TKarte(FKarten[i]).Code = 'KRD' then result := dkRe;
+    if TKarte(FKarten[i]).Code = 'KRD' then self.FPartei := dkRe;
   end;
 end;
 
