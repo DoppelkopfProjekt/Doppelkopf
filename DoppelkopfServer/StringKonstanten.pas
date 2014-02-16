@@ -66,6 +66,9 @@ const SPIELBEGINN = 'Spielbeginn';
       DELAY = 100;
       KEY_STRING = '<Key>';
       TZ = '#';
+
+      CHAT_SENDEN = 'ChatSenden';
+      CHAT_EMPFANGEN = 'Chat';
       //ANSAGE_KEINE = 'No';
 
 implementation

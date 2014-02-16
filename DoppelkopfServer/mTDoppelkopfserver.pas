@@ -31,6 +31,7 @@ private
   procedure processSolo (pClientIP: string; pMessage: TNetworkMessage);
   procedure processKarteLegen (pClientIP: string; pMessage: TNetworkMessage);
   procedure processAnsage (pClientIP: string; pMessage: TNetworkMessage);
+  procedure processChatSenden (pClientIP: string; pMessage: TNetworkMessage);
 
   procedure processConfirmation(pConfirmationMessage: string; pSenderIP: string);
   procedure processTransmissionConfirmations(sender: TObject);
@@ -161,6 +162,10 @@ begin
   begin
     self.processKarteLegen(pSenderIP, msg);
   end;
+  if (msg.key = CHAT_SENDEN) then
+  begin
+    self.processChatSenden(pSenderIP, msg);
+  end;
 end;
 
 procedure TDoppelkopfServer.ProcessMessage(pMessage: string; pSenderIP: string);
@@ -192,6 +197,21 @@ begin
                                                                                msg.confirmationMessage,
                                                                                FSpiel.playerIPForIndex(pIndex)));
   self.sendMessage(msg.resultingMessage, self.FSpiel.playerIPForIndex(pIndex));
+end;
+
+procedure TDoppelkopfServer.processChatSenden(pClientIP: string; pMessage: TNetworkMessage);
+var msg: TSendingNetworkMessage;
+    i: Integer;
+begin
+  msg := TSendingNetworkMessage.Create(CHAT_EMPFANGEN);
+  msg.addParameter(pMessage.parameter[0], pMessage.parameter[1]);
+  self.SendMessageToAll(msg.resultingMessage);
+    for i := 1 to 4 do
+    begin
+      self.FTransmissionConfirmations.Add(TExpectedTransmissionConfirmation.Create(msg.resultingMessage,
+                                                                                   msg.confirmationMessage,
+                                                                                   FSpiel.PlayerIPForIndex(i)))
+    end;
 end;
 
 
@@ -439,7 +459,5 @@ begin
     if FSpiel.PlayerForIndex(i).Partei = siegerPartei then result.Add(FSpiel.PlayerNameForIndex(i));
   end;
 end;
-
-
 
 end.
