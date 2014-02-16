@@ -2,8 +2,8 @@ object Form2: TForm2
   Left = 0
   Top = 0
   Caption = 'Form2'
-  ClientHeight = 523
-  ClientWidth = 829
+  ClientHeight = 671
+  ClientWidth = 943
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,141 +13,179 @@ object Form2: TForm2
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
-  object Image1: TImage
-    Left = 208
-    Top = 40
+  object Image11: TImage
+    Left = 24
+    Top = 24
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnMouseDown = Image0MouseDown
-    OnMouseMove = Image0MouseMove
-    OnMouseUp = Image0MouseUp
-    OnStartDrag = Image0StartDrag
+    OnMouseDown = Image20MouseDown
+    OnMouseMove = Image20MouseMove
+    OnMouseUp = Image20MouseUp
+    OnStartDrag = Image20StartDrag
   end
-  object Image2: TImage
-    Left = 295
-    Top = 40
+  object Image12: TImage
+    Left = 111
+    Top = 24
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnMouseDown = Image0MouseDown
-    OnMouseMove = Image0MouseMove
-    OnMouseUp = Image0MouseUp
-    OnStartDrag = Image0StartDrag
+    OnMouseDown = Image20MouseDown
+    OnMouseMove = Image20MouseMove
+    OnMouseUp = Image20MouseUp
+    OnStartDrag = Image20StartDrag
   end
-  object Image3: TImage
-    Left = 383
-    Top = 40
+  object Image13: TImage
+    Left = 199
+    Top = 24
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnMouseDown = Image0MouseDown
-    OnMouseMove = Image0MouseMove
-    OnMouseUp = Image0MouseUp
-    OnStartDrag = Image0StartDrag
+    OnMouseDown = Image20MouseDown
+    OnMouseMove = Image20MouseMove
+    OnMouseUp = Image20MouseUp
+    OnStartDrag = Image20StartDrag
   end
-  object Image4: TImage
-    Left = 472
-    Top = 40
+  object Image14: TImage
+    Left = 288
+    Top = 24
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnMouseDown = Image0MouseDown
-    OnMouseMove = Image0MouseMove
-    OnMouseUp = Image0MouseUp
-    OnStartDrag = Image0StartDrag
+    OnMouseDown = Image20MouseDown
+    OnMouseMove = Image20MouseMove
+    OnMouseUp = Image20MouseUp
+    OnStartDrag = Image20StartDrag
   end
-  object Image5: TImage
-    Left = 561
-    Top = 40
+  object Image15: TImage
+    Left = 377
+    Top = 24
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnMouseDown = Image0MouseDown
-    OnMouseMove = Image0MouseMove
-    OnMouseUp = Image0MouseUp
-    OnStartDrag = Image0StartDrag
+    OnMouseDown = Image20MouseDown
+    OnMouseMove = Image20MouseMove
+    OnMouseUp = Image20MouseUp
+    OnStartDrag = Image20StartDrag
   end
-  object Image6: TImage
-    Left = 208
+  object Image16: TImage
+    Left = 24
     Top = 168
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnMouseDown = Image0MouseDown
-    OnMouseMove = Image0MouseMove
-    OnMouseUp = Image0MouseUp
-    OnStartDrag = Image0StartDrag
+    OnMouseDown = Image20MouseDown
+    OnMouseMove = Image20MouseMove
+    OnMouseUp = Image20MouseUp
+    OnStartDrag = Image20StartDrag
   end
-  object Image7: TImage
-    Left = 295
+  object Image17: TImage
+    Left = 111
     Top = 168
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnMouseDown = Image0MouseDown
-    OnMouseMove = Image0MouseMove
-    OnMouseUp = Image0MouseUp
-    OnStartDrag = Image0StartDrag
+    OnMouseDown = Image20MouseDown
+    OnMouseMove = Image20MouseMove
+    OnMouseUp = Image20MouseUp
+    OnStartDrag = Image20StartDrag
   end
-  object Image8: TImage
-    Left = 383
+  object Image18: TImage
+    Left = 199
     Top = 168
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnMouseDown = Image0MouseDown
-    OnMouseMove = Image0MouseMove
-    OnMouseUp = Image0MouseUp
-    OnStartDrag = Image0StartDrag
+    OnMouseDown = Image20MouseDown
+    OnMouseMove = Image20MouseMove
+    OnMouseUp = Image20MouseUp
+    OnStartDrag = Image20StartDrag
   end
-  object Image9: TImage
-    Left = 472
+  object Image19: TImage
+    Left = 288
     Top = 168
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnMouseDown = Image0MouseDown
-    OnMouseMove = Image0MouseMove
-    OnMouseUp = Image0MouseUp
-    OnStartDrag = Image0StartDrag
+    OnMouseDown = Image20MouseDown
+    OnMouseMove = Image20MouseMove
+    OnMouseUp = Image20MouseUp
+    OnStartDrag = Image20StartDrag
   end
-  object Image0: TImage
-    Left = 559
+  object Image20: TImage
+    Left = 375
     Top = 168
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
-    OnMouseDown = Image0MouseDown
-    OnMouseMove = Image0MouseMove
-    OnMouseUp = Image0MouseUp
-    OnStartDrag = Image0StartDrag
+    OnMouseDown = Image20MouseDown
+    OnMouseMove = Image20MouseMove
+    OnMouseUp = Image20MouseUp
+    OnStartDrag = Image20StartDrag
   end
   object Button1: TButton
-    Left = 368
-    Top = 342
-    Width = 75
+    Left = 24
+    Top = 302
+    Width = 424
     Height = 25
-    Caption = 'Button1'
+    Caption = 'Sortieren'
     TabOrder = 0
     OnClick = Button1Click
   end
-  object Edit1: TEdit
-    Left = 152
-    Top = 344
-    Width = 121
-    Height = 21
+  object ProgressBar1: TProgressBar
+    Left = 8
+    Top = 150
+    Width = 426
+    Height = 17
+    Position = 100
     TabOrder = 1
-    Text = 'Edit1'
+  end
+  object Memo1: TMemo
+    Left = 688
+    Top = 140
+    Width = 185
+    Height = 89
+    Lines.Strings = (
+      'Memo1')
+    TabOrder = 2
+  end
+  object Memo2: TMemo
+    Left = 688
+    Top = 272
+    Width = 185
+    Height = 89
+    Lines.Strings = (
+      'Memo2')
+    TabOrder = 3
+  end
+  object Memo3: TMemo
+    Left = 400
+    Top = 440
+    Width = 185
+    Height = 89
+    Lines.Strings = (
+      ''
+      ''
+      '')
+    TabOrder = 4
+  end
+  object Button2: TButton
+    Left = 184
+    Top = 416
+    Width = 75
+    Height = 25
+    Caption = 'schlie'#223'en'
+    TabOrder = 5
+    OnClick = Button2Click
   end
 end

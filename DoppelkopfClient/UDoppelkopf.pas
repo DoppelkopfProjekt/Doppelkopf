@@ -96,6 +96,7 @@ var
   spielerreihenfolge: Array [0..3] of String;
   aktuellerunde: Integer;
   spielhatbegonnen, amzug:boolean;
+  Name:String;
 implementation
 
 uses Verbinden;
@@ -134,15 +135,25 @@ begin
   Form1.clientwidth:=960;
   alleansagenNummer:=0;
   amzug:=false;
+
+  //für testzwecke
+  (*karten_client:=tstringlist.create;
+  karten_client.add('KAK');
+  karten_client.add('KAA');
+  karten_client.add('KAD');
+  karten_client.add('HEK');
+  karten_client.add('HEA');
+  karten_client.add('HE10');
+  karten_client.add('KA10');
+  karten_client.add('PIK');
+  karten_client.add('KRD');
+  karten_client.add('KAB');
+  for I := 11 to 20 do
+    tImage(FindComponent('image'+IntToStr(i))).Picture.loadfromfile('Karten/'+karten_client[i-11]+'.jpg');
+    *)
   for I := 11 to 24 do
   begin
     tImage(FindComponent('image'+IntToStr(i))).Picture.loadfromfile('Karten/Back.jpg');
-    if i<21 then
-    begin
-      kartensortierung.add(IntTostr(i));
-      kartensortierung.add(IntTostr(i));
-      kartensortierung.add('Back');
-    end;
   end;
   aktuelleRunde:=0;
 end;
@@ -158,7 +169,7 @@ end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
-  ClientSocket1.Host:=Combobox1.Text; //Die IP oder der Hostname wird festgelegt
+  ClientSocket1.Host:=Combobox1.text; //Die IP oder der Hostname wird festgelegt
   ClientSocket1.Port:=StrToInt(Edit2.Text); //Der Port wird festgelegt
   ClientSocket1.Open; //Verbindung zum Server wird hergestellt
   Button4.Enabled:=true;
@@ -171,7 +182,8 @@ end;
 
 procedure TForm1.Button4Click(Sender: TObject);
 begin
-  ClientSocket1.Socket.SendText(KEY_STRING+CONNECT + TZ + Edit3.Text +TZ);
+  name:=edit3.Text;
+  ClientSocket1.Socket.SendText(KEY_STRING+CONNECT + TZ + name +TZ);
 end;
 
 procedure TForm1.Button5Click(Sender: TObject);
@@ -185,16 +197,32 @@ begin
     Memo1.Lines.Clear;
   end;
   aktuelleRunde:=0;
-  verbunden:=false
+  verbunden:=false;
+  Memo2.Lines.Clear;
 end;
 
 procedure TForm1.Button6Click(Sender: TObject);
 var
-  Sortieren:tStringlist;
+  Bild: tImage;
+  i: Integer;
 begin
+  Kartemarkieren('');
+  for i := 11 to 20 do
+  begin
+    kartensortierung.Add(inttostr(i));
+    kartensortierung.Add(inttostr(tImage(FindComponent('image'+IntToStr(i))).top));
+    kartensortierung.Add(inttostr(tImage(FindComponent('image'+IntToStr(i))).left));
+    kartensortierung.add(karten_client[i-11]);
+  end;
   Form2.meinekarten := kartensortierung;
-  Form2.ShowModal;
   Form2.Kartenlegen;
+  Form2.ShowModal;
+  for I := 0 to 9 do
+  begin
+    tImage(FindComponent('image'+Form2.meinekarten[4*i+0])).top:=StrToInt(form2.meinekarten[4*i+1]);
+    tImage(FindComponent('image'+Form2.meinekarten[4*i+0])).left:=StrToInt(form2.meinekarten[4*i+2]);
+    tImage(FindComponent('image'+Form2.meinekarten[4*i+0])).picture.loadfromfile('Karten/'+form2.meinekarten[4*i+3]+'.jpg');
+  end;
 end;
 
 procedure TForm1.Button7Click(Sender: TObject);
@@ -207,17 +235,17 @@ begin
   ftimer.interval:=600;
   ftimer.enabled:=true;
   ftimer.ontimer := TimerBlub;
-
+  name:=Form3.Nachricht[2];
 end;
 
 procedure TForm1.Button8Click(Sender: TObject);
 begin
-  ClientSocket1.Socket.SendText(KEY_STRING+CHAT_SENDEN+TZ+Edit3.Text+TZ);
+  ClientSocket1.Socket.SendText(KEY_STRING+CHAT_SENDEN+TZ+name+TZ+Memo3.Text+TZ);
 end;
 
 procedure tform1.Timerblub(sender: Tobject);
 begin
-  ClientSocket1.Socket.SendText(KEY_STRING+CONNECT + TZ + Form3.Nachricht[2] +TZ);
+  ClientSocket1.Socket.SendText(KEY_STRING+CONNECT + TZ + name +TZ);
   ftimer.enabled:=false;
 end;
 
@@ -226,16 +254,16 @@ var
 i,n,y,z, Anzahl_keys: Integer;        //wird y gebraucht?
 para:String;
 begin
-Netzwerknachricht:=TreceivingNetworkMessage.Create(Socket.ReceiveText);
-anzahl_keys:=Netzwerknachricht.count;
-for n := 0 to anzahl_keys - 1 do
-begin
-para:='';
-for i := 0 to Netzwerknachricht.messageForIndex(n).parameter.count - 1 do
-begin
-  para:=para+', '+Netzwerknachricht.messageForIndex(n).parameter[i];
-end;
-memo1.lines.add('// '+Netzwerknachricht.messageForIndex(n).key+';'+para);
+  Netzwerknachricht:=TreceivingNetworkMessage.Create(Socket.ReceiveText);
+  anzahl_keys:=Netzwerknachricht.count;
+  for n := 0 to anzahl_keys - 1 do
+  begin
+    para:='';
+  for i := 0 to Netzwerknachricht.messageForIndex(n).parameter.count - 1 do
+  begin
+    para:=para+', '+Netzwerknachricht.messageForIndex(n).parameter[i];
+  end;
+  memo1.lines.add('// '+Netzwerknachricht.messageForIndex(n).key+';'+para);
 if Netzwerknachricht.messageForIndex(n).key = CONNECT then                             //connect Verbindnug erstellt
     begin
       if Netzwerknachricht.messageForIndex(n).parameter[0] = YES then
