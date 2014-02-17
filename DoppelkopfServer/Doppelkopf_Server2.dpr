@@ -18,7 +18,6 @@ uses
   mTServer in 'mTServer.pas',
   mTExpectedTransmissionConfirmation in 'mTExpectedTransmissionConfirmation.pas',
   mTSendingNetworkMessage in 'mTSendingNetworkMessage.pas',
-  mTReceivingNetworkMessage in 'mTReceivingNetworkMessage.pas',
   mTConnection in 'mTConnection.pas';
 
 {$R *.RES}

@@ -93,7 +93,6 @@
         <DCCReference Include="mTServer.pas"/>
         <DCCReference Include="mTExpectedTransmissionConfirmation.pas"/>
         <DCCReference Include="mTSendingNetworkMessage.pas"/>
-        <DCCReference Include="mTReceivingNetworkMessage.pas"/>
         <DCCReference Include="mTConnection.pas"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
