@@ -16,7 +16,7 @@ private
   function getAnzahlTrumpfInBlatt: Integer;
   function istFehlfarbeInBlatt(pFarbe: dkFarbe): Boolean;
   function getAnzahlFehlfarbeInBlatt(pFarbe: dkFarbe): Integer;
-  procedure bestimmePartei: dkPartei;
+  procedure bestimmePartei;
 public
   constructor Create;
   function getKarteMitCode(pCode: string): TKarte;
