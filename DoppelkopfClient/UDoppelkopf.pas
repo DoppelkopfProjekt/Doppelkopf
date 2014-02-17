@@ -23,7 +23,6 @@ type
     Konsoleschlieen1: TMenuItem;
     Memo1: TMemo;
     Memo2: TMemo;
-    Memo3: TMemo;
     Image11: TImage;
     Image12: TImage;
     Image13: TImage;
@@ -56,6 +55,7 @@ type
     Button7: TButton;
     Timer1: TTimer;
     Button8: TButton;
+    Edit1: TEdit;
     procedure Terminalstarten1Click(Sender: TObject);
     procedure Konsoleschlieen1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -74,6 +74,7 @@ type
     procedure Timerblub(sender: Tobject);
     procedure Image12DblClick(Sender: TObject);
     procedure Button8Click(Sender: TObject);
+    procedure Edit1Click(Sender: TObject);
   private
     { Private-Deklarationen }
   public
@@ -136,9 +137,8 @@ begin
   alleansagenNummer:=0;
   amzug:=false;
 
-  //für testzwecke
-  (*karten_client:=tstringlist.create;
-  karten_client.add('KAK');
+  karten_client:=tstringlist.create;
+  (*karten_client.add('KAK');
   karten_client.add('KAA');
   karten_client.add('KAD');
   karten_client.add('HEK');
@@ -162,9 +162,8 @@ procedure TForm1.Button1Click(Sender: TObject);
 var
 sendung: String;
 begin
-sendung := Karten_client[strtoint(markiertekarte)];
+sendung := Karten_client[strtoint(markiertekarte)-11];
 ClientSocket1.Socket.SendText(KEY_STRING+KARTE_LEGEN+TZ+sendung+TZ);
-Kartemarkieren('');
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -240,7 +239,7 @@ end;
 
 procedure TForm1.Button8Click(Sender: TObject);
 begin
-  ClientSocket1.Socket.SendText(KEY_STRING+CHAT_SENDEN+TZ+name+TZ+Memo3.Text+TZ);
+  ClientSocket1.Socket.SendText(KEY_STRING+CHAT_SENDEN+TZ+name+TZ+Edit3.Text+TZ);
 end;
 
 procedure tform1.Timerblub(sender: Tobject);
@@ -288,12 +287,14 @@ else if Netzwerknachricht.messageForIndex(n).key = KARTEN then                  
       ClientSocket1.Socket.SendText(KEY_STRING+KARTEN+TZ+YES+TZ);
       spielhatbegonnen:=true;
       Karten_client.free;
+      Karten_client.create;
       Karten_client := Netzwerknachricht.messageForIndex(n).parameter;
       for i := 11 to 20 do
         tImage(FindComponent('image'+IntToStr(i))).Picture.assign(nil);
-      for i := 21 to Karten_client.Count-1+21 do
+      for i := 11 to Karten_client.Count-1+11 do
       begin
-        tImage(FindComponent('image'+IntToStr(i))).picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i]+'.jpg');
+        tImage(FindComponent('image'+IntToStr(i))).picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i-11]+'.jpg');
+        tImage(FindComponent('image'+inttostr(i))).enabled:=true;
       end;
     end
 else if Netzwerknachricht.messageForIndex(n).key = VORBEHALTE_ABFRAGEN then              //Vorbehaltabfrage Hat der Spieler einen Vorbahlt?
@@ -341,7 +342,9 @@ else if Netzwerknachricht.messageForIndex(n).key = KARTE_LEGEN then           //
         begin
           Memo1.Lines.add ('Karte erfolgreich gelegt');
           tImage(FindComponent('image'+markiertekarte)).Picture.loadfromfile('Karten/Back.jpg');
-          amzug:=false
+          tImage(FindComponent('image'+markiertekarte)).enabled:=false;
+          amzug:=false;
+          Kartemarkieren('');
         end;
         if Netzwerknachricht.messageForIndex(n).parameter[0] = NO then
           showmessage('neue Karte legen');
@@ -404,6 +407,11 @@ begin
   if chatoffen=true then
     Form1.Width:=960;
   chatoffen:=false
+end;
+
+procedure TForm1.Edit1Click(Sender: TObject);
+begin
+  edit1.text:='';
 end;
 
 procedure TForm1.openchatClick(Sender: TObject);
