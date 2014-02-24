@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   Menus, ExtCtrls, StdCtrls, jpeg, mtNetworkMessage, ScktComp, Stringkonstanten,
-  Kartensortieren, mtSendingNetworkmessage, mtReceivingNetworkmessage, mmsystem;
+  Kartensortieren, mtSendingNetworkmessage, mtReceivingNetworkmessage, mmsystem, contnrs, math;
 
 type
   TForm1 = class(TForm)
@@ -14,25 +14,15 @@ type
     NeuesSpiel1: TMenuItem;
     Label1: TLabel;
     Label2: TLabel;
-    Button1: TButton;
+    Karte_auf_stapel_legen: TButton;
     Chat1: TMenuItem;
     openchat: TMenuItem;
     closechat: TMenuItem;
     Terminal1: TMenuItem;
     Terminalstarten1: TMenuItem;
     Konsoleschlieen1: TMenuItem;
-    Memo1: TMemo;
-    Memo2: TMemo;
-    Image11: TImage;
-    Image12: TImage;
-    Image13: TImage;
-    Image14: TImage;
-    Image15: TImage;
-    Image16: TImage;
-    Image17: TImage;
-    Image18: TImage;
-    Image19: TImage;
-    Image20: TImage;
+    Terminal: TMemo;
+    Chat: TMemo;
     Image23: TImage;
     Image22: TImage;
     Image21: TImage;
@@ -44,46 +34,58 @@ type
     Label6: TLabel;
     Edit2: TEdit;
     Label7: TLabel;
-    Button2: TButton;
-    Button3: TButton;
-    Button4: TButton;
-    Button5: TButton;
+    verbinden_klein: TButton;
+    Ansage_abgeben: TButton;
+    Name_geben: TButton;
+    verbindung_trennen: TButton;
     Clientsocket1 : tClientsocket;
     Edit3: TEdit;
-    Button6: TButton;
+    Karten_sortieren: TButton;
     ComboBox1: TComboBox;
-    Button7: TButton;
+    Verbinden_gross: TButton;
     Timer1: TTimer;
     Button8: TButton;
     Edit1: TEdit;
     procedure Terminalstarten1Click(Sender: TObject);
     procedure Konsoleschlieen1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
+    procedure Karte_auf_stapel_legenClick(Sender: TObject);
     procedure closechatClick(Sender: TObject);
     procedure openchatClick(Sender: TObject);
-    procedure Image11Click(Sender: TObject);
-    procedure Kartemarkieren(Nummer: string);
-    procedure Button2Click(Sender: TObject);
-    procedure Button3Click(Sender: TObject);
-    procedure Button4Click(Sender: TObject);
+    procedure SelectImageClick(Sender: TObject);
+    procedure Kartemarkieren(Nummer: integer);
+    procedure verbinden_kleinClick(Sender: TObject);
+    procedure Ansage_abgebenClick(Sender: TObject);
+    procedure Name_gebenClick(Sender: TObject);
     procedure ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
-    procedure Button5Click(Sender: TObject);
-    procedure Button6Click(Sender: TObject);
-    procedure Button7Click(Sender: TObject);
+    procedure verbindung_trennenClick(Sender: TObject);
+    procedure Karten_sortierenClick(Sender: TObject);
+    procedure Verbinden_grossClick(Sender: TObject);
     procedure Timerblub(sender: Tobject);
     procedure Image12DblClick(Sender: TObject);
     procedure Button8Click(Sender: TObject);
     procedure Edit1Click(Sender: TObject);
+    procedure Karten_erstellen(pKarte: String);
+
+    //Images werdern erstellt
+
+    procedure MoveImage(x: Integer; n: Integer);
+    function CanMoveImage(x, n: Integer): Boolean;
+    procedure OnStartDrag(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure OnDrag(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure OnEndDrag(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
   private
-    { Private-Deklarationen }
+    FImages: TObjectList;
+    FNamen: TStringList;
+    FIsDragging: Boolean;
+    FOldPos: TPoint;
   public
   end;
 
 var
   Form1: TForm1;   
   Chatoffen: boolean;
-  markiertekarte: string;
+  markiertekarte: integer;
   karten_client: TStringList;
   verbunden: boolean;
   Vorbehalte_Art, Vorbehaltgeber: String;
@@ -96,8 +98,11 @@ var
   fTimer:Ttimer;
   spielerreihenfolge: Array [0..3] of String;
   aktuellerunde: Integer;
-  spielhatbegonnen, amzug:boolean;
+  spielhatbegonnen, amzug, bewegung:boolean;
   Name:String;
+  n: integer;
+  temp: TImage;
+  posX: Integer;
 implementation
 
 uses Verbinden;
@@ -106,125 +111,167 @@ uses Verbinden;
 
 procedure TForm1.Terminalstarten1Click(Sender: TObject);
 begin
-  Memo1.Visible:=true;
+  Terminal.Visible:=true;
   if chatoffen=true then
   begin
-    Memo1.height:=225;
-    Memo1.Top:=472;
-    Memo1.Width:=460;
+    Terminal.height:=225;
+    Terminal.Top:=472;
+    Terminal.Width:=460;
   end;
   if chatoffen=false then
   begin
-    Memo1.height:=117;
-    Memo1.Top:=520;
-    Memo1.Width:=873;
+    Terminal.height:=117;
+    Terminal.Top:=520;
+    Terminal.Width:=873;
   end;
 end;
 
 procedure TForm1.Konsoleschlieen1Click(Sender: TObject);
 begin
-  Memo1.Visible:=false;
+  Terminal.Visible:=false;
+end;
+
+procedure TForm1.Karten_erstellen(pKarte: string);
+begin
+  if n=0 then
+  begin
+    self.DoubleBuffered := true;
+    FNamen := TStringList.Create;
+    FImages := TObjectList.Create;
+    FImages.OwnsObjects := False;
+    posX := 25;
+    FIsDragging := False;
+  end;
+
+
+
+    FNamen.Add(pKarte);
+    temp := TImage.Create(self);
+   // temp.Height := round(105*1.5);
+    temp.Width :=120;
+    temp.Height := round(temp.Width * 105.0/73);
+    temp.Picture.LoadFromFile('Karten/' + FNamen[n] + '.jpg');
+    temp.Visible := true;
+    temp.Parent := self;
+    temp.Stretch := true;
+    temp.Left := posX;
+    temp.Top := 40;
+    temp.OnClick := SelectImageClick;
+    posX := posX + round((1/6) * temp.Width);
+    FImages.Add(temp);
+    inc(n);
+
+
+ if n=10 then
+ begin
+    // self.Width := posX + 25 + TImage(FImages[0]).width;
+    //self.Height := round(TImage(FImages[0]).height+100);
+    temp := TImage(self.FImages[self.FImages.Count-1]);
+    temp.cursor := crHandPoint;
+    temp.OnMouseDown := OnStartDrag;
+    temp.OnMouseMove := OnDrag;
+    temp.OnMouseUp := OnEndDrag;
+ end;
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-i:Integer;
+  I: Integer;
+  pKarten: tstringlist;
 begin
   verbunden:=false;
   kartensortierung:=tstringlist.create;
-  Form1.ClientHeight:=630;
+  markiertekarte:=-1;
+  Form1.ClientHeight:=730;
   Form1.clientwidth:=960;
   alleansagenNummer:=0;
   amzug:=false;
+  pkarten:=tstringlist.Create;
+  pkarten.add('HE10');
+  pkarten.add('KR10');
+  pkarten.add('KA10');
+  pkarten.add('PI10');
+  pkarten.add('KRD');
+  pkarten.add('HED');
+  pkarten.add('KAB');
+  pkarten.add('KRB');
+  pkarten.add('PIB');
+  pkarten.add('HEB');
 
-  karten_client:=tstringlist.create;
-  (*karten_client.add('KAK');
-  karten_client.add('KAA');
-  karten_client.add('KAD');
-  karten_client.add('HEK');
-  karten_client.add('HEA');
-  karten_client.add('HE10');
-  karten_client.add('KA10');
-  karten_client.add('PIK');
-  karten_client.add('KRD');
-  karten_client.add('KAB');
-  for I := 11 to 20 do
-    tImage(FindComponent('image'+IntToStr(i))).Picture.loadfromfile('Karten/'+karten_client[i-11]+'.jpg');
-    *)
-  for I := 11 to 24 do
+  for I := 0 to 9 do
   begin
-    tImage(FindComponent('image'+IntToStr(i))).Picture.loadfromfile('Karten/Back.jpg');
+    Karten_erstellen(pkarten[n]);
   end;
   aktuelleRunde:=0;
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.Karte_auf_stapel_legenClick(Sender: TObject);
 var
 sendung: String;
 begin
-sendung := Karten_client[strtoint(markiertekarte)-11];
-ClientSocket1.Socket.SendText(KEY_STRING+KARTE_LEGEN+TZ+sendung+TZ);
+  sendung := Karten_client[markiertekarte];
+  ClientSocket1.Socket.SendText(KEY_STRING+KARTE_LEGEN+TZ+sendung+TZ);
 end;
 
-procedure TForm1.Button2Click(Sender: TObject);
+procedure TForm1.verbinden_kleinClick(Sender: TObject);
 begin
   ClientSocket1.Host:=Combobox1.text; //Die IP oder der Hostname wird festgelegt
   ClientSocket1.Port:=StrToInt(Edit2.Text); //Der Port wird festgelegt
   ClientSocket1.Open; //Verbindung zum Server wird hergestellt
-  Button4.Enabled:=true;
+  Name_geben.Enabled:=true;
 end;
 
-procedure TForm1.Button3Click(Sender: TObject);
+procedure TForm1.Ansage_abgebenClick(Sender: TObject);
 begin
   ClientSocket1.Socket.SendText(KEY_STRING+ANSAGE + TZ+inputbox('neue Ansage', ANSAGE_RE + ', ' + ANSAGE_KONTRA + ', ' + ANSAGE_KEINENEUN  + ', ' +  ANSAGE_KEINESECHS  + ', ' +  ANSAGE_KEINEDREI  + ', ' + ANSAGE_SCHWARZ,'')+ TZ);
 end;
 
-procedure TForm1.Button4Click(Sender: TObject);
+procedure TForm1.Name_gebenClick(Sender: TObject);
 begin
   name:=edit3.Text;
   ClientSocket1.Socket.SendText(KEY_STRING+CONNECT + TZ + name +TZ);
 end;
 
-procedure TForm1.Button5Click(Sender: TObject);
+procedure TForm1.verbindung_trennenClick(Sender: TObject);
 var
   i: Integer;
 begin
   clientsocket1.Close;
-  for i := 11 to 24 do
+  for i := 0 to 9 do
   begin
-    tImage(FindComponent('image'+IntToStr(i))).Picture.loadfromfile('Karten/Back.jpg');
-    Memo1.Lines.Clear;
+    timage(FImages[i]).Picture.loadfromfile('Karten/Back.jpg');
+    Terminal.Lines.Clear;
   end;
   aktuelleRunde:=0;
   verbunden:=false;
-  Memo2.Lines.Clear;
+  Chat.Lines.Clear;
 end;
 
-procedure TForm1.Button6Click(Sender: TObject);
+procedure TForm1.Karten_sortierenClick(Sender: TObject);
 var
   Bild: tImage;
   i: Integer;
 begin
-  Kartemarkieren('');
-  for i := 11 to 20 do
+  Kartemarkieren(-1);
+  for i := 0 to 9 do
   begin
     kartensortierung.Add(inttostr(i));
-    kartensortierung.Add(inttostr(tImage(FindComponent('image'+IntToStr(i))).top));
-    kartensortierung.Add(inttostr(tImage(FindComponent('image'+IntToStr(i))).left));
-    kartensortierung.add(karten_client[i-11]);
+    kartensortierung.Add(inttostr(timage(FImages[i]).top));
+    kartensortierung.Add(inttostr(timage(FImages[i]).left));
+    kartensortierung.add(karten_client[i]);
   end;
   Form2.meinekarten := kartensortierung;
   Form2.Kartenlegen;
   Form2.ShowModal;
   for I := 0 to 9 do
   begin
-    tImage(FindComponent('image'+Form2.meinekarten[4*i+0])).top:=StrToInt(form2.meinekarten[4*i+1]);
-    tImage(FindComponent('image'+Form2.meinekarten[4*i+0])).left:=StrToInt(form2.meinekarten[4*i+2]);
-    tImage(FindComponent('image'+Form2.meinekarten[4*i+0])).picture.loadfromfile('Karten/'+form2.meinekarten[4*i+3]+'.jpg');
+    //timage(FImages[Form2.meinekarten[4*i+0]]).top:=(form2.meinekarten[4*i+1]);
+  //  timage(FImages[Form2.meinekarten[4*i+0]]).top:=StrToInt(form2.meinekarten[4*i+1]);
+ //   timage(FImages[Form2.meinekarten[4*i+0]]).picture.loadfromfile('Karten/'+form2.meinekarten[4*i+3]+'.jpg');
   end;
 end;
 
-procedure TForm1.Button7Click(Sender: TObject);
+procedure TForm1.Verbinden_grossClick(Sender: TObject);
 begin
   Form3.ShowModal;
   ClientSocket1.Host:=Form3.nachricht[0]; //Die IP oder der Hostname wird festgelegt
@@ -262,16 +309,16 @@ begin
   begin
     para:=para+', '+Netzwerknachricht.messageForIndex(n).parameter[i];
   end;
-  memo1.lines.add('// '+Netzwerknachricht.messageForIndex(n).key+';'+para);
+  Terminal.lines.add('// '+Netzwerknachricht.messageForIndex(n).key+';'+para);
 if Netzwerknachricht.messageForIndex(n).key = CONNECT then                             //connect Verbindnug erstellt
     begin
       if Netzwerknachricht.messageForIndex(n).parameter[0] = YES then
       begin
         verbunden:=true;
-        Memo1.Lines.add('zum Server verbunden');
+        Terminal.Lines.add('zum Server verbunden');
       end
       else if Netzwerknachricht.messageForIndex(n).parameter[0] = NO then
-        Memo1.Lines.add('Server ist voll');
+        Terminal.Lines.add('Server ist voll');
     end
 else if Netzwerknachricht.messageForIndex(n).key = SPIELBEGINN then                          //Spielbeginn Name der Spieler werden geschickt
     begin
@@ -289,12 +336,12 @@ else if Netzwerknachricht.messageForIndex(n).key = KARTEN then                  
       Karten_client.free;
       Karten_client.create;
       Karten_client := Netzwerknachricht.messageForIndex(n).parameter;
-      for i := 11 to 20 do
-        tImage(FindComponent('image'+IntToStr(i))).Picture.assign(nil);
-      for i := 11 to Karten_client.Count-1+11 do
+      for i := 0 to 9 do
+        timage(FImages[i]).Picture.assign(nil);
+      for i := 0 to Karten_client.Count-1 do
       begin
-        tImage(FindComponent('image'+IntToStr(i))).picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i-11]+'.jpg');
-        tImage(FindComponent('image'+inttostr(i))).enabled:=true;
+        timage(FImages[i]).picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i]+'.jpg');
+        timage(FImages[i]).enabled:=true;
       end;
     end
 else if Netzwerknachricht.messageForIndex(n).key = VORBEHALTE_ABFRAGEN then              //Vorbehaltabfrage Hat der Spieler einen Vorbahlt?
@@ -320,7 +367,7 @@ else if Netzwerknachricht.messageForIndex(n).key = SOLO then                    
 else if Netzwerknachricht.messageForIndex(n).key = WELCHE_KARTE then            //Welche Karte legen Spieler bekommt die Anweisung, dass er am Zug ist
     begin
       ClientSocket1.Socket.SendText(KEY_STRING+WELCHE_KARTE+ TZ+YES+TZ);                        //hier mit YES antworten
-      Memo1.Lines.add('WELCHE KARTEN SOLL GESPIELT WERDEN?');
+      Terminal.Lines.add('WELCHE KARTEN SOLL GESPIELT WERDEN?');
       amzug:=true;
     end
 else if Netzwerknachricht.messageForIndex(n).key = ANSAGE_GEMACHT then                 //Ansageanfrage
@@ -332,7 +379,7 @@ else if Netzwerknachricht.messageForIndex(n).key = ANSAGE_GEMACHT then          
         alleansagenNummer:=alleansagenNummer+1;
         alleansagenAnsage[alleansagenNummer] := Netzwerknachricht.messageForIndex(n).parameter[1];
         alleansagenSpieler[alleansagenNummer] := Netzwerknachricht.messageForIndex(n).parameter[0];
-        Memo1.lines.add('Spieler '+ alleansagenSpieler[alleansagenNummer] + ' hat folgende Ansage gemacht: ' + alleansagenAnsage[alleansagenNummer]);
+        Terminal.lines.add('Spieler '+ alleansagenSpieler[alleansagenNummer] + ' hat folgende Ansage gemacht: ' + alleansagenAnsage[alleansagenNummer]);
         ClientSocket1.Socket.SendText(KEY_STRING+ANSAGE_GEMACHT + TZ+YES+TZ)
       end;
     end
@@ -340,11 +387,11 @@ else if Netzwerknachricht.messageForIndex(n).key = KARTE_LEGEN then           //
       begin
         if Netzwerknachricht.messageForIndex(n).parameter[0] = YES then
         begin
-          Memo1.Lines.add ('Karte erfolgreich gelegt');
-          tImage(FindComponent('image'+markiertekarte)).Picture.loadfromfile('Karten/Back.jpg');
-          tImage(FindComponent('image'+markiertekarte)).enabled:=false;
+          Terminal.Lines.add ('Karte erfolgreich gelegt');
+          timage(FImages[markiertekarte]).Picture.loadfromfile('Karten/Back.jpg');
+          timage(FImages[markiertekarte]).enabled:=false;
           amzug:=false;
-          Kartemarkieren('');
+          Kartemarkieren(-1);
         end;
         if Netzwerknachricht.messageForIndex(n).parameter[0] = NO then
           showmessage('neue Karte legen');
@@ -357,12 +404,12 @@ else if Netzwerknachricht.messageForIndex(n).key = AKTUELLER_STICH then         
           if i-aktuellerunde=0 then
           for z := 21 to 24 do
           begin
-            tImage(FindComponent('image'+IntToStr(z))).picture.loadfromfile('Karten/Back.jpg');
+            timage(FImages[i]).picture.loadfromfile('Karten/Back.jpg');
           end;
           if i>3 then
-          tImage(FindComponent('image'+IntToStr(i+21-4))).Picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i-aktuellerunde]+'.jpg')
+          timage(FImages[i-4]).Picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i-aktuellerunde]+'.jpg')
           else
-          tImage(FindComponent('image'+IntToStr(i+21))).Picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i-aktuellerunde]+'.jpg');
+          timage(FImages[i]).Picture.loadfromfile('Karten/'+Netzwerknachricht.messageForIndex(n).parameter[i-aktuellerunde]+'.jpg');
         end;
       end
 else if Netzwerknachricht.messageForIndex(n).key = 'SpielerReihenfolge' then           //aktuelle Spielerreihenfolge
@@ -381,22 +428,22 @@ else if Netzwerknachricht.messageForIndex(n).key = GEWINNER_STICH then          
       begin
         ClientSocket1.Socket.SendText(KEY_STRING+GEWINNER_STICH+TZ+YES+TZ);
         aktuelleRunde:=0;
-        Memo1.lines.Add(Netzwerknachricht.messageForIndex(n).parameter[0]);
+        Terminal.lines.Add(Netzwerknachricht.messageForIndex(n).parameter[0]);
       end
 else if Netzwerknachricht.messageForIndex(n).key = GEWINNER_SPIEL then                      //Gewinner Sieger werden genannt
       begin
         ClientSocket1.Socket.SendText(KEY_STRING+GEWINNER_SPIEL+TZ+YES+TZ);
-        Memo1.Lines.add('Team: ' + Netzwerknachricht.messageForIndex(n).parameter[0] + ' hat ' + Netzwerknachricht.messageForIndex(n).parameter[1] + ' Punkte.');
+        Terminal.Lines.add('Team: ' + Netzwerknachricht.messageForIndex(n).parameter[0] + ' hat ' + Netzwerknachricht.messageForIndex(n).parameter[1] + ' Punkte.');
       end
 else if Netzwerknachricht.messageForIndex(n).key = 'aktueller Punktestand' then         //aktueller Punktestand Liste mit den Punkten der vielen Spieler wird gegeben
       begin
         ClientSocket1.Socket.SendText(KEY_STRING+'Gewinner, YES');
         for I := 0 to 3 do
-          Memo1.Lines.add(Netzwerknachricht.messageForIndex(n).parameter[2*i] + ' hat ' + Netzwerknachricht.messageForIndex(n).parameter[2*i+1] + ' Punkte.');
+          Terminal.Lines.add(Netzwerknachricht.messageForIndex(n).parameter[2*i] + ' hat ' + Netzwerknachricht.messageForIndex(n).parameter[2*i+1] + ' Punkte.');
       end
 else if Netzwerknachricht.messageForIndex(n).key = CHAT_EMPFANGEN then
       begin
-        Memo2.Lines.add(Netzwerknachricht.messageForIndex(n).parameter[0]+': '+Netzwerknachricht.messageForIndex(n).parameter[1]);
+        Chat.Lines.add(Netzwerknachricht.messageForIndex(n).parameter[0]+': '+Netzwerknachricht.messageForIndex(n).parameter[1]);
       end;
      
 end;
@@ -421,42 +468,185 @@ begin
   chatoffen:=true;
 end;
 
-procedure TForm1.Image11Click(Sender: TObject);
+procedure TForm1.SelectImageClick(Sender: TObject);
 begin
-Kartemarkieren((Sender as TComponent).Name[6]+(Sender as TComponent).Name[7]);
+Kartemarkieren(self.FImages.indexof(sender));
 sleep(20);
 end;
 
 procedure TForm1.Image12DblClick(Sender: TObject);
 begin
-  Kartemarkieren((Sender as TComponent).Name[6]+(Sender as TComponent).Name[7]);
-  self.Button1.Click;
+  Kartemarkieren(self.FImages.indexof(sender));
+  self.Karte_auf_stapel_legen.Click;
 end;
 
-procedure TForm1.Kartemarkieren(Nummer:string);
+procedure TForm1.Kartemarkieren(Nummer:integer);
 var
-  I: Integer;
+  I,s,p: Integer;
 begin
-  sndPlaySound(pChar('Sound.wav'),SND_ASYNC);
-  for I := 1 to 10 do
+  if bewegung =false then
   begin
-    if nummer <> '' then
+    sndPlaySound(pChar('Sound.wav'),SND_ASYNC);
+    for I := 0 to 150 do
     begin
-      tImage(FindComponent('image'+nummer)).Height:=tImage(FindComponent('image'+nummer)).Height+2;
-      tImage(FindComponent('image'+nummer)).width:=tImage(FindComponent('image'+nummer)).width+2;
-      tImage(FindComponent('image'+nummer)).left:=tImage(FindComponent('image'+nummer)).left-1;
-      tImage(FindComponent('image'+nummer)).top:=tImage(FindComponent('image'+nummer)).top-1;
+      bewegung:=true;
+      s:=timage(FImages[nummer]).top;
+      if markiertekarte <> -1 then
+      p:=timage(fimages[markiertekarte]).top;
+      if nummer <> -1 then
+      begin
+        timage(FImages[nummer]).top:=s-round((power (power(30, (1/30)), 30-i))/7);
+      end;
+      if (markiertekarte <> -1) then
+      begin
+        timage(FImages[markiertekarte]).top:=p+round((power (power(30, (1/30)), 30-i))/7);
+      end;
+    sleep(1);
+    application.ProcessMessages;
     end;
-    if (markiertekarte <> '') then
-    begin
-      tImage(FindComponent('image'+markiertekarte)).Height:=tImage(FindComponent('image'+markiertekarte)).Height-2;
-      tImage(FindComponent('image'+markiertekarte)).width:=tImage(FindComponent('image'+markiertekarte)).width-2;
-      tImage(FindComponent('image'+markiertekarte)).left:=tImage(FindComponent('image'+markiertekarte)).left+1;
-      tImage(FindComponent('image'+markiertekarte)).top:=tImage(FindComponent('image'+markiertekarte)).top+1;
-    end;
-  sleep(10);
-  application.ProcessMessages;
+  if markiertekarte <> nummer then
+  markiertekarte:=nummer
+  else markiertekarte := -1;
   end;
-  markiertekarte:=nummer;
+  bewegung:=false;
 end;
+
+
+
+
+//Images werden erstellt
+
+
+
+
+procedure TForm1.OnStartDrag(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  self.FIsDragging := True;
+  getCursorPos(FOldPos);
+  OutputdebugString('Start drag');
+end;
+
+procedure TForm1.OnDrag(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+var temp: TImage;
+    NewPos: TPoint;
+begin
+  if bewegung=false then
+  if self.FIsDragging then
+  begin
+    getCursorPos(newPos);
+    if abs(NewPos.X - FOldPos.X) >= 2 then
+    begin
+      OutputdebugString('Moving');
+      temp := TImage(sender);
+      self.MoveImage(NewPos.X - FOldPos.X, self.FImages.Count-1);
+      FOldPos := NewPos;
+    end;
+  end;
+
+end;
+
+procedure TForm1.OnEndDrag(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  self.FIsDragging := False;
+  OutputdebugString('Stop Drag');
+
+end;
+
+function TForm1.CanMoveImage(x, n: Integer): Boolean;
+var actualImage, previousImage: TImage;
+    place: Integer;
+begin
+  if x = 0 then result := false
+  else
+  begin
+    if (n >= 1) then
+    begin
+      actualImage := TImage(self.FImages[n]);
+      previousImage := TImage(self.FImages[n-1]);
+        if n = 0 then
+        begin
+          result := false;
+        end else
+        begin
+          if x <= 0 then
+          begin
+           place := 20;
+          end;
+          if x > 0  then
+          begin
+            place := 65;
+          end;
+          result := ((abs(actualImage.Left - previousImage.Left) < place) and (x > 0)) or
+             ((abs(actualImage.Left - previousImage.Left) > place) and (x < 0)) or
+             self.CanMoveImage(x, n-1);
+        end;
+    end else
+    begin
+      result := false;
+    end;
+  end;
+end;
+
+procedure TForm1.MoveImage(x: Integer; n: Integer);
+var actualImage, previousImage: TImage;
+    factor: double;
+    place, difference: Integer;
+begin
+  x := round(x * 1);
+  if (n >= 1) then
+  begin
+    actualImage := TImage(self.FImages[n]);
+    previousImage := TImage(self.FImages[n-1]);
+    if x <= 0 then
+    begin
+      factor := 0.25;
+      place := 20;
+    end;
+    if x > 0  then
+    begin
+      factor := 0.25;
+      place := 65;
+    end;
+    if ((abs(actualImage.Left - previousImage.Left) < place) and (x > 0)) or
+      ((abs(actualImage.Left - previousImage.Left) > place) and (x < 0)) then
+    begin
+      if ((actualImage.Left + x - previousImage.Left) > place) and (x > 0) then
+      begin
+        x := 65 - actualImage.Left + previousImage.Left;
+      end;
+      if ((actualImage.Left + x - previousImage.Left) < place) and (x < 0) then
+      begin
+        x := 20 - actualImage.Left + previousImage.Left;
+      end;
+      TImage(self.FImages[n]).Left := TImage(self.FImages[n]).Left + x;
+      self.MoveImage(round(factor*x), n-1);
+    end else
+    begin
+      if self.CanMoveImage(x, n-1) then
+      begin
+        self.MoveImage(x, n-1);
+        if ((actualImage.Left + x - previousImage.Left) > place) and (x > 0) then
+        begin
+          x := 65 - actualImage.Left + previousImage.Left;
+        end;
+        if ((actualImage.Left + x - previousImage.Left) < place) and (x < 0) then
+        begin
+          x := 20 - actualImage.Left + previousImage.Left;
+        end;
+        TImage(self.FImages[n]).Left := TImage(self.FImages[n]).Left + x;
+      end;
+    end;
+  end;
+end;
+
+
+
+
+
+
+
+
 end.
