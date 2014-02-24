@@ -1282,8 +1282,8 @@ object Form1: TForm1
     ParentFont = False
   end
   object Label2: TLabel
-    Left = 648
-    Top = 24
+    Left = 1040
+    Top = 384
     Width = 109
     Height = 20
     Caption = 'gelegt Karten'
@@ -30133,68 +30133,68 @@ object Form1: TForm1
     OnDblClick = Image12DblClick
   end
   object Label3: TLabel
-    Left = 682
-    Top = 335
+    Left = 1074
+    Top = 695
     Width = 41
     Height = 13
     Caption = 'Spieler 1'
   end
   object Label4: TLabel
-    Left = 504
-    Top = 184
+    Left = 896
+    Top = 544
     Width = 41
     Height = 13
     Caption = 'Spieler 4'
   end
   object Label5: TLabel
-    Left = 680
-    Top = 69
+    Left = 1072
+    Top = 429
     Width = 41
     Height = 13
     Caption = 'Spieler 2'
   end
   object Label6: TLabel
-    Left = 866
-    Top = 184
+    Left = 1258
+    Top = 544
     Width = 41
     Height = 13
     Caption = 'Spieler 3'
   end
   object Image23: TImage
-    Left = 664
-    Top = 88
+    Left = 1056
+    Top = 448
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
   end
   object Image22: TImage
-    Left = 569
-    Top = 140
+    Left = 961
+    Top = 500
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
   end
   object Image21: TImage
-    Left = 664
-    Top = 224
+    Left = 1056
+    Top = 584
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
   end
   object Image24: TImage
-    Left = 768
-    Top = 140
+    Left = 1160
+    Top = 500
     Width = 73
     Height = 105
     Cursor = crHandPoint
     Stretch = True
   end
   object Label7: TLabel
-    Left = 64
-    Top = 362
+    Left = 8
+    Top = 481
     Width = 56
     Height = 24
     Caption = 'Label7'
@@ -30207,7 +30207,7 @@ object Form1: TForm1
   end
   object Button1: TButton
     Left = 8
-    Top = 315
+    Top = 434
     Width = 425
     Height = 41
     Caption = 'ausgew'#228'hlte Karte legen'
@@ -30222,7 +30222,7 @@ object Form1: TForm1
   end
   object Memo1: TMemo
     Left = 8
-    Top = 400
+    Top = 511
     Width = 465
     Height = 153
     Lines.Strings = (
@@ -30239,7 +30239,7 @@ object Form1: TForm1
   end
   object Edit2: TEdit
     Left = 504
-    Top = 467
+    Top = 587
     Width = 121
     Height = 21
     TabOrder = 3
@@ -30247,7 +30247,7 @@ object Form1: TForm1
   end
   object Button2: TButton
     Left = 655
-    Top = 428
+    Top = 548
     Width = 119
     Height = 25
     Caption = 'Verbinden'
@@ -30255,8 +30255,8 @@ object Form1: TForm1
     OnClick = Button2Click
   end
   object Button3: TButton
-    Left = 448
-    Top = 335
+    Left = 776
+    Top = 480
     Width = 157
     Height = 25
     Caption = 'Ansage abgeben(am Zug)'
@@ -30266,7 +30266,7 @@ object Form1: TForm1
   end
   object Button4: TButton
     Left = 655
-    Top = 399
+    Top = 519
     Width = 75
     Height = 25
     Caption = 'Name geben'
@@ -30276,7 +30276,7 @@ object Form1: TForm1
   end
   object Button5: TButton
     Left = 655
-    Top = 459
+    Top = 579
     Width = 119
     Height = 29
     Caption = 'Verbindung trennen'
@@ -30285,15 +30285,15 @@ object Form1: TForm1
   end
   object Edit3: TEdit
     Left = 504
-    Top = 403
+    Top = 523
     Width = 121
     Height = 21
     TabOrder = 8
     Text = 'TESTNAME'
   end
   object Button6: TButton
-    Left = 448
-    Top = 304
+    Left = 776
+    Top = 449
     Width = 157
     Height = 25
     Caption = 'Kartensortieren'
@@ -30302,7 +30302,7 @@ object Form1: TForm1
   end
   object ComboBox1: TComboBox
     Left = 504
-    Top = 430
+    Top = 550
     Width = 145
     Height = 21
     ItemHeight = 13
@@ -30335,7 +30335,7 @@ object Form1: TForm1
     Left = 960
     Top = 154
     Width = 250
-    Height = 24
+    Height = 21
     TabOrder = 13
     Text = 'Edit1'
     OnClick = Edit1Click
