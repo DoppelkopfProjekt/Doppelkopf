@@ -40,6 +40,8 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_DcuOutput>C:\Users\Jonathan\Documents\GitHub\Doppelkopf\Zwischenprodukte\</DCC_DcuOutput>
+        <BRCC_OutputDir>C:\Users\Jonathan\Documents\GitHub\Doppelkopf\Zwischenprodukte\</BRCC_OutputDir>
         <DCC_ExeOutput>C:\Users\Jonathan\Documents\GitHub\Doppelkopf\</DCC_ExeOutput>
         <DCC_UnitSearchPath>C:\Users\Jonathan\Documents\GitHub\Doppelkopf\Shared;C:\Users\Jonathan\Documents\GitHub\Doppelkopf\DoppelkopfClient;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <Icon_MainIcon>PDoppelkopf_Icon.ico</Icon_MainIcon>
@@ -80,9 +82,10 @@
         <DCC_Optimize>false</DCC_Optimize>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <DCC_ExeOutput>C:\Users\Jonathan\Documents\GitHub\Doppelkopf\</DCC_ExeOutput>
+        <DCC_ExeOutput>C:\Users\Jonathan\Documents\GitHub\Doppelkopf\Endprodukte\</DCC_ExeOutput>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">

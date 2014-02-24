@@ -3,7 +3,6 @@ program Doppelkopf_Server2;
 uses
   Forms,
   GUI in 'GUI.pas' {Form1},
-  mTNetworkMessage in 'mTNetworkMessage.pas',
   mTDoppelkopfserver in 'mTDoppelkopfserver.pas',
   mTSpieler in 'mTSpieler.pas',
   mTDoppelkopfSpiel in 'mTDoppelkopfSpiel.pas',
@@ -13,12 +12,9 @@ uses
   mTKarte in 'mTKarte.pas',
   mTDoppelkopfDeck in 'mTDoppelkopfDeck.pas',
   mTSoloAnfrage in 'mTSoloAnfrage.pas',
-  StringKonstanten in 'StringKonstanten.pas',
   mTSonderkarteEreignis in 'mTSonderkarteEreignis.pas',
   mTServer in 'mTServer.pas',
-  mTExpectedTransmissionConfirmation in 'mTExpectedTransmissionConfirmation.pas',
-  mTSendingNetworkMessage in 'mTSendingNetworkMessage.pas',
-  mTReceivingNetworkMessage in 'mTReceivingNetworkMessage.pas';
+  mTExpectedTransmissionConfirmation in 'mTExpectedTransmissionConfirmation.pas';
 
 {$R *.RES}
 

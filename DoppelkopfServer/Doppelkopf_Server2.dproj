@@ -40,7 +40,9 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <DCC_ExeOutput>C:\Users\Jonathan\Documents\GitHub\Doppelkopf\</DCC_ExeOutput>
+        <BRCC_OutputDir>C:\Users\Jonathan\Documents\GitHub\Doppelkopf\Zwischenprodukte\</BRCC_OutputDir>
+        <DCC_DcuOutput>C:\Users\Jonathan\Documents\GitHub\Doppelkopf\Zwischenprodukte\</DCC_DcuOutput>
+        <DCC_ExeOutput>C:\Users\Jonathan\Documents\GitHub\Doppelkopf\Endprodukte\</DCC_ExeOutput>
         <DCC_UnitSearchPath>C:\Users\Jonathan\Documents\GitHub\Doppelkopf\Shared;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <Icon_MainIcon>Doppelkopf_Server2_Icon.ico</Icon_MainIcon>
         <Manifest_File>None</Manifest_File>
@@ -82,9 +84,9 @@
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <DCC_ExeOutput>C:\Users\Jonathan\Documents\GitHub\Doppelkopf\</DCC_ExeOutput>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -93,7 +95,6 @@
         <DCCReference Include="GUI.pas">
             <Form>Form1</Form>
         </DCCReference>
-        <DCCReference Include="mTNetworkMessage.pas"/>
         <DCCReference Include="mTDoppelkopfserver.pas"/>
         <DCCReference Include="mTSpieler.pas"/>
         <DCCReference Include="mTDoppelkopfSpiel.pas"/>
@@ -103,12 +104,9 @@
         <DCCReference Include="mTKarte.pas"/>
         <DCCReference Include="mTDoppelkopfDeck.pas"/>
         <DCCReference Include="mTSoloAnfrage.pas"/>
-        <DCCReference Include="StringKonstanten.pas"/>
         <DCCReference Include="mTSonderkarteEreignis.pas"/>
         <DCCReference Include="mTServer.pas"/>
         <DCCReference Include="mTExpectedTransmissionConfirmation.pas"/>
-        <DCCReference Include="mTSendingNetworkMessage.pas"/>
-        <DCCReference Include="mTReceivingNetworkMessage.pas"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
