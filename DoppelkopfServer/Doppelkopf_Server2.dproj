@@ -40,6 +40,10 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_ExeOutput>C:\Users\Jonathan\Documents\GitHub\Doppelkopf\</DCC_ExeOutput>
+        <DCC_UnitSearchPath>C:\Users\Jonathan\Documents\GitHub\Doppelkopf\Shared;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <Icon_MainIcon>Doppelkopf_Server2_Icon.ico</Icon_MainIcon>
+        <Manifest_File>None</Manifest_File>
         <DCC_F>false</DCC_F>
         <DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
         <DCC_K>false</DCC_K>

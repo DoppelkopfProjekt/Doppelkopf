@@ -40,6 +40,10 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_ExeOutput>C:\Users\Jonathan\Documents\GitHub\Doppelkopf\</DCC_ExeOutput>
+        <DCC_UnitSearchPath>C:\Users\Jonathan\Documents\GitHub\Doppelkopf\Shared;C:\Users\Jonathan\Documents\GitHub\Doppelkopf\DoppelkopfClient;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <Icon_MainIcon>PDoppelkopf_Icon.ico</Icon_MainIcon>
+        <Manifest_File>None</Manifest_File>
         <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;System.Win;$(DCC_Namespace)</DCC_Namespace>
         <DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
         <DCC_E>false</DCC_E>
@@ -87,13 +91,9 @@
         <DCCReference Include="UDoppelkopf.pas">
             <Form>Form1</Form>
         </DCCReference>
-        <DCCReference Include="mTNetworkMessage.pas"/>
         <DCCReference Include="Kartensortieren.pas">
             <Form>Form2</Form>
         </DCCReference>
-        <DCCReference Include="mTReceivingNetworkMessage.pas"/>
-        <DCCReference Include="mTSendingNetworkMessage.pas"/>
-        <DCCReference Include="StringKonstanten.pas"/>
         <DCCReference Include="Verbinden.pas">
             <Form>Form3</Form>
         </DCCReference>
