@@ -62,7 +62,7 @@ type
     procedure Karten_sortierenClick(Sender: TObject);
     procedure Verbinden_grossClick(Sender: TObject);
     procedure Timerblub(sender: Tobject);
-    procedure Image12DblClick(Sender: TObject);
+    procedure DoubleImageClick(Sender: TObject);
     procedure Button8Click(Sender: TObject);
     procedure Edit1Click(Sender: TObject);
     procedure Karten_erstellen(pKarte: String);
@@ -157,6 +157,7 @@ begin
     temp.Left := posX;
     temp.Top := 40;
     temp.OnClick := SelectImageClick;
+    temp.OnDblClick := DoubleImageClick;
     posX := posX + round((1/6) * temp.Width);
     FImages.Add(temp);
     inc(n);
@@ -203,14 +204,19 @@ begin
     Karten_erstellen(pkarten[n]);
   end;
   aktuelleRunde:=0;
+  image21.Picture.LoadFromFile('Karten/Back.jpg');
+  image22.Picture.loadfromfile('Karten/Back.jpg');
+  image23.Picture.loadfromfile('Karten/Back.jpg');
+  image24.Picture.loadfromfile('Karten/Back.jpg');
+
 end;
 
-procedure TForm1.Karte_auf_stapel_legenClick(Sender: TObject);
+procedure TForm1.Karte_auf_stapel_legenclick(Sender: TObject);
 var
 sendung: String;
 begin
-  sendung := Karten_client[markiertekarte];
-  ClientSocket1.Socket.SendText(KEY_STRING+KARTE_LEGEN+TZ+sendung+TZ);
+ // sendung := Karten_client[markiertekarte];
+ // ClientSocket1.Socket.SendText(KEY_STRING+KARTE_LEGEN+TZ+sendung+TZ);
 end;
 
 procedure TForm1.verbinden_kleinClick(Sender: TObject);
@@ -474,9 +480,36 @@ Kartemarkieren(self.FImages.indexof(sender));
 sleep(20);
 end;
 
-procedure TForm1.Image12DblClick(Sender: TObject);
+procedure TForm1.DoubleImageClick(Sender: TObject);
+var
+  y1,y2,y3,x1,x2,x3:double;
+  a,b,c:double;
+  z1,z2:double;
+  I: Integer;
 begin
-  Kartemarkieren(self.FImages.indexof(sender));
+  x1:=timage(FImages[markiertekarte]).left;
+  y1:=timage(FImages[markiertekarte]).top;
+  x3:=Image21.left;
+  y3:=Image21.top;
+  x2:=((x3-x1)) / 2 + x1;
+  y2:=y1-20;
+
+  z1:=(y3-y1) - ((y2-y1) / (x2-x1) * (x3-x1));
+  z2:=(sqr(x3) - sqr(x1)) - ((sqr(x2)-sqr(x1)) / (x2-x1) * (x3-x1));
+
+  a:= (z1 /z2);
+  b:= ((y2-y1) - ((sqr(x2)-sqr(x1)) * a)) / (x2-x1);
+  c:= y1 - (sqr(x1) * a) - (x1 *b);
+
+  for I := 1 to 50 do
+  begin
+    timage(FImages[markiertekarte]).left:= round(((x3-x1)/50*i)+x1);
+    timage(FImages[markiertekarte]).top := round((a*sqr((x3-x1)/50*i) + b*(x3-x1)/50*i + c));
+    sleep(10);
+    application.ProcessMessages;
+  end;
+
+//  Kartemarkieren(self.FImages.indexof(sender));
   self.Karte_auf_stapel_legen.Click;
 end;
 
@@ -487,7 +520,7 @@ begin
   if bewegung =false then
   begin
     sndPlaySound(pChar('Sound.wav'),SND_ASYNC);
-    for I := 0 to 150 do
+    for I := 0 to 30 do
     begin
       bewegung:=true;
       s:=timage(FImages[nummer]).top;
@@ -501,7 +534,7 @@ begin
       begin
         timage(FImages[markiertekarte]).top:=p+round((power (power(30, (1/30)), 30-i))/7);
       end;
-    sleep(1);
+    sleep(5);
     application.ProcessMessages;
     end;
   if markiertekarte <> nummer then
