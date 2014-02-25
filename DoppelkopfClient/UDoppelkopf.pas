@@ -46,6 +46,7 @@ type
     Timer1: TTimer;
     Button8: TButton;
     Edit1: TEdit;
+    Edit4: TEdit;
     procedure Terminalstarten1Click(Sender: TObject);
     procedure Konsoleschlieen1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -303,7 +304,7 @@ end;
 
 procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
 var
-i,n,y,z, Anzahl_keys: Integer;        //wird y gebraucht?
+i,n,z, Anzahl_keys: Integer;
 para:String;
 begin
   Netzwerknachricht:=TreceivingNetworkMessage.Create(Socket.ReceiveText);
@@ -486,28 +487,62 @@ var
   a,b,c:double;
   z1,z2:double;
   I: Integer;
+  entfernenBildFertig:boolean;
+  k, kmax: integer;
+  verschiebenbilderfertig:boolean;
 begin
-  x1:=timage(FImages[markiertekarte]).left;
+    x1 := timage(FImages[markiertekarte]).left;
+    x2 := image21.Left;
+    x3 := abs(x3-x1) / 2;
+    y1 := timage(FImages[markiertekarte]).top;
+    y2 := image21.Top;
+    y3 := 200;
+
+    entfernenbildfertig:=false;
+    k:=0;
+
+    a := y1;
+    b := (y2-y1)/(x2-x1);
+    c := ((y3-y2)/(x3-x2)- (y2-y1)/(x2-x1))/(x3-x1);
+
+    kmax:=image21.Left-timage(FImages[markiertekarte]).left;
+
+    while not entfernenBildFertig  do
+    begin
+      timage(FImages[markiertekarte]).top := round(a + b*(timage(FImages[markiertekarte]).left-x1) + c*(timage(FImages[markiertekarte]).left-x1)*(timage(FImages[markiertekarte]).left-x2));
+      timage(FImages[markiertekarte]).left := timage(FImages[markiertekarte]).left + 1;
+      inc(k, 1);
+      if k > kMax then
+      begin
+        entfernenBildFertig := true;
+      end;
+      application.ProcessMessages;
+      sleep(12);
+      inc(i);
+    end;
+
+ (* x1:=timage(FImages[markiertekarte]).left;
   y1:=timage(FImages[markiertekarte]).top;
   x3:=Image21.left;
   y3:=Image21.top;
   x2:=((x3-x1)) / 2 + x1;
   y2:=y1-20;
 
-  z1:=(y3-y1) - ((y2-y1) / (x2-x1) * (x3-x1));
-  z2:=(sqr(x3) - sqr(x1)) - ((sqr(x2)-sqr(x1)) / (x2-x1) * (x3-x1));
 
-  a:= (z1 /z2);
-  b:= ((y2-y1) - ((sqr(x2)-sqr(x1)) * a)) / (x2-x1);
-  c:= y1 - (sqr(x1) * a) - (x1 *b);
+                                   //
+  a:= ((y3-y1)-((y2-y1)*(x3-x1)/(x2-x1)))/((sqr(x3)-sqr(x1))-((sqr(x2)-sqr(x1))*(x3-x1)/(x2-x1)));
+  b:= ((y2-y1)-((sqr(x2)-sqr(x1))*a))/(x2-x1);
+  c:= y1-(sqr(x1)*a)-(x1-b);
+
+  edit4.text:=FloatToStrF(a, ffFixed, 8, 2)+' '+ FloatToStrF(b, ffFixed, 8, 2) +' '+ FloatToStrF(c, ffFixed, 8, 2);
 
   for I := 1 to 50 do
   begin
     timage(FImages[markiertekarte]).left:= round(((x3-x1)/50*i)+x1);
-    timage(FImages[markiertekarte]).top := round((a*sqr((x3-x1)/50*i) + b*(x3-x1)/50*i + c));
+    timage(FImages[markiertekarte]).top := round((a*sqr((x3-x1)/50*i) + b*(x3-x1)/50*i + c/50*i));
     sleep(10);
     application.ProcessMessages;
-  end;
+  end;                          *)
 
 //  Kartemarkieren(self.FImages.indexof(sender));
   self.Karte_auf_stapel_legen.Click;
@@ -560,9 +595,8 @@ begin
   OutputdebugString('Start drag');
 end;
 
-procedure TForm1.OnDrag(Sender: TObject; Shift: TShiftState; X,
-  Y: Integer);
-var temp: TImage;
+procedure TForm1.OnDrag(Sender: TObject; Shift: TShiftState; X,Y: Integer);
+var
     NewPos: TPoint;
 begin
   if bewegung=false then
@@ -572,7 +606,6 @@ begin
     if abs(NewPos.X - FOldPos.X) >= 2 then
     begin
       OutputdebugString('Moving');
-      temp := TImage(sender);
       self.MoveImage(NewPos.X - FOldPos.X, self.FImages.Count-1);
       FOldPos := NewPos;
     end;
@@ -626,7 +659,7 @@ end;
 procedure TForm1.MoveImage(x: Integer; n: Integer);
 var actualImage, previousImage: TImage;
     factor: double;
-    place, difference: Integer;
+    place: Integer;
 begin
   x := round(x * 1);
   if (n >= 1) then
@@ -674,8 +707,6 @@ begin
     end;
   end;
 end;
-
-
 
 
 

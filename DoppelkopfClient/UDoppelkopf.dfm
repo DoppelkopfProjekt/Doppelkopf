@@ -250,6 +250,14 @@ object Form1: TForm1
     Text = 'Edit1'
     OnClick = Edit1Click
   end
+  object Edit4: TEdit
+    Left = 820
+    Top = 579
+    Width = 121
+    Height = 21
+    TabOrder = 14
+    Text = 'Edit4'
+  end
   object MainMenu1: TMainMenu
     Left = 696
     Top = 640
