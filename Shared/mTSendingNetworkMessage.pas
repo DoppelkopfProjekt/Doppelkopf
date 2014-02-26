@@ -2,7 +2,7 @@ unit mTSendingNetworkMessage;
 
 interface
 
-uses StringKonstanten;
+uses StringKonstanten, sysutils;
 
 type
 
@@ -59,7 +59,7 @@ end;
 function TSendingNetworkMessage.getMsg;
 begin
   if paramCount = 0 then msg := msg + YES + TZ;
-  result := LENGTH_BEGIN + length(msg) + LENGTH_END + msg;
+  result := LENGTH_BEGIN + IntToStr(length(msg)) + LENGTH_END + msg;
 end;
 
 function TSendingNetworkMessage.getConfirmation;
