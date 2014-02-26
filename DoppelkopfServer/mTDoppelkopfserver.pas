@@ -2,7 +2,7 @@ unit mTDoppelkopfserver;
 
 interface
 
-uses Sysutils, mTBlatt, mTReceivingNetworkMessage, mTSendingNetworkMessage,
+uses Sysutils, mTBlatt, mTSendingNetworkMessage,
      mTKarte, Types, classes, mTServer, mTNetworkMessage, StdCtrls, mTSpieler,
      mTDoppelkopfSpiel, StringKonstanten, Contnrs,
      mTExpectedTransmissionConfirmation, ExtCtrls, dialogs;
@@ -167,17 +167,12 @@ begin
 end;
 
 procedure TDoppelkopfServer.ProcessMessage(pMessage: string; pSenderIP: string);
-var msg: TReceivingNetworkMessage;
-    i: Integer;
+var msg: TNetworkMessage;
 begin
   self.MeLog.Lines.Add('EMPFANGEN: ' + pSenderIP + ': ' + pMessage);
-  msg := TReceivingNetworkMessage.Create(pMessage);
-  for i := 0 to msg.Count-1 do
-  begin
-    self.processConfirmation(msg.messageStringForIndex(i), pSenderIP);
-    self.processNetworkMessage(msg.messageForIndex(i), pSenderIP);
-  end;
-
+  msg := TNetworkMessage.Create(pMessage);
+  self.processConfirmation(msg.CreationString, pSenderIP);
+  self.processNetworkMessage(msg, pSenderIP);
 end;
 
 procedure TDoppelkopfServer.sendCardsToClientWithIndex(pIndex: Integer);
