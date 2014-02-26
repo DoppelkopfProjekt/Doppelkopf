@@ -183,14 +183,20 @@ begin
 end;
 
 procedure TForm1.Ansage_abgebenClick(Sender: TObject);
+var msg:tsendingnetworkmessage;
 begin
-  ClientSocket1.Socket.SendText(KEY_STRING+ANSAGE + TZ+inputbox('neue Ansage', ANSAGE_RE + ', ' + ANSAGE_KONTRA + ', ' + ANSAGE_KEINENEUN  + ', ' +  ANSAGE_KEINESECHS  + ', ' +  ANSAGE_KEINEDREI  + ', ' + ANSAGE_SCHWARZ,'')+ TZ);
+  msg:=tsendingnetworkmessage.create(ANSAGE);
+  msg.addParameter(inputbox('neue Ansage', ANSAGE_RE + ', ' + ANSAGE_KONTRA + ', ' + ANSAGE_KEINENEUN  + ', ' +  ANSAGE_KEINESECHS  + ', ' +  ANSAGE_KEINEDREI  + ', ' + ANSAGE_SCHWARZ,''));                               ///HIER ETWAS ÜBERALL ÄNDERN
+  ClientSocket1.Socket.SendText(msg.resultingMessage);
 end;
 
 procedure TForm1.Name_gebenClick(Sender: TObject);
+var msg:tsendingnetworkmessage;
 begin
-  name:=edit3.Text;
-  ClientSocket1.Socket.SendText(KEY_STRING+CONNECT + TZ + name +TZ);
+      name:=edit3.Text;
+      msg:=tsendingnetworkmessage.create(CONNECT);
+      msg.addParameter(name);                               ///HIER ETWAS ÜBERALL ÄNDERN
+      ClientSocket1.Socket.SendText(msg.resultingMessage);
 end;
 
 procedure TForm1.verbindung_trennenClick(Sender: TObject);
@@ -247,8 +253,12 @@ begin
 end;
 
 procedure TForm1.Button8Click(Sender: TObject);
+var msg:tsendingnetworkmessage;
 begin
-  ClientSocket1.Socket.SendText(KEY_STRING+CHAT_SENDEN+TZ+name+TZ+Edit3.Text+TZ);
+      msg:=tsendingnetworkmessage.create(CHAT_SENDEN);
+      msg.addParameter(name);
+      msg.addParameter(Edit1.Text);                                 ///HIER ETWAS ÜBERALL ÄNDERN
+      ClientSocket1.Socket.SendText(msg.resultingMessage);
 end;
 
 procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
@@ -511,7 +521,7 @@ begin
   begin
     application.ProcessMessages;
   end;
-   result := true;//karte_erfolgreiche_gelegt;
+   result := karte_erfolgreiche_gelegt;
    if result = false then
    Terminal.lines.Add('Karte konnte nicht gelegt werden')
    else
