@@ -324,10 +324,6 @@ begin
     b := (y2-y1)/(x2-x1);
     c := ((y3-y2)/(x3-x2)- (y2-y1)/(x2-x1))/(x3-x1);
 
-   (* if a < 0 then a := -a;
-    if b > 0 then b := -b;
-    if c < 0 then c := -c;  *)
-
     stepWidth := 15;
 
     while not entfernenBildFertig or not verschiebenBilderFertig do
@@ -360,11 +356,11 @@ begin
         verschiebenBilderFertig := self.moveImageWhenDelete(i, iMax, pIndex, distance);
       end;
       application.ProcessMessages;
-      sleep(2);
+      sleep(5);
       inc(i);
     end;
- (*   destinationImage.Picture.Assign(altImage.Picture);
-    altImage.Free;            *)
+    destinationImage.Picture.Assign(altImage.Picture);
+    altImage.Free;
     self.FSelectedImage := nil;
     self.FIsDeleting := false;
   end;

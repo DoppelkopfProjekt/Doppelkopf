@@ -485,38 +485,8 @@ begin
     application.ProcessMessages;
   end;
    result := karte_erfolgreiche_gelegt;
+   result := true;
    karte_erfolgreiche_gelegt:=false;
 end;
-(*
-procedure TForm1.Kartemarkieren(Nummer:integer);
-var
-  I,s,p: Integer;
-begin
-  if bewegung =false then
-  begin
-    sndPlaySound(pChar('Sound.wav'),SND_ASYNC);
-    for I := 0 to 30 do
-    begin
-      bewegung:=true;
-      s:=timage(FImages[nummer]).top;
-      if markiertekarte <> -1 then
-      p:=timage(fimages[markiertekarte]).top;
-      if nummer <> -1 then
-      begin
-        timage(FImages[nummer]).top:=s-round((power (power(30, (1/30)), 30-i))/7);
-      end;
-      if (markiertekarte <> -1) then
-      begin
-        timage(FImages[markiertekarte]).top:=p+round((power (power(30, (1/30)), 30-i))/7);
-      end;
-    sleep(5);
-    application.ProcessMessages;
-    end;
-  if markiertekarte <> nummer then
-  markiertekarte:=nummer
-  else markiertekarte := -1;
-  end;
-  bewegung:=false;
-end;
- *)
+
 end.
