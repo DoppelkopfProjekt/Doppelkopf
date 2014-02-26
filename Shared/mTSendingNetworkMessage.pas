@@ -27,7 +27,7 @@ implementation
 
 constructor TSendingNetworkMessage.Create(pKey: string);
 begin
-  msg := KEY_STRING + pKey + TZ;
+  msg := pKey + TZ;
   key := pKey;
   paramCount := 0;
 end;

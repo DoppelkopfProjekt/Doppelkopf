@@ -69,6 +69,9 @@ const SPIELBEGINN = 'Spielbeginn';
 
       CHAT_SENDEN = 'ChatSenden';
       CHAT_EMPFANGEN = 'Chat';
+
+      LENGTH_BEGIN = '<###Length=';
+      LENGTH_END = 'Length###>';
       //ANSAGE_KEINE = 'No';
 
 implementation
