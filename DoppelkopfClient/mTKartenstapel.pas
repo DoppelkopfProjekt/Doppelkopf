@@ -74,17 +74,17 @@ begin
     posX := self.FLeft;
     for i := 0 to 9 do
     begin
-    temp := TImage.Create(self.FParentForm);
-    temp.Width :=self.FWidth;
-    temp.Height := self.FHeight;
-    temp.Picture.LoadFromFile('Karten/' + 'Back' + '.jpg');
-    temp.Parent := self.FParentForm;
-    temp.Stretch := true;
-    temp.Left := posX;
-    temp.Top := self.FTop;
+      temp := TImage.Create(self.FParentForm);
+      temp.Width :=self.FWidth;
+      temp.Height := self.FHeight;
+      temp.Picture.LoadFromFile('Karten/' + 'Back' + '.jpg');
+      temp.Parent := self.FParentForm;
+      temp.Stretch := true;
+      temp.Left := posX;
+      temp.Top := self.FTop;
     //temp.OnClick := SelectImage;
-    posX := posX + round((1/3) * temp.Width);
-    FImages.Add(temp);
+      posX := posX + round((1/3) * temp.Width);
+      FImages.Add(temp);
    // temp.OnDblClick := LegeKarte;
     end;
 end;
@@ -95,6 +95,11 @@ var i, k: Integer;
     posX: Integer;
 begin
   self.FNamen := pKarten;
+
+  for i := 0 to self.FImages.Count-1 do
+  begin
+    TObject(self.FImages[i]).Free;
+  end;
 
   FImages := TObjectList.Create;
  (* if Animate then
