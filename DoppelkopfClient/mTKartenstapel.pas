@@ -95,12 +95,10 @@ var i, k: Integer;
     posX: Integer;
 begin
   self.FNamen := pKarten;
-  if self.FImages <> nil then
+
+  for i := 0 to self.FImages.Count-1 do
   begin
-    for i := 0 to self.FImages.Count-1 do
-    begin
-      TObject(self.FImages[i]).Free;
-    end;
+    TObject(self.FImages[i]).Free;
   end;
 
   FImages := TObjectList.Create;
