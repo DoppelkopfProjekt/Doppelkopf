@@ -325,7 +325,7 @@ begin
   begin
     para:=para+', '+pmsg.parameter[i];
   end;
-  Terminal.lines.add('// '+pmsg.key+';'+para);
+  Terminal.lines.add(pmsg.key+';'+para);
 if pmsg.key = CONNECT then                             //connect Verbindnug erstellt
     begin
       if pmsg.parameter[0] = YES then
@@ -354,15 +354,13 @@ else if pmsg.key = KARTEN then                        //Karten Spieler bekommt d
       ClientSocket1.Socket.SendText(msg.resultingMessage);
       spielhatbegonnen:=true;
       Karten_client.free;
-      Karten_client.create;
+      Karten_client:=tstringlist.create;
       Karten_client := pmsg.parameter;
-      for i := 0 to 9 do
-        timage(FImages[i]).Picture.assign(nil);
+      pkarten.free;
+      pkarten:=tstringlist.Create;
       for i := 0 to Karten_client.Count-1 do
       begin
-          pkarten.free;
-          pkarten:=tstringlist.Create;
-          pkarten.add(pmsg.parameter[i]);
+        pkarten.add(pmsg.parameter[i]);
       end;
     fKartenstapel.setKarten(pkarten, false);
     end
