@@ -125,7 +125,7 @@ procedure TServer.SendMessage(pMessage: string; pClientIP: string);
 var i: Integer;
     temp: TCustomWinSocket;
 begin
-  pMessage := LENGTH_BEGIN + IntToStr(length(pMessage)) + LENGTH_END + pMessage;
+ // pMessage := LENGTH_BEGIN + IntToStr(length(pMessage)) + LENGTH_END + pMessage;
   for i := 0 to FServer.Socket.ActiveConnections-1 do
   begin
     temp := FServer.Socket.Connections[i];
