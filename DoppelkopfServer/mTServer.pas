@@ -137,7 +137,7 @@ end;
 procedure TServer.SendMessageToAll(pMessage: string);
 var i: Integer;
 begin
-  pMessage := LENGTH_BEGIN + IntToStr(length(pMessage)) + LENGTH_END + pMessage;
+  //pMessage := LENGTH_BEGIN + IntToStr(length(pMessage)) + LENGTH_END + pMessage;
   for i := 0 to FServer.Socket.ActiveConnections-1 do
   begin
     FServer.Socket.Connections[i].SendText(AnsiString(pMessage));
