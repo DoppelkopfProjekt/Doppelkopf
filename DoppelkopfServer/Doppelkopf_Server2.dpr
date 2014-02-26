@@ -15,8 +15,9 @@ uses
   mTSonderkarteEreignis in 'mTSonderkarteEreignis.pas',
   mTServer in 'mTServer.pas',
   mTExpectedTransmissionConfirmation in 'mTExpectedTransmissionConfirmation.pas',
-  mTSendingNetworkMessage in 'mTSendingNetworkMessage.pas',
-  mTConnection in 'mTConnection.pas';
+  mTConnection in 'mTConnection.pas',
+  mTNetworkMessage in '..\Shared\mTNetworkMessage.pas',
+  mTSendingNetworkMessage in '..\Shared\mTSendingNetworkMessage.pas';
 
 {$R *.RES}
 
