@@ -59,7 +59,7 @@ end;
 function TSendingNetworkMessage.getMsg;
 begin
   if paramCount = 0 then msg := msg + YES + TZ;
-  result := msg;
+  result := LENGTH_BEGIN + length(msg) + LENGTH_END + msg;
 end;
 
 function TSendingNetworkMessage.getConfirmation;
