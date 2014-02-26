@@ -206,7 +206,7 @@ begin
   clientsocket1.Close;
   for i := 0 to 9 do
   begin
-    timage(FImages[i]).Picture.loadfromfile('Karten/Back.jpg');
+     timage(FImages[i]).picture.loadfromfile('Karten/Back.jpg');
     Terminal.Lines.Clear;
   end;
   aktuelleRunde:=0;
@@ -257,7 +257,7 @@ var msg:tsendingnetworkmessage;
 begin
       msg:=tsendingnetworkmessage.create(CHAT_SENDEN);
       msg.addParameter(name);
-      msg.addParameter(Edit1.Text);                                 ///HIER ETWAS ÜBERALL ÄNDERN
+      msg.addParameter(Edit1.Text);
       ClientSocket1.Socket.SendText(msg.resultingMessage);
 end;
 
