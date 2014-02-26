@@ -214,7 +214,6 @@ object Form1: TForm1
     Top = 550
     Width = 145
     Height = 21
-    ItemHeight = 13
     TabOrder = 10
     Text = '87.67.69.82'
     Items.Strings = (
@@ -288,6 +287,7 @@ object Form1: TForm1
     Active = False
     ClientType = ctNonBlocking
     Port = 0
+    OnRead = ClientSocket1Read
     Left = 736
     Top = 642
   end

@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   Menus, ExtCtrls, StdCtrls, jpeg, ScktComp, Stringkonstanten,
   Kartensortieren, mtSendingNetworkmessage, mmsystem, mtNetworkMessage,
-  contnrs, math, mtKartenstapel;
+  contnrs, math, mtKartenstapel, strUtils;
 
 type
   TForm1 = class(TForm)
@@ -62,8 +62,10 @@ type
     procedure Button8Click(Sender: TObject);
     procedure Edit1Click(Sender: TObject);
     procedure processmessage(pmsg:tnetworkmessage);
+    procedure ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
 
   private
+    FBuffer: string;
     FImages: TObjectList;
     FNamen: TStringList;
     FIsDragging: Boolean;
@@ -247,6 +249,53 @@ end;
 procedure TForm1.Button8Click(Sender: TObject);
 begin
   ClientSocket1.Socket.SendText(KEY_STRING+CHAT_SENDEN+TZ+name+TZ+Edit3.Text+TZ);
+end;
+
+procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
+var expectedLength, tempEnd, tempBegin, realLength, lengthBegin, lengthEnd: Integer;
+    shouldStop: Boolean;
+    networkMessage: TNetworkMessage;
+    IP: string;
+    buffer: string;
+begin
+  IP := socket.RemoteAddress;
+  self.Fbuffer := self.fbuffer + string(socket.ReceiveText);
+  buffer := self.FBuffer;
+  shouldStop := False;
+  lengthBegin := length(LENGTH_BEGIN);
+  lengthEnd := length(LENGTH_END);
+  while not shouldStop do
+  begin
+    tempEnd := posEx(LENGTH_END, buffer, lengthBegin);
+    if tempEnd <> 0 then
+    begin
+      expectedLength := StrToInt(copy(buffer, lengthBegin+1, tempEnd-lengthBegin-1));
+      tempBegin := posEx(LENGTH_BEGIN, buffer, tempEnd);
+      if tempBegin <> 0 then
+      begin
+        realLength := tempBegin - lengthBegin - lengthEnd - length(copy(buffer, lengthBegin+1, tempEnd-lengthBegin-1))-1;
+      end else
+      begin
+        realLength := length(buffer) - lengthBegin - lengthEnd - length(copy(buffer, lengthBegin+1, tempEnd-lengthBegin-1));
+      end;
+      if realLength = expectedLength then
+      begin
+        delete(buffer, 1, tempEnd+lengthEnd-1);
+        //self.ProcessMessage(copy(buffer, 1, realLength), socket.RemoteAddress);
+        networkMessage := TnetworkMessage.Create(copy(buffer, 1, realLength));
+        self.processmessage(networkMessage);
+        //ShowMessage(copy(buffer, 1, realLength));
+        delete(buffer, 1, realLength);
+      end else
+      begin
+        shouldStop := True;
+      end;
+    end else
+    begin
+      shouldStop := True;
+    end;
+  end;
+  self.FBuffer := buffer;
 end;
 
 procedure tform1.Timerblub(sender: Tobject);
