@@ -106,12 +106,8 @@
         <DCCReference Include="mTSoloAnfrage.pas"/>
         <DCCReference Include="mTSonderkarteEreignis.pas"/>
         <DCCReference Include="mTServer.pas"/>
-        <DCCReference Include="mTExpectedTransmissionConfirmation.pas"/>
-<<<<<<< HEAD
-=======
         <DCCReference Include="mTSendingNetworkMessage.pas"/>
         <DCCReference Include="mTConnection.pas"/>
->>>>>>> 659eb36cf6e5f870acfc99b40a34b05d07bb1ff6
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
