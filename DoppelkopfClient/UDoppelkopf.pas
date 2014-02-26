@@ -339,7 +339,9 @@ else if pmsg.key = SPIELBEGINN then                          //Spielbeginn Name 
     end
 else if pmsg.key = KARTEN then                        //Karten Spieler bekommt die Karten geschickt
     begin
-      ClientSocket1.Socket.SendText(KEY_STRING+KARTEN+TZ+YES+TZ);
+      msg:=tsendingnetworkmessage.create(KARTEN);
+      msg.addParameter(YES);                                  ///HIER ETWAS ÜBERALL ÄNDERN
+      ClientSocket1.Socket.SendText(msg.resultingMessage);
       spielhatbegonnen:=true;
       Karten_client.free;
       Karten_client.create;
@@ -356,13 +358,19 @@ else if pmsg.key = KARTEN then                        //Karten Spieler bekommt d
     end
 else if pmsg.key = VORBEHALTE_ABFRAGEN then              //Vorbehaltabfrage Hat der Spieler einen Vorbahlt?
     begin
-      ClientSocket1.Socket.SendText(KEY_STRING+VORBEHALTE_ABFRAGEN + TZ+YES+TZ);
-      ClientSocket1.Socket.SendText(KEY_STRING+VORBEHALT_ANMELDEN+ TZ+VORBEHALT_NICHTS+TZ); // inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+TZ);
+      msg:=tsendingnetworkmessage.create(VORBEHALTE_ABFRAGEN);
+      msg.addParameter(YES);
+      ClientSocket1.Socket.SendText(msg.resultingMessage);
+
+      msg:=tsendingnetworkmessage.create(VORBEHALTE_ABFRAGEN);
+      msg.addParameter(YES);
+      msg.addParameter(inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben'));
+      ClientSocket1.Socket.SendText(msg.resultingMessage); // inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+TZ);
     end
 else if pmsg.key = VORBEHALT_ANMELDEN then
     begin
       if pmsg.parameter[0] = YES then
-      //if Netzwerknachricht.parameter[0] = NO then
+      //if pmsg.parameter[0] = NO then
       //  ClientSocket1.Socket.SendText(VORBEHALT_ANMELDEN +TZ + inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+TZ);
     end
 else if pmsg.key = SOLO then                     //Vorbehalt Ein Spieler hat einen gültigen Vorbehalt gelegt
@@ -372,11 +380,15 @@ else if pmsg.key = SOLO then                     //Vorbehalt Ein Spieler hat ein
         Vorbehalte_Art := pmsg.parameter[1];
         Vorbehaltgeber := pmsg.parameter[0];
       end;
-      ClientSocket1.Socket.SendText(KEY_STRING+SOLO+ TZ+YES+TZ);
+      msg:=tsendingnetworkmessage.create(SOLO);
+      msg.addParameter(YES);
+      ClientSocket1.Socket.SendText(msg.resultingMessage);
     end
 else if pmsg.key = WELCHE_KARTE then            //Welche Karte legen Spieler bekommt die Anweisung, dass er am Zug ist
     begin
-      ClientSocket1.Socket.SendText(KEY_STRING+WELCHE_KARTE+ TZ+YES+TZ);                        //hier mit YES antworten
+      msg:=tsendingnetworkmessage.create(WELCHE_KARTE);
+      msg.addParameter(YES);
+      ClientSocket1.Socket.SendText(msg.resultingMessage);                        //hier mit YES antworten
       Terminal.Lines.add('WELCHE KARTEN SOLL GESPIELT WERDEN?');
       amzug:=true;
     end
@@ -390,7 +402,9 @@ else if pmsg.key = ANSAGE_GEMACHT then                 //Ansageanfrage
         alleansagenAnsage[alleansagenNummer] := pmsg.parameter[1];
         alleansagenSpieler[alleansagenNummer] := pmsg.parameter[0];
         Terminal.lines.add('Spieler '+ alleansagenSpieler[alleansagenNummer] + ' hat folgende Ansage gemacht: ' + alleansagenAnsage[alleansagenNummer]);
-        ClientSocket1.Socket.SendText(KEY_STRING+ANSAGE_GEMACHT + TZ+YES+TZ)
+        msg:=tsendingnetworkmessage.create(ANSAGE_GEMACHT);
+      msg.addParameter(YES);
+      ClientSocket1.Socket.SendText(msg.resultingMessage);
       end;
     end
 else if pmsg.key = KARTE_LEGEN then           //welche Karten testen gelegte Karte wird getestet
@@ -406,7 +420,9 @@ else if pmsg.key = KARTE_LEGEN then           //welche Karten testen gelegte Kar
       end
 else if pmsg.key = AKTUELLER_STICH then               //aktueller Stich gibt den kompletten momentanen Stich
       begin
-        ClientSocket1.Socket.SendText(KEY_STRING+AKTUELLER_STICH+TZ+YES+TZ);
+        msg:=tsendingnetworkmessage.create(AKTUELLER_STICH);
+      msg.addParameter(YES);
+      ClientSocket1.Socket.SendText(msg.resultingMessage);
         for I := aktuellerunde to pmsg.parameter.count-1+aktuellerunde do
         begin
           if i-aktuellerunde=0 then
@@ -420,9 +436,11 @@ else if pmsg.key = AKTUELLER_STICH then               //aktueller Stich gibt den
           timage(FImages[i]).Picture.loadfromfile('Karten/'+pmsg.parameter[i-aktuellerunde]+'.jpg');
         end;
       end
-else if pmsg.key = 'SpielerReihenfolge' then           //aktuelle Spielerreihenfolge
+else if pmsg.key = SPIELER_REIHENFOLGE then           //aktuelle Spielerreihenfolge
       begin
-        ClientSocket1.Socket.SendText(KEY_STRING+SPIELER_REIHENFOLGE+TZ+YES+TZ);
+        msg:=tsendingnetworkmessage.create(SPIELER_REIHENFOLGE);
+      msg.addParameter(YES);
+      ClientSocket1.Socket.SendText(msg.resultingMessage);
         for I := 0 to 3 do
         begin
           spielerreihenfolge[i]:= pmsg.parameter[i];
@@ -434,21 +452,30 @@ else if pmsg.key = 'SpielerReihenfolge' then           //aktuelle Spielerreihenf
       end
 else if pmsg.key = GEWINNER_STICH then               //Gewinnerstich
       begin
-        ClientSocket1.Socket.SendText(KEY_STRING+GEWINNER_STICH+TZ+YES+TZ);
+      msg:=tsendingnetworkmessage.create(GEWINNER_STICH);
+      msg.addParameter(YES);
+      ClientSocket1.Socket.SendText(msg.resultingMessage);
         aktuelleRunde:=0;
         Terminal.lines.Add(pmsg.parameter[0]);
       end
 else if pmsg.key = GEWINNER_SPIEL then                      //Gewinner Sieger werden genannt
       begin
-        ClientSocket1.Socket.SendText(KEY_STRING+GEWINNER_SPIEL+TZ+YES+TZ);
-        Terminal.Lines.add('Team: ' + pmsg.parameter[0] + ' hat ' + pmsg.parameter[1] + ' Punkte.');
+        msg:=tsendingnetworkmessage.create(GEWINNER_SPIEL);
+        msg.addParameter(YES);
+        ClientSocket1.Socket.SendText(msg.resultingMessage);
+        Terminal.Lines.add('Team ');
+        for I := 0 to pmsg.parameter.Count - 1 do
+        begin
+          terminal.Lines[terminal.lines.Count-1]:=terminal.Lines[terminal.lines.Count-1] + pmsg.parameter[i] +' ';
+        end;
+          terminal.Lines[terminal.lines.Count+1]:=terminal.Lines[terminal.lines.Count-1] + 'hat ' + pmsg.parameter[pmsg.parameter.count-1] + ' Punkte.'
       end
-else if pmsg.key = 'aktueller Punktestand' then         //aktueller Punktestand Liste mit den Punkten der vielen Spieler wird gegeben
+(*else if pmsg.key = 'aktueller Punktestand' then         //aktueller Punktestand Liste mit den Punkten der vielen Spieler wird gegeben
       begin
         ClientSocket1.Socket.SendText(KEY_STRING+'Gewinner, YES');
         for I := 0 to 3 do
           Terminal.Lines.add(pmsg.parameter[2*i] + ' hat ' + pmsg.parameter[2*i+1] + ' Punkte.');
-      end
+      end                  *)
 else if pmsg.key = CHAT_EMPFANGEN then
       begin
         Chat.Lines.add(pmsg.parameter[0]+': '+pmsg.parameter[1]);
@@ -484,7 +511,11 @@ begin
   begin
     application.ProcessMessages;
   end;
-   result := karte_erfolgreiche_gelegt;
+   result := true;//karte_erfolgreiche_gelegt;
+   if result = false then
+   Terminal.lines.Add('Karte konnte nicht gelegt werden')
+   else
+   Terminal.lines.add('Karte wurde erfolgreich gelegt');
    karte_erfolgreiche_gelegt:=false;
 end;
 (*

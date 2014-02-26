@@ -5,7 +5,7 @@ object Form1: TForm1
   Caption = 'Form1'
   ClientHeight = 735
   ClientWidth = 1335
-  Color = clActiveCaption
+  Color = clGreen
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -136,7 +136,7 @@ object Form1: TForm1
     Width = 465
     Height = 153
     Lines.Strings = (
-      '//Terminal gestartet')
+      'Terminal gestartet')
     TabOrder = 1
   end
   object Chat: TMemo
