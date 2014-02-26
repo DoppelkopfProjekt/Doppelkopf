@@ -195,7 +195,7 @@ var msg:tsendingnetworkmessage;
 begin
       name:=edit3.Text;
       msg:=tsendingnetworkmessage.create(CONNECT);
-      msg.addParameter(name);                               ///HIER ETWAS ÜBERALL ÄNDERN
+      msg.addParameter(name);                              
       ClientSocket1.Socket.SendText(msg.resultingMessage);
 end;
 

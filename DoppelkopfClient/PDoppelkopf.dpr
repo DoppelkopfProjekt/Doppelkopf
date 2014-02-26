@@ -7,6 +7,8 @@ uses
   Verbinden in 'Verbinden.pas' {Form3},
   mTKartenstapel in 'mTKartenstapel.pas',
   mTNetworkMessage in '..\Shared\mTNetworkMessage.pas',
+  mTReceivingNetworkMessage in '..\Shared\mTReceivingNetworkMessage.pas',
+  mTSendingNetworkMessage in '..\Shared\mTSendingNetworkMessage.pas',
   StringKonstanten in '..\Shared\StringKonstanten.pas';
 
 {$R *.RES}
