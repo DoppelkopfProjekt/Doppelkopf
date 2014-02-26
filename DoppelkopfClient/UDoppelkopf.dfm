@@ -208,7 +208,6 @@ object Form1: TForm1
     Height = 25
     Caption = 'Kartensortieren'
     TabOrder = 9
-    OnClick = Karten_sortierenClick
   end
   object ComboBox1: TComboBox
     Left = 504
@@ -250,14 +249,6 @@ object Form1: TForm1
     Text = 'Edit1'
     OnClick = Edit1Click
   end
-  object Edit4: TEdit
-    Left = 820
-    Top = 579
-    Width = 121
-    Height = 21
-    TabOrder = 14
-    Text = 'Edit4'
-  end
   object MainMenu1: TMainMenu
     Left = 696
     Top = 640
@@ -297,7 +288,6 @@ object Form1: TForm1
     Active = False
     ClientType = ctNonBlocking
     Port = 0
-    OnRead = ClientSocket1Read
     Left = 736
     Top = 642
   end

@@ -4,7 +4,9 @@ uses
   Forms,
   UDoppelkopf in 'UDoppelkopf.pas' {Form1},
   Kartensortieren in 'Kartensortieren.pas' {Form2},
-  Verbinden in 'Verbinden.pas' {Form3};
+  Verbinden in 'Verbinden.pas' {Form3},
+  mTKartenstapel in 'mTKartenstapel.pas',
+  mTNetworkMessage in '..\Shared\mTNetworkMessage.pas';
 
 {$R *.RES}
 
