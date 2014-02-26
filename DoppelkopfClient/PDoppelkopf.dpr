@@ -6,7 +6,8 @@ uses
   Kartensortieren in 'Kartensortieren.pas' {Form2},
   Verbinden in 'Verbinden.pas' {Form3},
   mTKartenstapel in 'mTKartenstapel.pas',
-  mTNetworkMessage in '..\Shared\mTNetworkMessage.pas';
+  mTNetworkMessage in '..\Shared\mTNetworkMessage.pas',
+  StringKonstanten in '..\Shared\StringKonstanten.pas';
 
 {$R *.RES}
 

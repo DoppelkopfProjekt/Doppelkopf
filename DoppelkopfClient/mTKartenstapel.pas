@@ -338,7 +338,6 @@ begin
           if ((k+stepWidth)> kMax) and (k < kMax) then
           begin
             k := kMax;
-            //entfernenBildFertig := true;
           end else
           begin
             entfernenBildFertig := true;
@@ -346,8 +345,8 @@ begin
         end;
       end;
       if k = kMax then
-        begin
-          entfernenBildFertig := true;
+      begin
+        entfernenBildFertig := true;
         end;
         altImage.Left := round(x1 + k);
         altImage.Top := round(a + b*(altImage.Left-x1) + c*(altImage.Left-x1)*(altImage.Left-x2));
