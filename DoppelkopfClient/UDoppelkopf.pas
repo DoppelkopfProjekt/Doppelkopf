@@ -157,6 +157,7 @@ begin
   pkarten.add('HEB');
 
   fKartenstapel.setKarten(pkarten, false);
+    self.FKartenstapel.setBackCards;
 
   aktuelleRunde:=0;
   image21.Picture.LoadFromFile('Karten/Back.jpg');
@@ -204,11 +205,8 @@ var
   i: Integer;
 begin
   clientsocket1.Close;
-  for i := 0 to 9 do
-  begin
-     timage(FImages[i]).picture.loadfromfile('Karten/Back.jpg');
-    Terminal.Lines.Clear;
-  end;
+  self.FKartenstapel.setBackCards;
+  Terminal.Lines.Clear;
   aktuelleRunde:=0;
   verbunden:=false;
   Chat.Lines.Clear;

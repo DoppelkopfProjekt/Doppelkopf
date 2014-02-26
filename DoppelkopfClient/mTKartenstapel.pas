@@ -95,7 +95,7 @@ var i, k: Integer;
     posX: Integer;
 begin
   self.FNamen := pKarten;
-  if self.FImages <> nil then
+  if FImages <> nil then
   begin
     for i := 0 to self.FImages.Count-1 do
     begin
