@@ -337,7 +337,7 @@ if pmsg.key = CONNECT then                             //connect Verbindnug erst
 else if pmsg.key = SPIELBEGINN then                          //Spielbeginn Name der Spieler werden geschickt
     begin
       msg:=tsendingnetworkmessage.create(SPIELBEGINN);
-      msg.addParameter(YES);                                  ///HIER ETWAS ÜBERALL ÄNDERN
+      msg.addParameter(YES);                                 
       ClientSocket1.Socket.SendText(msg.resultingMessage);
         for i := 0 to 3  do
         begin
