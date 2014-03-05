@@ -215,7 +215,7 @@ var
   i, distance, iMax: Integer;
   image: TImage;
 begin
-  if not self.FIsReallyDragging and not self.FIsDeleting and (self.FImages.Count > 1) then
+  if not self.FIsReallyDragging and not self.FIsDeleting and (self.FImages.Count > 1) and not self.FIsSelecting then
   begin
     self.FIsSelecting := true;
     FTest := getTickCount;
@@ -308,7 +308,7 @@ begin
     begin
       verschiebenBilderFertig := true;
     end;
-    //Alte Position in Tag speichern, wird später gebraucht. Durch den Tag kann man auf ein Array verzichten
+    //Alte Position in Tag speichern, wird spï¿½ter gebraucht. Durch den Tag kann man auf ein Array verzichten
     if pIndex <= self.FImages.Count -2 then
     begin
       NeuImage := TImage(self.FImages[pIndex]);
