@@ -115,20 +115,6 @@ object Form1: TForm1
     Font.Style = []
     ParentFont = False
   end
-  object Karte_auf_stapel_legen: TButton
-    Left = 8
-    Top = 434
-    Width = 425
-    Height = 41
-    Caption = 'ausgew'#228'hlte Karte legen'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -16
-    Font.Name = 'MS Sans Serif'
-    Font.Style = [fsBold]
-    ParentFont = False
-    TabOrder = 0
-  end
   object Terminal: TMemo
     Left = 8
     Top = 511
@@ -136,7 +122,7 @@ object Form1: TForm1
     Height = 153
     Lines.Strings = (
       'Terminal gestartet')
-    TabOrder = 1
+    TabOrder = 0
   end
   object Chat: TMemo
     Left = 960
@@ -144,14 +130,14 @@ object Form1: TForm1
     Width = 361
     Height = 113
     ReadOnly = True
-    TabOrder = 2
+    TabOrder = 1
   end
   object Edit2: TEdit
     Left = 504
     Top = 587
     Width = 121
     Height = 21
-    TabOrder = 3
+    TabOrder = 2
     Text = '45678'
   end
   object verbinden_klein: TButton
@@ -160,7 +146,7 @@ object Form1: TForm1
     Width = 119
     Height = 25
     Caption = 'Verbinden'
-    TabOrder = 4
+    TabOrder = 3
     OnClick = verbinden_kleinClick
   end
   object Ansage_abgeben: TButton
@@ -170,7 +156,7 @@ object Form1: TForm1
     Height = 25
     Caption = 'Ansage abgeben(am Zug)'
     Enabled = False
-    TabOrder = 5
+    TabOrder = 4
     OnClick = Ansage_abgebenClick
   end
   object Name_geben: TButton
@@ -180,7 +166,7 @@ object Form1: TForm1
     Height = 25
     Caption = 'Name geben'
     Enabled = False
-    TabOrder = 6
+    TabOrder = 5
     OnClick = Name_gebenClick
   end
   object verbindung_trennen: TButton
@@ -189,7 +175,7 @@ object Form1: TForm1
     Width = 119
     Height = 29
     Caption = 'Verbindung trennen'
-    TabOrder = 7
+    TabOrder = 6
     OnClick = verbindung_trennenClick
   end
   object Edit3: TEdit
@@ -197,7 +183,7 @@ object Form1: TForm1
     Top = 523
     Width = 121
     Height = 21
-    TabOrder = 8
+    TabOrder = 7
     Text = 'TESTNAME'
   end
   object Karten_sortieren: TButton
@@ -206,7 +192,7 @@ object Form1: TForm1
     Width = 157
     Height = 25
     Caption = 'Kartensortieren'
-    TabOrder = 9
+    TabOrder = 8
   end
   object ComboBox1: TComboBox
     Left = 504
@@ -214,7 +200,7 @@ object Form1: TForm1
     Width = 145
     Height = 21
     ItemHeight = 13
-    TabOrder = 10
+    TabOrder = 9
     Text = '87.67.151.230'
     Items.Strings = (
       '84.63.62.143'
@@ -227,7 +213,7 @@ object Form1: TForm1
     Width = 202
     Height = 25
     Caption = 'Verbinden'
-    TabOrder = 11
+    TabOrder = 10
     OnClick = Verbinden_grossClick
   end
   object Button8: TButton
@@ -236,7 +222,7 @@ object Form1: TForm1
     Width = 105
     Height = 25
     Caption = 'Senden'
-    TabOrder = 12
+    TabOrder = 11
     OnClick = Button8Click
   end
   object Edit1: TEdit
@@ -244,7 +230,7 @@ object Form1: TForm1
     Top = 154
     Width = 250
     Height = 21
-    TabOrder = 13
+    TabOrder = 12
     Text = 'Edit1'
     OnClick = Edit1Click
   end

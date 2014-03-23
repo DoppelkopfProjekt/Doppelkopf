@@ -15,7 +15,6 @@ type
     NeuesSpiel1: TMenuItem;
     Label1: TLabel;
     Label2: TLabel;
-    Karte_auf_stapel_legen: TButton;
     Chat1: TMenuItem;
     openchat: TMenuItem;
     closechat: TMenuItem;
