@@ -284,6 +284,8 @@ begin
     altImage.OnMouseDown := nil;
     altImage.OnMouseMove := nil;
     altImage.OnMouseUp := nil;
+    altImage.OnClick := nil;
+    altImage.OnDblClick := nil;
     // Alte und neue Karte animieren
 
     if pIndex = self.FImages.Count-1 then
