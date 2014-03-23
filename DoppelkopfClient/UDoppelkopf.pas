@@ -24,10 +24,10 @@ type
     Konsoleschlieen1: TMenuItem;
     Terminal: TMemo;
     Chat: TMemo;
-    Image23: TImage;
-    Image22: TImage;
-    Image21: TImage;
-    Image24: TImage;
+    Image2: TImage;
+    Image1: TImage;
+    Image0: TImage;
+    Image3: TImage;
     Verbinden1: TMenuItem;
     Label3: TLabel;
     Label4: TLabel;
@@ -144,10 +144,10 @@ begin
   self.FKartenstapel.setBackCards;
 
   aktuelleRunde:=0;
-  image21.Picture.LoadFromFile('Karten/Back.jpg');
-  image22.Picture.loadfromfile('Karten/Back.jpg');
-  image23.Picture.loadfromfile('Karten/Back.jpg');
-  image24.Picture.loadfromfile('Karten/Back.jpg');
+  image0.Picture.LoadFromFile('Karten/Back.jpg');
+  image1.Picture.loadfromfile('Karten/Back.jpg');
+  image2.Picture.loadfromfile('Karten/Back.jpg');
+  image3.Picture.loadfromfile('Karten/Back.jpg');
 
 end;
 
@@ -501,7 +501,7 @@ function TForm1.shouldDeletePicture(var destImage: TImage; kartenCode: string): 
 var startzeit : integer;
 begin
   self.Karte_auf_stapel_legenClick(kartencode);
-  destImage := image21; //hier muss das Bild variabel sein, NOCH MACHEN
+  destImage := image0; //hier muss das Bild variabel sein, NOCH MACHEN
   startzeit:=gettickcount;
   self.FRueckmeldungErhalten := false;
   while (gettickcount-startzeit < DELAY) and not self.FRueckmeldungErhalten do

@@ -70,7 +70,7 @@ object Form1: TForm1
     Height = 13
     Caption = 'Spieler 3'
   end
-  object Image23: TImage
+  object Image2: TImage
     Left = 681
     Top = 128
     Width = 73
@@ -78,7 +78,7 @@ object Form1: TForm1
     Cursor = crHandPoint
     Stretch = True
   end
-  object Image22: TImage
+  object Image1: TImage
     Left = 586
     Top = 180
     Width = 73
@@ -86,7 +86,7 @@ object Form1: TForm1
     Cursor = crHandPoint
     Stretch = True
   end
-  object Image21: TImage
+  object Image0: TImage
     Left = 681
     Top = 264
     Width = 73
@@ -94,7 +94,7 @@ object Form1: TForm1
     Cursor = crHandPoint
     Stretch = True
   end
-  object Image24: TImage
+  object Image3: TImage
     Left = 785
     Top = 180
     Width = 73
