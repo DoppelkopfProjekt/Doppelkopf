@@ -50,7 +50,7 @@ type
     procedure Terminalstarten1Click(Sender: TObject);
     procedure Konsoleschlieen1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure Karte_auf_stapel_legenClick(Sender: TObject);
+    procedure Karte_auf_stapel_legenClick(pkartencode:string);
     procedure closechatClick(Sender: TObject);
     procedure openchatClick(Sender: TObject);
     procedure verbinden_kleinClick(Sender: TObject);
@@ -151,12 +151,12 @@ begin
 
 end;
 
-procedure TForm1.Karte_auf_stapel_legenclick(Sender: TObject);
-var
-sendung: String;
+procedure TForm1.Karte_auf_stapel_legenclick(pkartencode:String);
+var msg:tsendingnetworkmessage;
 begin
- // sendung := Karten_client[markiertekarte];
- // ClientSocket1.Socket.SendText(KEY_STRING+KARTE_LEGEN+TZ+sendung+TZ);
+  msg:=tsendingnetworkmessage.create(KARTE_LEGEN);
+      msg.addParameter(PKartencode);
+      ClientSocket1.Socket.SendText(msg.resultingMessage);
 end;
 
 procedure TForm1.verbinden_kleinClick(Sender: TObject);
@@ -499,7 +499,9 @@ end;
 
 function TForm1.shouldDeletePicture(var destImage: TImage): Boolean;
 var startzeit : integer;
+kartencode:string;
 begin
+  self.Karte_auf_stapel_legenClick(kartencode);
   destImage := image21; //hier muss das Bild variabel sein, NOCH MACHEN
   startzeit:=gettickcount;
   self.FRueckmeldungErhalten := false;

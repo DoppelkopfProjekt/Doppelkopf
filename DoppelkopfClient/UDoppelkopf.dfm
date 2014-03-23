@@ -128,7 +128,6 @@ object Form1: TForm1
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 0
-    OnClick = Karte_auf_stapel_legenClick
   end
   object Terminal: TMemo
     Left = 8
