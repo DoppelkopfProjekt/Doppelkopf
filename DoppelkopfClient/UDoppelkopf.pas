@@ -191,7 +191,7 @@ begin
   clientsocket1.Close;
   for i := 0 to 9 do
   begin
-     timage(FImages[i]).picture.loadfromfile('Karten/Back.jpg');
+     self.FKartenstapel.setBackCards;
     Terminal.Lines.Clear;
   end;
   aktuelleRunde:=0;
