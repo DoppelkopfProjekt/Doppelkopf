@@ -8,7 +8,7 @@ uses
 
 type
 
-  TLegeKarteHandler = function(var destinationImage: TImage): Boolean of object;
+  TLegeKarteHandler = function(var destinationImage: TImage; kartenCode: string): Boolean of object;
 
   TKartenstapel = class(TObject)
   private
@@ -187,11 +187,13 @@ end;
 procedure TKartenstapel.LegeKarte(Sender: TObject);
 var index: integer;
     destImage: TImage;
+    kartenCode: string;
 begin
   destImage := nil;
-  if not self.FIsReallyDragging and self.FLegeKarteHandler(destImage) then
+  index := self.FImages.IndexOf(sender);
+  kartenCode := self.FNamen[index];
+  if not self.FIsReallyDragging and self.FLegeKarteHandler(destImage, kartenCode) then
   begin
-    index := self.FImages.IndexOf(sender);
     self.FWirdGelegt := true;
   if self.FSelectedImage <> nil then
   begin
