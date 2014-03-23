@@ -423,7 +423,7 @@ else if pmsg.key = AKTUELLER_STICH then               //aktueller Stich gibt den
           if i-aktuellerunde=0 then
           for z := 21 to 24 do
           begin
-            timage(FImages[i]).picture.loadfromfile('Karten/Back.jpg');
+            timage(FImages[z]).picture.loadfromfile('Karten/Back.jpg');
           end;
           if i>3 then
           timage(FImages[i-4]).Picture.loadfromfile('Karten/'+pmsg.parameter[i-aktuellerunde]+'.jpg')
