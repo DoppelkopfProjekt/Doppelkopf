@@ -423,12 +423,12 @@ else if pmsg.key = AKTUELLER_STICH then               //aktueller Stich gibt den
           if i-aktuellerunde=0 then
           for z := 21 to 24 do
           begin
-            timage(FImages[z]).picture.loadfromfile('Karten/Back.jpg');
+            timage(Findcomponent('Image'+inttostr(z))).picture.loadfromfile('Karten/Back.jpg');
           end;
           if i>3 then
-          timage(FImages[i-4]).Picture.loadfromfile('Karten/'+pmsg.parameter[i-aktuellerunde]+'.jpg')
+          timage(Findcomponent('Image'+inttostr(i-4))).Picture.loadfromfile('Karten/'+pmsg.parameter[i-aktuellerunde]+'.jpg')
           else
-          timage(FImages[i]).Picture.loadfromfile('Karten/'+pmsg.parameter[i-aktuellerunde]+'.jpg');
+          timage(Findcomponent('Image'+inttostr(i))).Picture.loadfromfile('Karten/'+pmsg.parameter[i-aktuellerunde]+'.jpg');
         end;
       end
 else if pmsg.key = SPIELER_REIHENFOLGE then           //aktuelle Spielerreihenfolge
