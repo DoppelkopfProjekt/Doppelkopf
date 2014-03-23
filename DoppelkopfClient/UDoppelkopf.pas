@@ -70,7 +70,7 @@ type
 
     FKartenstapel: TKartenstapel;
     FRueckmeldungErhalten: Boolean;
-    function shouldDeletePicture(var destImage: TImage): Boolean;
+    function shouldDeletePicture(var destImage: TImage; kartenCode: string): Boolean;
   public
   end;
 
@@ -497,9 +497,8 @@ begin
   chatoffen:=true;
 end;
 
-function TForm1.shouldDeletePicture(var destImage: TImage): Boolean;
+function TForm1.shouldDeletePicture(var destImage: TImage; kartenCode: string): Boolean;
 var startzeit : integer;
-kartencode:string;
 begin
   self.Karte_auf_stapel_legenClick(kartencode);
   destImage := image21; //hier muss das Bild variabel sein, NOCH MACHEN
