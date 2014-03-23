@@ -421,7 +421,7 @@ else if pmsg.key = AKTUELLER_STICH then               //aktueller Stich gibt den
         for I := aktuellerunde to pmsg.parameter.count-1+aktuellerunde do
         begin
           if i-aktuellerunde=0 then
-          for z := 21 to 24 do
+          for z := 0 to 3 do
           begin
             timage(Findcomponent('Image'+inttostr(z))).picture.loadfromfile('Karten/Back.jpg');
           end;
