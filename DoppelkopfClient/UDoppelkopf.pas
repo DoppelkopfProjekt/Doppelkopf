@@ -355,7 +355,7 @@ else if pmsg.key = VORBEHALTE_ABFRAGEN then              //Vorbehaltabfrage Hat 
       msg.addParameter(YES);
       ClientSocket1.Socket.SendText(msg.resultingMessage);
 
-      msg:=tsendingnetworkmessage.create(VORBEHALT_ANMELDEN),
+      msg:=tsendingnetworkmessage.create(VORBEHALT_ANMELDEN);
       msg.addParameter('Nichts');
       // erste später im spiel: msg.addParameter(inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben'));
       ClientSocket1.Socket.SendText(msg.resultingMessage); // inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+TZ);
