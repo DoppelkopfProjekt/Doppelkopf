@@ -1,4 +1,4 @@
-unit mTKartenstapel;
+﻿unit mTKartenstapel;
 
 interface
 
@@ -49,6 +49,7 @@ type
                         Shift: TShiftState; X, Y: Integer);
     procedure SelectImage(Sender: TObject);
     procedure deletePicture(pIndex: Integer; destinationImage: TImage);
+    procedure clearImages;
   public
     constructor Create(pParentForm: TForm; pLegeKarteHandler: TLegeKarteHandler; left, top, width, height: Integer);
     procedure setKarten(pKarten: TStringList; Animate: Boolean);
@@ -70,6 +71,7 @@ procedure TKartenstapel.setBackCards;
 var i, posX: Integer;
     temp: TImage;
 begin
+  self.clearImages;
   FImages := TObjectList.Create;
     posX := self.FLeft;
     for i := 0 to 9 do
@@ -89,13 +91,9 @@ begin
     end;
 end;
 
-procedure TKartenstapel.setKarten(pKarten: TStringList; Animate: Boolean);
-var i, k: Integer;
-    temp: TImage;
-    posX: Integer;
+procedure TKartenstapel.clearImages;
+var i: Integer;
 begin
-  self.FNamen := pKarten;
-
   if FImages <> nil then
   begin
     for i := 0 to self.FImages.Count-1 do
@@ -103,6 +101,16 @@ begin
       TObject(self.FImages[i]).Free;
     end;
   end;
+end;
+
+procedure TKartenstapel.setKarten(pKarten: TStringList; Animate: Boolean);
+var i, k: Integer;
+    temp: TImage;
+    posX: Integer;
+begin
+  self.FNamen := pKarten;
+
+  self.clearImages;
 
   FImages := TObjectList.Create;
  (* if Animate then

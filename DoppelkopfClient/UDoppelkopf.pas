@@ -67,11 +67,9 @@ type
   private
     FBuffer: string;
     FImages: TObjectList;
-    FNamen: TStringList;
-    FIsDragging: Boolean;
-    FOldPos: TPoint;
 
     FKartenstapel: TKartenstapel;
+    FRueckmeldungErhalten: Boolean;
     function shouldDeletePicture(var destImage: TImage): Boolean;
   public
   end;
@@ -129,7 +127,6 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 var
   I: Integer;
-  pKarten: tstringlist;
   width: integer;
 begin
   karte_erfolgreiche_gelegt:=false;
@@ -144,19 +141,7 @@ begin
 
   self.FKartenStapel := TKartenstapel.Create(self, shouldDeletePicture, 25, 40, width, round(width * (105.0/73)));
 
-  pkarten:=tstringlist.Create;
-  pkarten.add('HE10');
-  pkarten.add('KR10');
-  pkarten.add('KA10');
-  pkarten.add('PI10');
-  pkarten.add('KRD');
-  pkarten.add('HED');
-  pkarten.add('KAB');
-  pkarten.add('KRB');
-  pkarten.add('PIB');
-  pkarten.add('HEB');
-
-  fKartenstapel.setKarten(pkarten, false);
+  self.FKartenstapel.setBackCards;
 
   aktuelleRunde:=0;
   image21.Picture.LoadFromFile('Karten/Back.jpg');
@@ -370,7 +355,7 @@ else if pmsg.key = VORBEHALTE_ABFRAGEN then              //Vorbehaltabfrage Hat 
       msg.addParameter(YES);
       ClientSocket1.Socket.SendText(msg.resultingMessage);
 
-      msg:=tsendingnetworkmessage.create(VORBEHALT_ANMELDEN),
+      msg:=tsendingnetworkmessage.create(VORBEHALT_ANMELDEN);
       msg.addParameter('Nichts');
       // erste später im spiel: msg.addParameter(inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben'));
       ClientSocket1.Socket.SendText(msg.resultingMessage); // inputbox('Vorbehalte', (VORBEHALT_DAMENSOLO +', '+ VORBEHALT_BUBENSOLO +', '+ VORBEHALT_FLEISCHLOSER +', '+ VORBEHALT_HOCHZEIT +', '+ VORBEHALT_NICHTS), 'hier eingeben')+TZ);
@@ -418,6 +403,7 @@ else if pmsg.key = ANSAGE_GEMACHT then                 //Ansageanfrage
     end
 else if pmsg.key = KARTE_LEGEN then           //welche Karten testen gelegte Karte wird getestet
       begin
+        self.FRueckmeldungErhalten := true;
         if pmsg.parameter[0] = YES then
         begin
           Terminal.Lines.add ('Karte erfolgreich gelegt');
@@ -516,7 +502,8 @@ var startzeit : integer;
 begin
   destImage := image21; //hier muss das Bild variabel sein, NOCH MACHEN
   startzeit:=gettickcount;
-  while (gettickcount-startzeit < DELAY) and not karte_erfolgreiche_gelegt do
+  self.FRueckmeldungErhalten := false;
+  while (gettickcount-startzeit < DELAY) and not self.FRueckmeldungErhalten do
   begin
     application.ProcessMessages;
   end;
