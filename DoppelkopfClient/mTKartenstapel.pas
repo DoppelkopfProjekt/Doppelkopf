@@ -188,7 +188,15 @@ procedure TKartenstapel.LegeKarte(Sender: TObject);
 var index: integer;
     destImage: TImage;
     kartenCode: string;
+    backupImage: TImage;
 begin
+  backupImage := TImage.Create(self);
+  backupImage.Assign(altImage);
+  altImage.OnMouseDown := nil;
+  altImage.OnMouseMove := nil;
+  altImage.OnMouseUp := nil;
+  altImage.OnClick := nil;
+  altImage.OnDblClick := nil;
   destImage := nil;
   index := self.FImages.IndexOf(sender);
   kartenCode := self.FNamen[index];
@@ -207,6 +215,11 @@ begin
     end;
   self.deletePicture(index, destImage);
   self.FWirdGelegt := false;
+  end
+  else
+  begin
+    backupImage.parent := self;
+    self.FImages[index] := backupImage;
   end;
 end;
 
