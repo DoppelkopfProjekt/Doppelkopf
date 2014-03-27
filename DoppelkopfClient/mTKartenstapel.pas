@@ -206,6 +206,7 @@ begin
       self.OnEndDrag(sender, mbLeft, [], 0, 0);
     end;
   self.deletePicture(index, destImage);
+  self.FWirdGelegt := false;
   end;
 end;
 
@@ -225,12 +226,11 @@ var
   i, distance, iMax: Integer;
   image, tempSelectedImg: TImage;
 begin
-  if not self.FIsReallyDragging and not self.FIsDeleting and (self.FImages.Count > 1) and not self.FIsSelecting then
+  if not self.FIsReallyDragging and not self.FIsDeleting and (self.FImages.Count > 1) and not self.FIsSelecting and not self.FWirdGelegt then
   begin
     self.FIsSelecting := true;
     FTest := getTickCount;
     sndPlaySound(pChar('Sound.wav'), SND_ASYNC);
-    self.FWirdGelegt := false;
     image := TImage(sender);
     iMax := 30;
     distance := 30;
