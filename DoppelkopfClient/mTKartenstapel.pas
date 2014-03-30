@@ -190,13 +190,13 @@ var index: integer;
     kartenCode: string;
     backupImage: TImage;
 begin
-  backupImage := TImage.Create(self);
-  backupImage.Assign(altImage);
-  altImage.OnMouseDown := nil;
-  altImage.OnMouseMove := nil;
-  altImage.OnMouseUp := nil;
-  altImage.OnClick := nil;
-  altImage.OnDblClick := nil;
+  backupImage := TImage.Create(self.FParentForm);
+  backupImage.Assign(sender as TImage);
+  (sender as TImage).OnMouseDown := nil;
+  (sender as TImage).OnMouseMove := nil;
+  (sender as TImage).OnMouseUp := nil;
+  (sender as TImage).OnClick := nil;
+  (sender as TImage).OnDblClick := nil;
   destImage := nil;
   index := self.FImages.IndexOf(sender);
   kartenCode := self.FNamen[index];
@@ -218,7 +218,7 @@ begin
   end
   else
   begin
-    backupImage.parent := self;
+    backupImage.parent := self.FParentForm;
     self.FImages[index] := backupImage;
   end;
 end;
@@ -237,7 +237,7 @@ end;
 procedure TKartenstapel.SelectImage(Sender: TObject);
 var
   i, distance, iMax: Integer;
-  image, tempSelectedImg: TImage;
+  image, tmpSelectedImg: TImage;
 begin
   if not self.FIsReallyDragging and not self.FIsDeleting and (self.FImages.Count > 1) and not self.FIsSelecting and not self.FWirdGelegt then
   begin
@@ -355,7 +355,7 @@ begin
     targetWidth := destinationImage.width;
     targetHeight := destinationImage.Height;
     
-    widthDiff := altImage.Widht - targetWidth;
+    widthDiff := altImage.Width - targetWidth;
     heightDiff := altImage.Height - targetHeight;
     
     widthDiff := (widthDiff div kMax) div stepWidth;
