@@ -65,7 +65,6 @@ type
 
   private
     FBuffer: string;
-    FImages: TObjectList;
 
     FKartenstapel: TKartenstapel;
     FRueckmeldungErhalten: Boolean;
@@ -125,7 +124,6 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  I: Integer;
   width: integer;
 begin
   karte_erfolgreiche_gelegt:=false;
@@ -300,7 +298,7 @@ end;
 
 procedure TForm1.processmessage(pmsg:tnetworkmessage);
 var
-i,n,z, Anzahl_keys: Integer;
+i,z: Integer;
 para:String;
 pkarten:tstringlist;
 msg:tsendingnetworkmessage;
@@ -340,7 +338,6 @@ else if pmsg.key = KARTEN then                        //Karten Spieler bekommt d
       Karten_client.free;
       Karten_client:=tstringlist.create;
       Karten_client := pmsg.parameter;
-      pkarten.free;
       pkarten:=tstringlist.Create;
       for i := 0 to Karten_client.Count-1 do
       begin
