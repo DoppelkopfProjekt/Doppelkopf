@@ -194,6 +194,10 @@ begin
   aktuelleRunde:=0;
   verbunden:=false;
   Chat.Lines.Clear;
+  image0.Picture.LoadFromFile('Karten/Back.jpg');
+  image1.Picture.LoadFromFile('Karten/Back.jpg');
+  image2.Picture.LoadFromFile('Karten/Back.jpg');
+  image3.Picture.LoadFromFile('Karten/Back.jpg');
 end;
 
 (*
