@@ -206,18 +206,18 @@ begin
   if not self.FIsReallyDragging and self.FLegeKarteHandler(destImage, kartenCode) then
   begin
     self.FWirdGelegt := true;
-  if self.FSelectedImage <> nil then
-  begin
-    self.FSelectedImage.Top := TImage(self.FImages[(index+1) mod (self.FImages.Count)]).Top;
-    self.FSelectedImage := nil;
-  end;
-  if Sender = self.FImages.Last then
-  begin
-    //Drag beenden
-    self.OnEndDrag(sender, mbLeft, [], 0, 0);
-  end;
-  self.deletePicture(index, destImage);
-  self.FWirdGelegt := false;
+    if self.FSelectedImage <> nil then
+    begin
+      self.FSelectedImage.Top := TImage(self.FImages[(index+1) mod (self.FImages.Count)]).Top;
+      self.FSelectedImage := nil;
+    end;
+    if Sender = self.FImages.Last then
+    begin
+      //Drag beenden
+      self.OnEndDrag(sender, mbLeft, [], 0, 0);
+    end;
+    self.deletePicture(index, destImage);
+    self.FWirdGelegt := false;
   end
   else
   begin
@@ -239,48 +239,42 @@ end;
 
 procedure TKartenstapel.SelectImage(Sender: TObject);
 var
-  i, distance, iMax: Integer;
+  i, distance, oldDistance, iMax: Integer;
   image, tmpSelectedImg: TImage;
 begin
-  if not self.FIsReallyDragging and not self.FIsDeleting and (self.FImages.Count > 1) and not self.FIsSelecting then
+  if not self.FIsReallyDragging and not self.FIsDeleting and (self.FImages.Count > 1) and not self.FIsSelecting and not self.FWirdGelegt then
   begin
     self.FIsSelecting := true;
     FTest := getTickCount;
     sndPlaySound(pChar('Sound.wav'), SND_ASYNC);
-    self.FWirdGelegt := false;
     image := TImage(sender);
     iMax := 30;
     distance := 30;
     image.Tag := image.Top;
-    if self.FSelectedImage <> nil then
+    tmpSelectedImg := self.FSelectedImage;
+    self.FSelectedImage := image;
+    if tmpSelectedImg <> nil then
     begin
-      self.FSelectedImage.Tag := self.FSelectedImage.Top;
+      tmpSelectedImg.Tag := tmpSelectedImg.Top;
+      oldDistance := image.Top - tmpSelectedImg.Top;
     end;
     for i := 1 to iMax do
     begin
       if not self.FWirdGelegt then
       begin
-        if sender <> self.FSelectedImage then
+        if sender <> tmpSelectedImg then
         begin
           image.Top := image.Tag - round(self.logarithmAnimation(i, distance, iMax));
         end;
       end;
-      if self.FSelectedImage <> nil then
+      if tmpSelectedImg <> nil then
       begin
-        self.FSelectedImage.Top := self.FSelectedImage.tag + round(self.logarithmAnimation(i, distance, iMax));
+        tmpSelectedImg.Top := tmpSelectedImg.tag + round(self.logarithmAnimation(i, oldDistance, iMax));
       end;
       sleep(5);
       application.ProcessMessages;
     end;
     self.FIsSelecting := false;
-    if not self.FWirdGelegt and (sender <> self.FSelectedImage) then
-    begin
-      self.FSelectedImage := image;
-    end else
-    begin
-      self.FSelectedImage := nil;
-    end;
-    self.FWirdGelegt := false;
   end;
 end;
 
