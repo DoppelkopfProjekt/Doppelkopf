@@ -206,16 +206,16 @@ begin
   if not self.FIsReallyDragging and self.FLegeKarteHandler(destImage, kartenCode) then
   begin
     self.FWirdGelegt := true;
-   (* if self.FSelectedImage <> nil then
-    begin
-      self.FSelectedImage.Top := TImage(self.FImages[(index+1) mod (self.FImages.Count)]).Top;
-      self.FSelectedImage := nil;
-    end;*)
-    if Sender = self.FImages.Last then
-    begin
-      //Drag beenden
-      self.OnEndDrag(sender, mbLeft, [], 0, 0);
-    end;
+  if self.FSelectedImage <> nil then
+  begin
+    self.FSelectedImage.Top := TImage(self.FImages[(index+1) mod (self.FImages.Count)]).Top;
+    self.FSelectedImage := nil;
+  end;
+  if Sender = self.FImages.Last then
+  begin
+    //Drag beenden
+    self.OnEndDrag(sender, mbLeft, [], 0, 0);
+  end;
   self.deletePicture(index, destImage);
   self.FWirdGelegt := false;
   end
@@ -251,29 +251,28 @@ begin
     iMax := 30;
     distance := 30;
     image.Tag := image.Top;
-    tmpSelectedImg := self.FSelectedImage;
-    if tmpSelectedImg <> nil then
+    if self.FSelectedImage <> nil then
     begin
-      tmpSelectedImg.Tag := tmpSelectedImg.Top;
+      self.FSelectedImage.Tag := self.FSelectedImage.Top;
     end;
     for i := 1 to iMax do
     begin
       if not self.FWirdGelegt then
       begin
-        if sender <> tmpSelectedImg then
+        if sender <> self.FSelectedImage then
         begin
           image.Top := image.Tag - round(self.logarithmAnimation(i, distance, iMax));
         end;
       end;
-      if tmpSelectedImg <> nil then
+      if self.FSelectedImage <> nil then
       begin
-        tmpSelectedImg.Top := tmpSelectedImg.tag + round(self.logarithmAnimation(i, distance, iMax));
+        self.FSelectedImage.Top := self.FSelectedImage.tag + round(self.logarithmAnimation(i, distance, iMax));
       end;
       sleep(5);
       application.ProcessMessages;
     end;
     self.FIsSelecting := false;
-    if not self.FWirdGelegt and (sender <> tmpSelectedImg) then
+    if not self.FWirdGelegt and (sender <> self.FSelectedImage) then
     begin
       self.FSelectedImage := image;
     end else
