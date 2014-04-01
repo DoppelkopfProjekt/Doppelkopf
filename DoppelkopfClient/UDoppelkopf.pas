@@ -68,7 +68,7 @@ type
 
     FKartenstapel: TKartenstapel;
     FRueckmeldungErhalten: Boolean;
-    function shouldDeletePicture(var destImage: TImage; kartenCode: string): Boolean;
+    procedure shouldDeletePicture(kartenCode: string);
   public
   end;
 
@@ -403,7 +403,8 @@ else if pmsg.key = ANSAGE_GEMACHT then                 //Ansageanfrage
     end
 else if pmsg.key = KARTE_LEGEN then           //welche Karten testen gelegte Karte wird getestet
       begin
-        self.FRueckmeldungErhalten := true;
+        //self.FRueckmeldungErhalten := true;
+        self.FKartenstapel.BestaetigeLegeKarte(image0);
         if pmsg.parameter[0] = YES then
         begin
           Terminal.Lines.add ('Karte erfolgreich gelegt');
@@ -497,12 +498,12 @@ begin
   chatoffen:=true;
 end;
 
-function TForm1.shouldDeletePicture(var destImage: TImage; kartenCode: string): Boolean;
+procedure TForm1.shouldDeletePicture(kartenCode: string);
 var startzeit : integer;
 begin
   self.Karte_auf_stapel_legenClick(kartencode);
-  destImage := image0; //hier muss das Bild variabel sein, NOCH MACHEN
-  startzeit:=gettickcount;
+  //destImage := image0; //hier muss das Bild variabel sein, NOCH MACHEN
+ (* startzeit:=gettickcount;
   self.FRueckmeldungErhalten := false;
   while (gettickcount-startzeit < DELAY) and not self.FRueckmeldungErhalten do
   begin
@@ -513,7 +514,7 @@ begin
    Terminal.lines.Add('Karte konnte nicht gelegt werden')
    else
    Terminal.lines.add('Karte wurde erfolgreich gelegt');
-   karte_erfolgreiche_gelegt:=false;
+   karte_erfolgreiche_gelegt:=false;   *)
 end;
 
 end.

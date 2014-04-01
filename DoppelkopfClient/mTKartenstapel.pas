@@ -204,6 +204,7 @@ begin
   (sender as TImage).OnDblClick := nil;    *)
   index := self.FImages.IndexOf(sender);
   kartenCode := self.FNamen[index];
+  clickedImage := TImage(sender);
   if not self.FIsReallyDragging then
   begin
     self.FLegeKarteHandler(kartenCode);
@@ -211,17 +212,19 @@ begin
 end;
 
 procedure TKartenstapel.BestaetigeLegeKarte(destImage: TImage);
+var index: Integer;
 begin
     self.FWirdGelegt := true;
+    index := self.FImages.IndexOf(self.clickedImage);
     if self.FSelectedImage <> nil then
     begin
       self.FSelectedImage.Top := TImage(self.FImages[(index+1) mod (self.FImages.Count)]).Top;
       self.FSelectedImage := nil;
     end;
-    if Sender = self.FImages.Last then
+    if self.clickedImage = self.FImages.Last then
     begin
       //Drag beenden
-      self.OnEndDrag(sender, mbLeft, [], 0, 0);
+      self.OnEndDrag(self.clickedImage, mbLeft, [], 0, 0);
     end;
     self.deletePicture(index, destImage);
     if not self.FIsSelecting then

@@ -199,7 +199,6 @@ object Form1: TForm1
     Top = 550
     Width = 145
     Height = 21
-    ItemHeight = 13
     TabOrder = 9
     Text = '81.243.185.197'
     Items.Strings = (
