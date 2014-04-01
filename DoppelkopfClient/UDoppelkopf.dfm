@@ -201,7 +201,7 @@ object Form1: TForm1
     Height = 21
     ItemHeight = 13
     TabOrder = 9
-    Text = '87.67.151.230'
+    Text = '81.243.185.197'
     Items.Strings = (
       '84.63.62.143'
       '127.0.0.1'
