@@ -353,6 +353,7 @@ var success: Boolean;
     msg: TSendingNetworkMessage;
     karten, gewinner: TStringList;
 begin
+  sleep(300);
   MeLog.Lines.Add('Karte gelegt');
 
   success := self.FSpiel.legeKarte(pMessage.parameter[0], pClientIP);
