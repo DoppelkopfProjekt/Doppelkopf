@@ -396,7 +396,7 @@ begin
       altImage.Left := round(x1 + k);
       altImage.Top := round(a + b*(altImage.Left-x1) + c*(altImage.Left-x1)*(altImage.Left-x2));
       altImage.width := altImage.width - widthDiff;
-      altImage.top := altImage.top - heightDiff;
+      altImage.height := altImage.height - heightDiff;
       if self.FImages.Count > 0 then
       begin
         verschiebenBilderFertig := self.moveImageWhenDelete(i, iMax, pIndex, distance);
