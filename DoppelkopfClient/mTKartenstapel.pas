@@ -217,7 +217,6 @@ begin
       self.OnEndDrag(sender, mbLeft, [], 0, 0);
     end;
     self.deletePicture(index, destImage);
-    self.FWirdGelegt := false;
   end
   else
   begin
@@ -276,6 +275,7 @@ begin
     end;
     self.FIsSelecting := false;
   end;
+  self.FWirdGelegt := False;
 end;
 
 procedure TKartenstapel.deletePicture(pIndex: Integer; destinationImage: TImage);
