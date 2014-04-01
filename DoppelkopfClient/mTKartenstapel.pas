@@ -242,11 +242,12 @@ var
   i, distance, iMax: Integer;
   image, tmpSelectedImg: TImage;
 begin
-  if not self.FIsReallyDragging and not self.FIsDeleting and (self.FImages.Count > 1) and not self.FIsSelecting and not self.FWirdGelegt then
+  if not self.FIsReallyDragging and not self.FIsDeleting and (self.FImages.Count > 1) and not self.FIsSelecting then
   begin
     self.FIsSelecting := true;
     FTest := getTickCount;
     sndPlaySound(pChar('Sound.wav'), SND_ASYNC);
+    self.FWirdGelegt := false;
     image := TImage(sender);
     iMax := 30;
     distance := 30;
