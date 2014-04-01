@@ -217,6 +217,10 @@ begin
       self.OnEndDrag(sender, mbLeft, [], 0, 0);
     end;
     self.deletePicture(index, destImage);
+    if not self.FIsSelecting then
+    begin
+      self.FWirdGelegt := False;
+    end;
   end
   else
   begin
