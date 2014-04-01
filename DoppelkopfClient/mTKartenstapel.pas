@@ -8,7 +8,7 @@ uses
 
 type
 
-  TLegeKarteHandler = function(var destinationImage: TImage; kartenCode: string): Boolean of object;
+  TLegeKarteHandler = procedure(kartenCode: string) of object;
 
   TKartenstapel = class(TObject)
   private
@@ -34,6 +34,10 @@ type
     FIsSelecting: Boolean;
     FIsReallyDragging: Boolean;
     FParentForm: TForm;
+
+
+    clickedImage: TImage;
+
     procedure MoveImage(x: Integer; n: Integer);
     procedure LegeKarte(Sender: TObject);
     function logarithmAnimation(x, distance, xMax: Integer): double;
@@ -55,6 +59,7 @@ type
     procedure setKarten(pKarten: TStringList; Animate: Boolean);
     procedure setBackCards;
     property backCardName: string read FBackCardName write FBackCardName;
+    procedure BestaetigeLegeKarte(destImage: TImage);
   end;
 
 implementation
@@ -186,11 +191,7 @@ end;
 
 procedure TKartenstapel.LegeKarte(Sender: TObject);
 var index: integer;
-    destImage: TImage;
     kartenCode: string;
-    backupImage: TImage;
-    test: TImage;
-    antwort: Boolean;
 begin
 //  backupImage := TImage.Create(self.FParentForm);
 //  test := TImage(Sender);
@@ -201,12 +202,16 @@ begin
   (sender as TImage).OnMouseUp := nil;
   (sender as TImage).OnClick := nil;
   (sender as TImage).OnDblClick := nil;    *)
-  destImage := nil;
   index := self.FImages.IndexOf(sender);
   kartenCode := self.FNamen[index];
-  antwort := self.FLegeKarteHandler(destImage, kartenCode);
-  if not self.FIsReallyDragging and antwort then
+  if not self.FIsReallyDragging then
   begin
+    self.FLegeKarteHandler(kartenCode);
+  end;
+end;
+
+procedure TKartenstapel.BestaetigeLegeKarte(destImage: TImage);
+begin
     self.FWirdGelegt := true;
     if self.FSelectedImage <> nil then
     begin
@@ -223,12 +228,6 @@ begin
     begin
       self.FWirdGelegt := False;
     end;
-  end
-  else
-  begin
-   // backupImage.parent := self.FParentForm;
-   // self.FImages[index] := backupImage;
-  end;
 end;
 
 constructor TKartenstapel.Create(pParentForm: TForm; pLegeKarteHandler: TLegeKarteHandler; left, top, width, height: Integer);
@@ -258,6 +257,7 @@ begin
     image.Tag := image.Top;
     tmpSelectedImg := self.FSelectedImage;
     self.FSelectedImage := image;
+    oldDistance := 0;
     if tmpSelectedImg <> nil then
     begin
       tmpSelectedImg.Tag := tmpSelectedImg.Top;
