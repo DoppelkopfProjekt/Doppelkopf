@@ -189,14 +189,17 @@ var index: integer;
     destImage: TImage;
     kartenCode: string;
     backupImage: TImage;
+    test: TImage;
 begin
-  backupImage := TImage.Create(self.FParentForm);
-  backupImage.Assign(sender as TImage);
-  (sender as TImage).OnMouseDown := nil;
-  (sender as TImage).OnMouseMove := nil;
+//  backupImage := TImage.Create(self.FParentForm);
+//  test := TImage(Sender);
+ // backupImage.Assign(test);
+ // backupImage.co
+//  (sender as TImage).OnMouseDown := nil;
+(*  (sender as TImage).OnMouseMove := nil;
   (sender as TImage).OnMouseUp := nil;
   (sender as TImage).OnClick := nil;
-  (sender as TImage).OnDblClick := nil;
+  (sender as TImage).OnDblClick := nil;    *)
   destImage := nil;
   index := self.FImages.IndexOf(sender);
   kartenCode := self.FNamen[index];
@@ -218,8 +221,8 @@ begin
   end
   else
   begin
-    backupImage.parent := self.FParentForm;
-    self.FImages[index] := backupImage;
+   // backupImage.parent := self.FParentForm;
+   // self.FImages[index] := backupImage;
   end;
 end;
 
