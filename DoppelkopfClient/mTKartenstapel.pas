@@ -190,6 +190,7 @@ var index: integer;
     kartenCode: string;
     backupImage: TImage;
     test: TImage;
+    antwort: Boolean;
 begin
 //  backupImage := TImage.Create(self.FParentForm);
 //  test := TImage(Sender);
@@ -203,7 +204,8 @@ begin
   destImage := nil;
   index := self.FImages.IndexOf(sender);
   kartenCode := self.FNamen[index];
-  if not self.FIsReallyDragging and self.FLegeKarteHandler(destImage, kartenCode) then
+  antwort := self.FLegeKartenHandler(destImage, kartenCode);
+  if not self.FIsReallyDragging and antwort then
   begin
     self.FWirdGelegt := true;
     if self.FSelectedImage <> nil then

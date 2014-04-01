@@ -506,7 +506,7 @@ begin
   self.FRueckmeldungErhalten := false;
   while (gettickcount-startzeit < DELAY) and not self.FRueckmeldungErhalten do
   begin
-    application.ProcessMessages;
+    sleep(2);
   end;
    result := karte_erfolgreiche_gelegt;
    if result = false then
