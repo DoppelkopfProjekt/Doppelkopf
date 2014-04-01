@@ -204,7 +204,7 @@ begin
   destImage := nil;
   index := self.FImages.IndexOf(sender);
   kartenCode := self.FNamen[index];
-  antwort := self.FLegeKartenHandler(destImage, kartenCode);
+  antwort := self.FLegeKarteHandler(destImage, kartenCode);
   if not self.FIsReallyDragging and antwort then
   begin
     self.FWirdGelegt := true;
